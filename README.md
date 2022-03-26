@@ -1,34 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SIYA Archive
 
-## Getting Started
+## 컨벤션
 
-First, run the development server:
+### 브랜치명
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+> feature/#[이슈번호]
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 마스터 기준으로 배포 진행
+- 이슈 기준으로 각 브랜치 생성
+- develop 브랜치로 각 피쳐브랜치 PR
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 커밋메세지
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+> [feat]: [내용]
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### 코드 컨벤션
 
-## Learn More
+- 함수는 웬만하면 arrow function으로 생성
+- 컴포넌트 파일명은 컴포넌트 이름.tsx + 대문자로 시작
+- 폴더명은 카멜케이스
 
-To learn more about Next.js, take a look at the following resources:
+### 타입스크립트 컨벤션
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- 기본은 interface, 유니온등 필요한 경우에는 type
