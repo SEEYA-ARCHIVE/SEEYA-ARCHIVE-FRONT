@@ -8,6 +8,7 @@ export const theme = {
     gray: '#f6f6f6',
     green: '#07b495',
     lightGreen: '#99ecdd',
+<<<<<<< HEAD
     white: '#ffffff',
     mint: '#13ACC1',
     black: '#000',
@@ -18,6 +19,10 @@ export const theme = {
     black: '#33333',
     gray: '#7b7b7b',
     white: '#fff',
+=======
+    darkGray: '#54595d',
+    highLight: '#13ACC1',
+>>>>>>> 4f09d66 (feat: border-radius 적용)
   },
   boxShadow: {
     normal: '0 3px 8px 0 rgb(0 0 0 / 10%)',
