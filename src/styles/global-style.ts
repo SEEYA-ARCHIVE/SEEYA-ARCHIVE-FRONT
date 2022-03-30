@@ -11,9 +11,17 @@ export const GlobalStyle = createGlobalStyle`
     ::-webkit-scrollbar {
         display: none;
     }
+<<<<<<< HEAD
     *{
         box-sizing: border-box;
     }
+=======
+
+    * {
+        box-sizing: border-box;
+    }
+    
+>>>>>>> 12c4cbd (style: box-sizing 글로벌에 추가)
     html{
         font-family: 'Noto Sans KR', sans-serif;
         font-display: fallback;
