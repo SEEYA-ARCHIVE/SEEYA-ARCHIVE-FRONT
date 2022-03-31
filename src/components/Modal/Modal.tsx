@@ -7,12 +7,13 @@ import useModal from 'src/hooks/useModal';
 
 export const Modal: VFC = () => {
   const modalList = useRecoilValue(modalListState);
+  const { closeCurrentModal } = useModal();
 
   return (
     <>
       {modalList.length > 0 && (
         <S.Wrapper>
-          <S.Background />
+          <S.Background onClick={closeCurrentModal} />
           {modalList.map(({ key, props }) => {
             const CustomModal = modalMap[key];
             return (
