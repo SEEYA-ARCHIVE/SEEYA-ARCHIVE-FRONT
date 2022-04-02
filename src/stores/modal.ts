@@ -10,3 +10,8 @@ export const modalBlurState = atom({
   key: 'modalBlurState',
   default: false,
 });
+
+export const modalLockState = atom({
+  key: 'modalLockState',
+  default: false,
+});
