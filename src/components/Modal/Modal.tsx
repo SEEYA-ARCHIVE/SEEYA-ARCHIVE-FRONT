@@ -1,31 +1,37 @@
 import React, { VFC } from 'react';
 import { useRecoilValue } from 'recoil';
-import { modalBlurState, modalListState } from 'src/stores/modal';
+import { modalBlurState, modalListState, modalLockState } from 'src/stores/modal';
 import useModal from 'src/hooks/useModal';
 import styled, { css } from 'styled-components';
 
 export type ModalType = React.FC | React.VFC;
 export interface IOptions {
-  blur: boolean;
+  backgroundBlur?: boolean;
+  backgroundLock?: boolean;
 }
 
 export const Modal: VFC = () => {
   const modalList = useRecoilValue(modalListState);
-  const blur = useRecoilValue(modalBlurState);
+  const backgroundBlur = useRecoilValue(modalBlurState);
+  const backgroundLock = useRecoilValue(modalLockState);
   const { closeCurrentModal } = useModal();
+
+  const onClickModalBackground = () => {
+    if (backgroundLock) return;
+
+    closeCurrentModal();
+  };
 
   return (
     <>
       {modalList.length > 0 && (
         <Wrapper>
-          <Background onClick={closeCurrentModal} isBlur={blur} />
-          {modalList.map((Component, idx) => {
-            return (
-              <Content key={idx}>
-                <Component />
-              </Content>
-            );
-          })}
+          <Background onClick={onClickModalBackground} isBlur={backgroundBlur} />
+          {modalList.map((Component, idx) => (
+            <Content key={idx}>
+              <Component />
+            </Content>
+          ))}
         </Wrapper>
       )}
     </>

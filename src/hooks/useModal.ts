@@ -11,6 +11,7 @@ interface IUseModal {
 const useModal = (): IUseModal => {
   const setModalList = useSetRecoilState(modalListState);
   const [blur, setBlur] = useRecoilState(modalBlurState);
+  const [lock, setLock] = useRecoilState(modalLockState);
 
   const openModal = (component: ReactElement) => {
     setModalList((prev) => [...prev, component]);
@@ -18,14 +19,16 @@ const useModal = (): IUseModal => {
 
   const closeCurrentModal = () => {
     if (blur) setBlur(false);
+    if (lock) setLock(false);
 
     setModalList((prev) => [...prev].slice(0, prev.length - 1));
   };
 
   const manageOptions = (options: IOptions) => {
-    const { blur } = options;
+    const { backgroundBlur, backgroundLock } = options;
 
-    if (blur) setBlur(true);
+    if (backgroundBlur) setBlur(true);
+    if (backgroundLock) setLock(true);
   };
 
   return {
