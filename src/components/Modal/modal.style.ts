@@ -22,9 +22,5 @@ export const Background = styled.div`
 
 export const Content = styled.div`
   position: absolute;
-  padding: 1rem 2rem;
-  background-color: ${({ theme }) => theme.color.white};
-  border-radius: 8px;
-  border: none;
   z-index: 1001;
 `;
