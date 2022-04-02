@@ -5,3 +5,8 @@ export const modalListState = atom<ReactElement[]>({
   key: 'modalList',
   default: [],
 });
+
+export const modalBlurState = atom({
+  key: 'modalBlurState',
+  default: false,
+});
