@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { ModalType } from 'src/components/Modal/Modal';
+import { ModalType } from 'src/components/common/modal/Modal';
 
 export const modalListState = atom<ModalType[]>({
   key: 'modalListState',
