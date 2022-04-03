@@ -1,1 +1,1 @@
-export { default as sample } from 'src/assets/image/sample.jpeg';
+export { default as sample } from 'public/assets/image/sample.jpeg';

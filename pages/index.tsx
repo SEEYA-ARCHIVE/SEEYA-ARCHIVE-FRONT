@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import Icon from 'src/components/common/icon/Icon';
 import { Img } from 'src/components/common/image/Img';
-import Comment from 'src/assets/icon/Comments.svg';
+import Comment from 'public/assets/icon/Comments.svg';
 
 const Title = styled.h1`
   color: red;

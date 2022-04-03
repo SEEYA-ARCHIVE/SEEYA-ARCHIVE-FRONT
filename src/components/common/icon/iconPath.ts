@@ -1,1 +1,1 @@
-export { default as iconComment } from 'src/assets/icon/Comments.svg';
+export { default as iconComment } from 'public/assets/icon/Comments.svg';
