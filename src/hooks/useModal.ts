@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { modalListState } from 'src/stores/modal';
-import { IOptions, ModalType } from 'src/components/Modal/Modal';
+import { IOptions, ModalType } from 'src/components/common/Modal/Modal';
 
 interface IUseModal {
   openModal: (component: ReactElement) => void;
