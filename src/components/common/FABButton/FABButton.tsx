@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import { colorType } from 'src/types/commonType';
+import { ColorType } from 'src/types/commonType';
 import styled, { css } from 'styled-components';
+import Icon from '../icon/Icon';
 
 interface Props {
-  bgColor: colorType;
+  bgColor: ColorType;
   position?: {
     top?: number;
     right?: number;
@@ -16,6 +17,9 @@ interface Props {
 export const FABButton: FC<Props> = ({ bgColor, position, value }) => {
   return (
     <FABWrapper bgColor={bgColor} position={position}>
+      <div>
+        <Icon name="iconComment" />
+      </div>
       {value}
     </FABWrapper>
   );
@@ -26,7 +30,12 @@ const FABWrapper = styled.button<Pick<Props, 'bgColor' | 'position'>>`
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  border: none;
   background-color: ${({ theme, bgColor }) => theme.color[bgColor]};
+
+  font-size: 12px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.color.white};
 
   ${({ position }) =>
     position &&
@@ -35,5 +44,5 @@ const FABWrapper = styled.button<Pick<Props, 'bgColor' | 'position'>>`
       right: ${position.right ?? 0}px;
       bottom: ${position.bottom ?? 0}px;
       left: ${position.left ?? 0}px;
-    `}
+    `};
 `;
