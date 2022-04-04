@@ -38,11 +38,10 @@ const FABWrapper = styled.button<Pick<Props, 'bgColor' | 'position'>>`
   color: ${({ theme }) => theme.color.white};
 
   ${({ position }) =>
-    position &&
     css`
-      top: ${position.top ?? 0}px;
-      right: ${position.right ?? 0}px;
-      bottom: ${position.bottom ?? 0}px;
-      left: ${position.left ?? 0}px;
-    `};
+      ${position?.top && `top: ${position.top}px;`}
+      ${position?.right && `right: ${position.right}px;`}
+      ${position?.bottom && `bottom: ${position.bottom}px;`}
+      ${position?.left && `left: ${position.left}px;`}
+    `}
 `;
