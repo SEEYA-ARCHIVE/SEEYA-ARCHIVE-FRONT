@@ -24,7 +24,13 @@ const HeaderWrapper = styled.div`
 `;
 
 const MainTitle = styled.span`
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 30px;
   margin-right: 16px;
 `;
 
-const SubTitle = styled.span``;
+const SubTitle = styled.span`
+  font-family: 'Poppins', sans-serif;
+  color: ${({ theme }) => theme.fontColor.gray};
+  letter-spacing: 0.2em;
+`;

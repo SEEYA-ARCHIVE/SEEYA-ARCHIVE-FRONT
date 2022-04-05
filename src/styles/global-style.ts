@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
         display: none;
     }
     html{
-        font-family: -apple-system,BlinkMacSystemFont,helvetica,Apple SD Gothic Neo,sans-serif;       
+        font-family: 'Noto Sans KR', sans-serif;
         font-display: fallback;
 
         -ms-overflow-style: none;

@@ -7,6 +7,11 @@ export const theme = {
     lightGreen: '#99ecdd',
     darkGray: '#54595d',
     white: '#ffffff',
+    mint: '#13ACC1',
+  },
+  fontColor: {
+    gray: '#7b7b7b',
+    white: '#fff',
   },
   boxShadow: {
     normal: '0 3px 8px 0 rgb(0 0 0 / 10%)',
