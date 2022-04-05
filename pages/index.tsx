@@ -24,9 +24,12 @@ const Home = () => {
 export default Home;
 
 const MainWrapper = styled.div`
+  max-width: 1000px;
   display: flex;
   justify-content: space-between;
-  padding: 165px 185px;
+  padding: 165px 30px;
+
+  margin: auto;
 
   .find_hall {
     font-size: 10px;
