@@ -1,6 +1,7 @@
 export const theme = {
   color: {
     blue: '#00bac7',
+    gray3: '#b3b3b3',
     gray5: '#f5f5f5',
     gray: '#f6f6f6',
     green: '#07b495',
@@ -8,8 +9,11 @@ export const theme = {
     darkGray: '#54595d',
     white: '#ffffff',
     mint: '#13ACC1',
+    black: '#000',
+    yellow: '#FFB118',
   },
   fontColor: {
+    black: '#33333',
     gray: '#7b7b7b',
     white: '#fff',
   },

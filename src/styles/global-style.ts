@@ -18,6 +18,9 @@ export const GlobalStyle = createGlobalStyle`
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+    button{
+        border:none;
+    }
     .pc-tablet-only {
         display: block;
         ${media.mobile} {

@@ -1,35 +1,36 @@
 import styled from 'styled-components';
 
-import Icon from 'src/components/common/icon/Icon';
-import { Img } from 'src/components/common/image/Img';
-import Comment from 'public/assets/icon/Comments.svg';
-
-const Title = styled.h1`
-  color: red;
-`;
+import { Header } from 'src/components/common/header/Header';
+import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
+import { MainUpload } from 'src/components/mainPage/mainUpload/MainUpload';
+import { MainHallSearch } from 'src/components/mainPage/mainHallSearch/MainHallSearch';
 
 const Home = () => {
   return (
-    <Wrapper>
-      <StyledHeader>시야 아카이브</StyledHeader>
-      <Img name="sample" width={300} height={300} />
-      <Icon name="iconComment" fillColor="blue" />
-      <Comment />
-    </Wrapper>
+    <>
+      <Header />
+      <MainWrapper>
+        <MainInfo />
+        <div>
+          <MainUpload />
+          <MainHallSearch />
+          <div className="find_hall">찾는 공연장이 없으신가요? 여기를 클릭하세요</div>
+        </div>
+      </MainWrapper>
+    </>
   );
 };
 
 export default Home;
 
-const Wrapper = styled.div`
-  padding: 30px;
-`;
+const MainWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 165px 185px;
 
-const StyledHeader = styled.h1`
-  width: 100%;
-  text-align: center;
-  font-size: 4rem;
-  font-weight: 700;
-
-  margin-bottom: 30px;
+  .find_hall {
+    font-size: 10px;
+    text-decoration: underline;
+    color: ${({ theme }) => theme.fontColor.black};
+  }
 `;

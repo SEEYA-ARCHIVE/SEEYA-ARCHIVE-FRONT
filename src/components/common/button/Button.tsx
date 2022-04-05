@@ -17,12 +17,12 @@ export const Button: FC<Props> = ({ children, onClick, className, bgColor }) => 
   );
 };
 
-const ButtonWrapper = styled.div<Pick<Props, 'bgColor'>>`
+const ButtonWrapper = styled.button<Pick<Props, 'bgColor'>>`
   display: flex;
   align-items: center;
   justify-content: center;
   width: fit-content;
-  padding: 6px 20px;
+  padding: 0 20px;
   height: 40px;
   border-radius: 25px;
   color: white;

@@ -33,5 +33,5 @@ const MainTitle = styled.div`
 const MainDesc = styled.div`
   font-size: 12px;
   line-height: 20px;
-  color: #333333;
+  color: ${({ theme }) => theme.fontColor.black};
 `;
