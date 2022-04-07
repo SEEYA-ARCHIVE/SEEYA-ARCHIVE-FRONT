@@ -70,7 +70,7 @@ const Wrapper = styled.div`
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
   background-color: ${({ theme }) => theme.color.white};
   animation: ${({ theme }) => theme.animation.slideIn} 1s ease-in-out;
-  border-left: 4px solid ${({ theme }) => theme.color.tilt};
+  border-left: 4px solid ${({ theme }) => theme.color.mint};
   padding: 36px 0 0 54px;
 `;
 
