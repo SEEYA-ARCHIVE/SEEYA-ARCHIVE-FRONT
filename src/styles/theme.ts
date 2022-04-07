@@ -1,3 +1,5 @@
+import { keyframes } from 'styled-components';
+
 export const theme = {
   color: {
     blue: '#00bac7',
@@ -19,6 +21,16 @@ export const theme = {
   },
   boxShadow: {
     normal: '0 3px 8px 0 rgb(0 0 0 / 10%)',
+  },
+  animation: {
+    slideIn: keyframes`
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(0%);
+      }
+    `,
   },
 };
 
