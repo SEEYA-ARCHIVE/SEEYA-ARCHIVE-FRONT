@@ -11,6 +11,9 @@ export const GlobalStyle = createGlobalStyle`
     ::-webkit-scrollbar {
         display: none;
     }
+    *{
+        box-sizing: border-box;
+    }
     html{
         font-family: 'Noto Sans KR', sans-serif;
         font-display: fallback;
