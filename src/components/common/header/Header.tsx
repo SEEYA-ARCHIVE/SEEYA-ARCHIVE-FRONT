@@ -21,6 +21,10 @@ const HeaderWrapper = styled.div`
   align-items: center;
 
   padding: 15px 50px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const MainTitle = styled.span`
