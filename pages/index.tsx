@@ -24,7 +24,7 @@ const Home = () => {
 export default Home;
 
 const MainWrapper = styled.div`
-  max-width: 1000px;
+  max-width: 920px;
   display: flex;
   justify-content: space-between;
   padding: 165px 30px;
