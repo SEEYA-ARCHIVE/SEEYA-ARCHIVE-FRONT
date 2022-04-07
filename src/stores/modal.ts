@@ -1,17 +1,22 @@
+import { ReactElement } from 'react';
 import { atom } from 'recoil';
-import { ModalType } from 'src/components/common/modal/Modal';
 
-export const modalListState = atom<ModalType[]>({
+export const modalListState = atom<ReactElement[]>({
   key: 'modalListState',
   default: [],
 });
 
-export const modalBlurState = atom({
-  key: 'modalBlurState',
+export const modalBackgroundTransparentState = atom({
+  key: 'modalBackgroundTransparentState',
   default: false,
 });
 
-export const modalLockState = atom({
-  key: 'modalLockState',
+export const modalBackgroundBlurState = atom({
+  key: 'modalBackgroundBlurState',
+  default: false,
+});
+
+export const modalBackgroundLockState = atom({
+  key: 'modalBackgroundLockState',
   default: false,
 });
