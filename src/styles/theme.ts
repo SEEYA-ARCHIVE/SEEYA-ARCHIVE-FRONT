@@ -3,6 +3,8 @@ import { keyframes } from 'styled-components';
 export const theme = {
   color: {
     blue: '#00bac7',
+    gray3: '#b3b3b3',
+    gray5: '#f5f5f5',
     gray: '#f6f6f6',
     green: '#07b495',
     lightGreen: '#99ecdd',
