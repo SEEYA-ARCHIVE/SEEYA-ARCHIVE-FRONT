@@ -1,4 +1,5 @@
-import Document, { DocumentContext } from 'next/document';
+import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document';
+
 import { ServerStyleSheet } from 'styled-components';
 
 export default class MyDocument extends Document {
@@ -25,5 +26,21 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal();
     }
+  }
+  render() {
+    return (
+      <Html>
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR&family=Poppins:wght@200&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }
