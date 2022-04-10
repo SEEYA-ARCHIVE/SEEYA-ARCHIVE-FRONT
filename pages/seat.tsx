@@ -14,7 +14,7 @@ const Seat: FC<Props> = () => {
     <SeatPageWrapper>
       <Header />
       <SeatInfo />
-      <Seats name="seatsOlympicHall" className="seats" />
+      <Seats name="seatsOlympicHall2" className="seats" />
       <FABCompareBox />
       <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} />
       <FABButton value="업로드" bgColor="yellow" position={{ bottom: 40, right: 90 }} />
