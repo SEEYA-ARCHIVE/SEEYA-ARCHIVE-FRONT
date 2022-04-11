@@ -1,45 +1,65 @@
-import React, { FC, useEffect, useRef, VFC } from 'react';
-
-import * as seats from 'src/components/common/seats/seatsPath';
+import React, { useState, VFC } from 'react';
 import styled from 'styled-components';
 
+interface PolygonPathType {
+  id: string;
+  d: string;
+  stroke: string;
+  fill: string;
+  'stroke-width'?: string;
+  'stroke-dasharray'?: string;
+}
+
+interface WordPathType {
+  id: string;
+  d: string;
+  fill: string;
+}
+interface SVGDataType {
+  width: number;
+  height: number;
+  viewBox: string;
+  xmlns: string;
+  polygon: PolygonPathType[];
+  word: WordPathType[];
+}
 interface Props {
-  name: keyof typeof seats;
-  size?: number;
+  data: SVGDataType;
   className?: string;
 }
 
 /** component */
-export const Seats: VFC<Props> = ({ name, size, className }) => {
-  const SVGSeat = seats[name];
-  const seatRef = useRef<HTMLDivElement>(null);
+export const Seats: VFC<Props> = ({ data, className }) => {
+  const [svgData, setSvgData] = useState(data);
+  const { width, height, viewBox, xmlns, polygon, word } = svgData;
 
-  const handleSeatClick = () => {
-    console.log('work');
-  };
+  const handlePolygonClick = () => {};
 
-  const isPolygon = (element: any) => {
-    return !!element.getAttribute('stroke');
-  };
+  const SVGPolygons = polygon.map((data) => (
+    <PolygonPath
+      key={data.id}
+      d={data.d}
+      fill={data.fill}
+      stroke={data.stroke}
+      strokeWidth={data['stroke-width']}
+      strokeDasharray={data['stroke-dasharray']}
+    />
+  ));
 
-  useEffect(() => {
-    if (!seatRef.current) return;
-
-    const pathList = seatRef.current.querySelectorAll('path');
-  }, []);
+  const SVGWords = word.map((data) => <WordPath key={data.id} d={data.d} fill={data.fill} />);
 
   return (
-    <SVGWrap ref={seatRef} size={size} className={className}>
-      <SVGSeat />
+    <SVGWrap className={className}>
+      <svg width={width} height={height} viewBox={viewBox} xmlns={xmlns}>
+        {SVGPolygons}
+        {SVGWords}
+      </svg>
     </SVGWrap>
   );
 };
 
 /** styled component */
-const SVGWrap = styled.div<Pick<Props, 'size'>>`
-  width: ${({ size }) => `${size ? size : 'auto'}px`};
-  height: ${({ size }) => `${size ? size : 'auto'}px`};
-
+const SVGWrap = styled.div`
   display: inline-block;
 
   & svg {
@@ -49,24 +69,6 @@ const SVGWrap = styled.div<Pick<Props, 'size'>>`
     display: block;
   }
 `;
-// let seatObj: any = {
-//   polygon: [],
-//   word: [],
-// };
-// (pathList as any).forEach((v: any, idx: number) => {
-//   const obj: any = {};
-//   obj.d = v.getAttribute('d');
-//   if (isPolygon(v)) {
-//     obj.stroke = '#C4C4C4';
-//     obj.fill = '#EFEFEF';
-//     obj['stroke-width'] = '2';
-//     obj['stroke-dasharray'] = '4 4';
 
-//     seatObj.polygon.push(obj);
-//   } else {
-//     obj.fill = '#C4C4C4';
-//     seatObj.word.push(obj);
-//   }
-// });
-// console.log(JSON.stringify(seatObj));
-// }, []);
+const PolygonPath = styled.path``;
+const WordPath = styled.path``;
