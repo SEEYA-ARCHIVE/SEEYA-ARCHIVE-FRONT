@@ -2,21 +2,21 @@ import { ReactElement } from 'react';
 import { atom } from 'recoil';
 
 export const modalListState = atom<ReactElement[]>({
-  key: 'modalListState',
+  key: 'modalList',
   default: [],
 });
 
 export const modalBackgroundTransparentState = atom({
-  key: 'modalBackgroundTransparentState',
+  key: 'modalBackgroundTransparent',
   default: false,
 });
 
 export const modalBackgroundBlurState = atom({
-  key: 'modalBackgroundBlurState',
+  key: 'modalBackgroundBlur',
   default: false,
 });
 
 export const modalBackgroundLockState = atom({
-  key: 'modalBackgroundLockState',
+  key: 'modalBackgroundLock',
   default: false,
 });
