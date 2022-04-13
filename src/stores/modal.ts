@@ -7,16 +7,16 @@ export const modalListState = atom<ReactElement[]>({
 });
 
 export const modalBackgroundTransparentState = atom({
-  key: 'modalBackgroundTransparentState',
+  key: 'modalBackgroundTransparent',
   default: false,
 });
 
 export const modalBackgroundBlurState = atom({
-  key: 'modalBackgroundBlurState',
+  key: 'modalBackgroundBlur',
   default: false,
 });
 
 export const modalBackgroundLockState = atom({
-  key: 'modalBackgroundLockState',
+  key: 'modalBackgroundLock',
   default: false,
 });
