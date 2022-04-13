@@ -46,12 +46,13 @@ interface PolygonPositionType {
 /** component */
 export const Seats: VFC<Props> = ({ data, className }) => {
   const [svgData, setSvgData] = useState(data);
-  const [isCommentOpen, setIsCommentOpen] = useState(true);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [polygonPosition, setPolygonPosition] = useState<DOMRect | null>(null);
 
   const { width, height, viewBox, xmlns, polygon, word } = svgData;
 
   const handlePolygonClick = (e: MouseEvent) => {
+    if (!isCommentOpen) setIsCommentOpen(true);
     const polygon = e.target as SVGPathWithId;
     const id = polygon.id;
 
@@ -106,6 +107,7 @@ const SVGWrap = styled.div`
   }
 `;
 const SeatComment = styled.div<{ polygonPosition: DOMRect | null }>`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,7 +124,7 @@ const SeatComment = styled.div<{ polygonPosition: DOMRect | null }>`
     return (
       polygonPosition &&
       css`
-        top: ${polygonPosition.top - polygonPosition.height / 2 - 35}px;
+        top: ${polygonPosition.top - polygonPosition.height / 2 - 34}px;
         left: ${polygonPosition.left + polygonPosition.width / 2 - 15}px;
       `
     );
@@ -139,5 +141,9 @@ const SeatComment = styled.div<{ polygonPosition: DOMRect | null }>`
   z-index: 9999;
 `;
 
-const PolygonPath = styled.path``;
-const WordPath = styled.path``;
+const PolygonPath = styled.path`
+  cursor: pointer;
+`;
+const WordPath = styled.path`
+  cursor: pointer;
+`;
