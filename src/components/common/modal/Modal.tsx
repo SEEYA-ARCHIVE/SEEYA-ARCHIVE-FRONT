@@ -8,11 +8,6 @@ import {
 } from 'src/stores/modal';
 import useModal from 'src/hooks/useModal';
 import styled, { css } from 'styled-components';
-export interface IOptions {
-  backgroundBlur?: boolean;
-  backgroundLock?: boolean;
-  backgroundTransparent?: boolean;
-}
 
 export const Modal: VFC = () => {
   const modalList = useRecoilValue(modalListState);
