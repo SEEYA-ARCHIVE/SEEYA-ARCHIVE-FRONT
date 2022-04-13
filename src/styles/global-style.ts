@@ -23,6 +23,7 @@ export const GlobalStyle = createGlobalStyle`
     }
     button{
         border:none;
+        cursor: pointer;
     }
     .pc-tablet-only {
         display: block;

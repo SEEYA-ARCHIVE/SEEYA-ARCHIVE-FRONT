@@ -144,6 +144,4 @@ const SeatComment = styled.div<{ polygonPosition: DOMRect | null }>`
 const PolygonPath = styled.path`
   cursor: pointer;
 `;
-const WordPath = styled.path`
-  cursor: pointer;
-`;
+const WordPath = styled.path``;
