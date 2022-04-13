@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Card } from '../common/card/Card';
@@ -17,7 +18,7 @@ export const ReviewCard: FC<Props> = ({ imgSrc, author, surplusPic, createdAt, t
   return (
     <Card>
       <ImageWrapper>
-        <Img src={imgSrc} />
+        <Img src={imgSrc} layout="fill" objectFit="cover" />
         <PicInfo>
           <NameText>{author}</NameText>
           <SurplusText>{surplusPic ? `+${surplusPic}` : ''}</SurplusText>
@@ -47,12 +48,9 @@ const ImageWrapper = styled.div`
   height: 217px;
 `;
 
-const Img = styled.img`
+const Img = styled(Image)`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 `;
 
 const PicInfo = styled.div`
