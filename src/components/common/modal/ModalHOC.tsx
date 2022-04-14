@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { modalBackgroundBlurState, modalBackgroundLockState, modalBackgroundTransparentState } from 'src/stores/modal';
 
@@ -18,15 +18,28 @@ export const ModalHOC = <P extends ModalWrappedProps>(
     const [lock, setLock] = useRecoilState(modalBackgroundLockState);
     const [transparent, setTransparent] = useRecoilState(modalBackgroundTransparentState);
 
+    const [hocBlur, setHocBlur] = useState(false);
+    const [hocLock, setHocLock] = useState(false);
+    const [hocTransparent, setHocTransparent] = useState(false);
+
     useEffect(() => {
-      if (backgroundBlur && !blur) setBlur(true);
-      if (backgroundLock && !lock) setLock(true);
-      if (backgroundTransparent && !transparent) setTransparent(true);
+      if (backgroundBlur && !blur) {
+        setBlur(true);
+        setHocBlur(true);
+      }
+      if (backgroundLock && !lock) {
+        setLock(true);
+        setHocLock(true);
+      }
+      if (backgroundTransparent && !transparent) {
+        setTransparent(true);
+        setHocTransparent(true);
+      }
 
       return () => {
-        if (backgroundBlur && !blur) setBlur(false);
-        if (backgroundLock && !lock) setLock(false);
-        if (backgroundTransparent && !transparent) setTransparent(false);
+        if (hocBlur) setBlur(false);
+        if (hocLock) setLock(false);
+        if (hocTransparent) setTransparent(false);
       };
     }, []);
     return <WrappedComponent {...(props as P)} />;
