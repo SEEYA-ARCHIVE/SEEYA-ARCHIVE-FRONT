@@ -31,10 +31,10 @@ export const ReviewCard: FC<Props> = ({ imgSrc, author, surplusPic, createdAt, t
             <Tag key={tag} text={tag} />
           ))}
         </TagList>
-        <HelpTextWrapper>
+        {/* <HelpTextWrapper>
           <HelpText>{helpCount}명에게 도움이 되었습니다.</HelpText>
-          <Icon name="iconThumbsUp" />
-        </HelpTextWrapper>
+          <PointerIcon name="iconThumbsUp" />
+        </HelpTextWrapper> */}
       </InfoWrapper>
     </Card>
   );
@@ -46,11 +46,19 @@ const ImageWrapper = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   height: 217px;
+
+  overflow: hidden;
+  cursor: pointer;
 `;
 
 const Img = styled(Image)`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  transition: 0.5s all;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const PicInfo = styled.div`
@@ -78,7 +86,6 @@ const SurplusText = styled.p`
 `;
 
 const InfoWrapper = styled.div`
-  height: 88px;
   padding: 12px;
 `;
 
@@ -104,4 +111,8 @@ const HelpText = styled.p`
   color: #333333;
   font-size: 12px;
   font-weight: 500;
+`;
+
+const PointerIcon = styled(Icon)`
+  cursor: pointer;
 `;
