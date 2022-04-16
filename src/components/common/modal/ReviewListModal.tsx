@@ -71,21 +71,21 @@ export const ReviewListModal: FC = () => {
 const Wrapper = styled.div<{ isShow: boolean }>`
   position: fixed;
   top: 0;
-  right: -20vw;
-  width: 100vw;
+  right: 0;
+  width: 80vw;
   height: 100%;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
   background-color: ${({ theme }) => theme.color.white};
   border-left: 4px solid ${({ theme }) => theme.color.mint};
   padding: 36px 0 0 54px;
 
-  animation: ${({ isShow }) =>
+  animation: ${({ theme, isShow }) =>
     isShow
       ? css`
-          ${slideIn} 1s ease-in
+          ${theme.animation.slideIn} 1s ease-in
         `
       : css`
-          ${slideOut} 1s ease-in-out
+          ${theme.animation.slideOut} 1s ease-in-out
         `};
 `;
 
@@ -148,25 +148,4 @@ const IconWrapper = styled.div`
   position: absolute;
   top: 45%;
   left: 0;
-`;
-
-const slideIn = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-`;
-
-const slideOut = keyframes`
-  0% {
-    transform: translateX(0%);
-  }
-  30% {
-    transform: translateX(-2%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
 `;
