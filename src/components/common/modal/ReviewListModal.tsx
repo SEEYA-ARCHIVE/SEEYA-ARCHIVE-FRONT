@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { Select } from 'src/components/common/select/Select';
 import { ReviewCard } from 'src/components/reviewListPage/ReviewCard';
 import Icon from '../icon/Icon';
@@ -26,10 +26,18 @@ const MOCK_REVIEW_DATA = [
 ];
 
 export const ReviewListModal: FC = () => {
+  const [isShow, setIsShow] = useState(true);
   const [sort, setSort] = useState('');
   const reviewCount = MOCK_REVIEW_DATA.length; // TODO 데이터 받는 방식에 따라 수정 pagination or all
+
+  const handleChevronClick = () => {
+    setIsShow(false);
+
+    // TODO modal 구현 브랜치 머지 후, closeCurrentModal 함수 Timeout으로 실행
+  };
+
   return (
-    <Wrapper>
+    <Wrapper isShow={isShow}>
       <ReviewWrapper>
         <TitleWrapper>
           <Title>
@@ -56,22 +64,32 @@ export const ReviewListModal: FC = () => {
           </ReviewListWrapper>
         </ScrollWrapper>
       </ReviewWrapper>
-      <StyledChevron name="iconCircleChevronRight" />
+      <IconWrapper onClick={handleChevronClick}>
+        <Icon name="iconCircleChevronRight" />
+      </IconWrapper>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isShow: boolean }>`
   position: fixed;
   top: 0;
-  right: 0;
-  width: 80vw;
+  right: -20vw;
+  width: 100vw;
   height: 100%;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
   background-color: ${({ theme }) => theme.color.white};
-  animation: ${({ theme }) => theme.animation.slideIn} 1s ease-in-out;
   border-left: 4px solid ${({ theme }) => theme.color.mint};
   padding: 36px 0 0 54px;
+
+  animation: ${({ isShow }) =>
+    isShow
+      ? css`
+          ${slideIn} 1s ease-in
+        `
+      : css`
+          ${slideOut} 1s ease-in-out
+        `};
 `;
 
 const ReviewWrapper = styled.div`
@@ -100,7 +118,7 @@ const Title = styled.p`
 `;
 
 const ScrollWrapper = styled.div`
-  width: 695px;
+  width: 705px;
   height: calc(100% - 36px);
   overflow-y: scroll;
 
@@ -119,17 +137,39 @@ const ScrollWrapper = styled.div`
 const ReviewListWrapper = styled.div`
   width: 675px;
   margin-top: 15px;
+
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-row-gap: 15px;
   grid-column-gap: 12px;
-  grid-auto-rows: minmax(305px, auto);
+
   padding-bottom: 10px;
   padding-right: 20px;
 `;
 
-const StyledChevron = styled(Icon)`
+const IconWrapper = styled.div`
   position: absolute;
   top: 45%;
   left: 0;
+`;
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+`;
+
+const slideOut = keyframes`
+  0% {
+    transform: translateX(0%);
+  }
+  30% {
+    transform: translateX(-2%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 `;
