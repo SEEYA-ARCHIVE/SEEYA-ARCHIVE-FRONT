@@ -10,10 +10,7 @@ interface Props {
 }
 
 // TODO 임시 데이터
-const SORT_OPTIONS = [
-  { value: 'latest', label: '최신순' },
-  { value: 'price', label: '가격순' },
-];
+const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
 const MOCK_REVIEW_DATA = [
   {
     imgSrc: sampleThumbnail.src,
