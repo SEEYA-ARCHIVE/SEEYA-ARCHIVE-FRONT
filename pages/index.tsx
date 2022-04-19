@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-<<<<<<< HEAD
 import { Header } from 'src/components/common/header/Header';
 import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
 import { MainUpload } from 'src/components/mainPage/mainUpload/MainUpload';
@@ -19,24 +18,6 @@ const Home = () => {
         </div>
       </MainWrapper>
     </>
-=======
-import Icon from 'src/components/common/icon/Icon';
-import { Img } from 'src/components/common/image/Img';
-import Comment from 'public/assets/icon/Comments.svg';
-
-const Title = styled.h1`
-  color: red;
-`;
-
-const Home = () => {
-  return (
-    <Wrapper>
-      <StyledHeader>시야 아카이브</StyledHeader>
-      <Img name="sample" width={300} height={300} />
-      <Icon name="iconComment" fillColor="blue" />
-      <Comment />
-    </Wrapper>
->>>>>>> bbfeebe (feat: common으로 폴더 변경)
   );
 };
 

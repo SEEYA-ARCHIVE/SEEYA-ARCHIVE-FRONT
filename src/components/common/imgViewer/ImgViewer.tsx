@@ -1,40 +1,91 @@
 import React, { FC, useState } from 'react';
-
-import * as S from './imgViewer.style';
+import styled, { css } from 'styled-components';
 
 interface Props {
   imgList: string[];
-  width?: number;
-  height?: number;
+  userId: string;
 }
 
-const MAX_IMG_COUNT = 5;
-const GAP = 10;
-
-export const ImgViewer: FC<Props> = ({ imgList, width = 500, height = 400 }) => {
+export const ImgViewer: FC<Props> = ({ imgList, userId }) => {
   const [selectedIdx, setSelectedIdx] = useState(0);
-
-  const minWidth = Math.floor((width - GAP * (MAX_IMG_COUNT - 1)) / 5);
 
   const handleImgClick = (idx: number) => setSelectedIdx(idx);
 
   return (
-    <S.Wrapper>
-      <S.Img src={imgList[selectedIdx]} width={width} height={height}></S.Img>
-      <S.MinImgWrapper gap={GAP}>
+    <Wrapper>
+      <PreviewImgWrapper>
+        <Img src={imgList[selectedIdx]} width={500} height={300}></Img>
+        <ImgInfoBar>
+          <div className="user">{userId}</div>
+          <div className="count">+{imgList.length - 1}</div>
+        </ImgInfoBar>
+      </PreviewImgWrapper>
+      <MinImgWrapper>
         {imgList.map((src, idx) => {
           return (
-            <S.Img
+            <Img
               key={src + idx}
               src={src}
-              width={minWidth}
-              height={minWidth}
+              width={74}
+              height={74}
               onClick={() => handleImgClick(idx)}
               isSelected={idx === selectedIdx}
             />
           );
         })}
-      </S.MinImgWrapper>
-    </S.Wrapper>
+      </MinImgWrapper>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+`;
+
+const PreviewImgWrapper = styled.div`
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+`;
+
+const Img = styled.img<{ isSelected?: boolean }>`
+  border-radius: 10px;
+
+  ${({ theme, isSelected }) =>
+    isSelected &&
+    css`
+      border: 4px solid ${theme.color.mint};
+    `}
+`;
+
+const ImgInfoBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  color: ${({ theme }) => theme.fontColor.white};
+  font-weight: 700;
+  padding: 9px 12px;
+  background-color: rgba(0, 0, 0, 0.25);
+  .user {
+    font-size: 12px;
+  }
+  .count {
+    font-size: 16px;
+  }
+`;
+
+const MinImgWrapper = styled.div`
+  display: flex;
+  margin-top: 8px;
+
+  & > *:not(:first-child) {
+    margin-left: 5px;
+  }
+`;
