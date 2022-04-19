@@ -13,11 +13,13 @@ export const theme = {
     black: '#000',
     yellow: '#FFB118',
     darkGray: '#333333',
+    purple: '#7B61FF',
   },
   fontColor: {
     black: '#33333',
     gray: '#7b7b7b',
     white: '#fff',
+    mint: '#13ACC1',
   },
   boxShadow: {
     normal: '0 3px 8px 0 rgb(0 0 0 / 10%)',

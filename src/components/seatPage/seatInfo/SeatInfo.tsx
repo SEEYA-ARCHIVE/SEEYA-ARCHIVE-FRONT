@@ -26,14 +26,14 @@ export const SeatInfo: FC<Props> = () => {
   return (
     <SeatInfoWrapper>
       <h1>올림픽 홀</h1>
-      <div>
-        <span>총 {SEAT_COUNT}</span>의 사진 리뷰가 있습니다.
-      </div>
       <SelectBoxWrapper>
         <Select value={floor} onChange={setFloor} options={floorOptions} />
         <Select value={section} onChange={setSection} options={sectionOptions} />
         구역
       </SelectBoxWrapper>
+      <div>
+        <span className="highlight">총 {SEAT_COUNT}</span>의 사진 리뷰가 있습니다.
+      </div>
     </SeatInfoWrapper>
   );
 };
@@ -45,13 +45,16 @@ const SeatInfoWrapper = styled.div`
     margin-bottom: 8px;
   }
   font-size: 12px;
+  .highlight {
+    color: ${({ theme }) => theme.fontColor.mint};
+  }
 `;
 
 const SelectBoxWrapper = styled.div`
   display: flex;
   align-items: center;
   font-size: 12px;
-  margin-top: 24px;
+  margin-bottom: 18px;
   & > * {
     margin-right: 10px;
   }
