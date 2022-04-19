@@ -95,9 +95,11 @@ export const Seats: VFC<Props> = ({ data, className }) => {
     setSvgData({ ...svgData, polygon: updatedPolygons, word: updatedWords });
   }, []);
 
+  const showComment = () => setIsCommentOpen(true);
+  const hideComment = () => setIsCommentOpen(false);
+
   const handlePolygonEnter = (e: MouseEvent) => {
-    if (!isCommentOpen) setIsCommentOpen(true);
-    console.log('!!!');
+    if (!isCommentOpen) showComment();
     const polygon = e.target as SVGPathWithId;
     const id = polygon.id;
     setReviewCount(polygon.dataset.review ? +polygon.dataset.review : 0);
@@ -107,7 +109,6 @@ export const Seats: VFC<Props> = ({ data, className }) => {
     setPolygonPosition(wordPath.getBoundingClientRect());
   };
 
-  const handlePolygonLeave = (e: MouseEvent) => setIsCommentOpen(false);
   const handlePolygonClick = (e: MouseEvent) => {
     /** 리뷰 리스트 모달 */
   };
@@ -122,18 +123,20 @@ export const Seats: VFC<Props> = ({ data, className }) => {
       stroke={data.stroke}
       strokeWidth={data['stroke-width']}
       strokeDasharray={data['stroke-dasharray']}
-      // onMouseOver={handlePolygonEnter}
-      // onMouseLeave={handlePolygonLeave}
-      onClick={handlePolygonEnter}
+      onMouseEnter={handlePolygonEnter}
+      onMouseLeave={hideComment}
+      onClick={handlePolygonClick}
     />
   ));
 
-  const SVGWords = word.map((data) => <WordPath key={data.id} id={data.id} d={data.d} fill={data.fill} />);
+  const SVGWords = word.map((data) => (
+    <WordPath key={data.id} id={data.id} d={data.d} fill={data.fill} onMouseEnter={showComment} />
+  ));
 
   return (
     <>
-      {isCommentOpen && !!reviewCount && (
-        <SeatComment polygonPosition={polygonPosition}>
+      {!!reviewCount && (
+        <SeatComment isCommentOpen={isCommentOpen} onMouseEnter={showComment} polygonPosition={polygonPosition}>
           {reviewCount}건<div className="arrow"></div>
         </SeatComment>
       )}
@@ -158,8 +161,9 @@ const SVGWrap = styled.div`
     display: block;
   }
 `;
-const SeatComment = styled.div<{ polygonPosition: DOMRect | null }>`
+const SeatComment = styled.div<{ isCommentOpen: boolean; polygonPosition: DOMRect | null }>`
   cursor: pointer;
+  visibility: ${({ isCommentOpen }) => (isCommentOpen ? 'visible' : 'hidden')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,6 +199,16 @@ const SeatComment = styled.div<{ polygonPosition: DOMRect | null }>`
 
 const PolygonPath = styled.path`
   cursor: pointer;
+  position: relative;
+  &:before {
+    content: '';
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 `;
 const WordPath = styled.path`
   user-select: none;
