@@ -1,12 +1,23 @@
 import React, { FC } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+
 import { Button } from 'src/components/common/button/Button';
+import { isCompareModeState, selectedCompareSeatState } from 'src/stores/compare';
 import styled, { css } from 'styled-components';
 
 interface Props {}
 
 export const FABCompareBox: FC<Props> = () => {
-  return (
-    <FABCompareBoxWrapper>
+  const [isCompareMode, setIsCompareMode] = useRecoilState(isCompareModeState);
+  const selectedCompareSeat = useRecoilValue(selectedCompareSeatState);
+
+  const handleCompareBtnClick = () => {
+    setIsCompareMode(true);
+  };
+  const handleCancleBtnClick = () => {};
+
+  return isCompareMode ? (
+    <ComparingBox>
       <div className="inner_box_wrapper">
         <CompareInnerBox>비교할 구역을 클릭하세요.</CompareInnerBox>
         <CompareInnerBox>비교할 구역을 클릭하세요.</CompareInnerBox>
@@ -14,18 +25,24 @@ export const FABCompareBox: FC<Props> = () => {
       <Button bgColor="darkGray" className="compare_btn">
         비교하기
       </Button>
-    </FABCompareBoxWrapper>
+    </ComparingBox>
+  ) : (
+    <ReadyBox>
+      <div>어떤 좌석이 더 좋을지 고민된다면?</div>
+      <Button bgColor="darkGray" className="compare_start_btn" onClick={() => setIsCompareMode(true)}>
+        비교 시작하기
+      </Button>
+    </ReadyBox>
   );
 };
 
-const FABCompareBoxWrapper = styled.div`
+const CompareBox = styled.div`
+  width: 160px;
+
   position: fixed;
   right: 50px;
   top: 50%;
   transform: translate(0, -60%);
-
-  width: 160px;
-  height: 350px;
 
   border-radius: 40px;
   background-color: ${({ theme }) => theme.color.gray5};
@@ -37,9 +54,32 @@ const FABCompareBoxWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 35px 25px;
+`;
+
+const ReadyBox = styled(CompareBox)`
+  color: ${({ theme }) => theme.fontColor.gray};
+
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+  & > div {
+    margin-bottom: 8px;
+  }
+  .compare_start_btn {
+    width: 115px;
+  }
+`;
+
+const ComparingBox = styled(CompareBox)`
+  height: 350px;
 
   .inner_box_wrapper {
     margin-bottom: 24px;
+  }
+
+  .compare_btn {
+    min-width: 85px;
+    margin-bottom: 8px;
   }
 `;
 
