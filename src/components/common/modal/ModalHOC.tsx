@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { modalBackgroundBlurState, modalBackgroundLockState, modalBackgroundTransparentState } from 'src/stores/modal';
+import React, { FC } from 'react';
+import useModal from 'src/hooks/useModal';
+import styled, { css } from 'styled-components';
 
 export interface ModalWrappedProps {}
 
@@ -14,36 +14,46 @@ export const ModalHOC = <P extends ModalWrappedProps>(
   WrappedComponent: React.ComponentType<P>,
 ): FC<Props & Omit<P, keyof ModalWrappedProps>> => {
   const ModalManageComponent = ({ backgroundBlur, backgroundLock, backgroundTransparent, ...props }: Props) => {
-    const [blur, setBlur] = useRecoilState(modalBackgroundBlurState);
-    const [lock, setLock] = useRecoilState(modalBackgroundLockState);
-    const [transparent, setTransparent] = useRecoilState(modalBackgroundTransparentState);
+    const { closeCurrentModal } = useModal();
 
-    const [hocBlur, setHocBlur] = useState(false);
-    const [hocLock, setHocLock] = useState(false);
-    const [hocTransparent, setHocTransparent] = useState(false);
+    const onClickModalBackground = () => {
+      if (backgroundLock) return;
 
-    useEffect(() => {
-      if (backgroundBlur && !blur) {
-        setBlur(true);
-        setHocBlur(true);
-      }
-      if (backgroundLock && !lock) {
-        setLock(true);
-        setHocLock(true);
-      }
-      if (backgroundTransparent && !transparent) {
-        setTransparent(true);
-        setHocTransparent(true);
-      }
+      closeCurrentModal();
+    };
 
-      return () => {
-        if (hocBlur) setBlur(false);
-        if (hocLock) setLock(false);
-        if (hocTransparent) setTransparent(false);
-      };
-    }, []);
-    return <WrappedComponent {...(props as P)} />;
+    return (
+      <>
+        <Background
+          onClick={onClickModalBackground}
+          backgroundBlur={backgroundBlur}
+          backgroundTransparent={backgroundTransparent}
+        />
+        <Content>
+          <WrappedComponent {...(props as P)} />
+        </Content>
+      </>
+    );
   };
 
   return ModalManageComponent;
 };
+
+const Background = styled.div<Pick<Props, 'backgroundTransparent' | 'backgroundBlur'>>`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: ${({ backgroundTransparent }) => (backgroundTransparent ? 'transparent' : 'rgba(123, 123, 123, 0.75);')};
+
+  ${({ backgroundBlur }) =>
+    backgroundBlur &&
+    css`
+      backdrop-filter: blur(20px);
+    `};
+`;
+
+const Content = styled.div`
+  position: absolute;
+  z-index: 1001;
+`;
