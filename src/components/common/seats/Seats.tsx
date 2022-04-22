@@ -1,4 +1,8 @@
 import React, { MouseEvent, useEffect, useState, VFC } from 'react';
+import { useRecoilValue } from 'recoil';
+import { MOCK_SEAT_AREA } from 'src/api/mock/seat_areas';
+import { SeatAreaType } from 'src/api/seat';
+import { getSeatArea } from 'src/stores/seat';
 import styled, { css } from 'styled-components';
 
 interface PolygonPathType {
@@ -25,6 +29,7 @@ interface SVGDataType {
   word: WordPathType[];
 }
 interface Props {
+  hallId: number;
   data: SVGDataType;
   className?: string;
 }
@@ -33,23 +38,7 @@ interface SVGPathWithId extends SVGPathElement {
   id: string;
 }
 
-const mock = [
-  { id: 'f3-a1', count: 3 },
-  { id: 'f3-a2', count: 2 },
-  { id: 'f3-a3', count: 1 },
-  { id: 'f3-a4', count: 7 },
-  { id: 'f2-d1', count: 1 },
-  { id: 'f2-d2', count: 2 },
-  { id: 'f2-g', count: 3 },
-  { id: 'f2-h', count: 3 },
-  { id: 'f2-b1', count: 3 },
-  { id: 'f3-e1', count: 2 },
-  { id: 'f3-e3', count: 5 },
-];
-
-const mockData = {
-  data: [{ floor: 2, sector: 'a1', count: 3 }],
-};
+const mock = MOCK_SEAT_AREA;
 
 const FLOOR_COLOR: Record<string, string> = {
   2: '#FFB118',
@@ -57,21 +46,31 @@ const FLOOR_COLOR: Record<string, string> = {
 };
 
 /** component */
-export const Seats: VFC<Props> = ({ data, className }) => {
+export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   const [svgData, setSvgData] = useState(data);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
-  const [polygonPosition, setPolygonPosition] = useState<DOMRect | null>(null);
   const [reviewCount, setReviewCount] = useState(0);
+  const [polygonPosition, setPolygonPosition] = useState<DOMRect | null>(null);
+  const seatArea = useRecoilValue(getSeatArea(hallId));
 
   const { width, height, viewBox, xmlns, polygon, word } = svgData;
 
   useEffect(() => {
-    const getReivewCount = (id: string, reviewData: { id: string; count: number }[]) => {
-      /** TODO: API 리스폰스 정해지면 수정필요 */
-      return reviewData.find((data) => data.id === id)?.count;
+    if (!mock) return;
+
+    const getReivewCount = (id: string) => {
+      const floor = Number(id.split('-')[0][1]);
+      const area = id.split('-')[1];
+      if (!area || !floor) return 0;
+
+      return mock.find((data) => {
+        return data.floor === floor && data.area === area.toUpperCase();
+      })?.countReviews;
     };
+
     const updatedPolygons = svgData.polygon.map((data) => {
-      const seatReviews = getReivewCount(data.id, mock);
+      const seatReviews = getReivewCount(data.id);
+
       if (seatReviews) {
         const floor = data.id.split('-')[0].split('')[1];
         const style = {
@@ -86,7 +85,7 @@ export const Seats: VFC<Props> = ({ data, className }) => {
     });
 
     const updatedWords = svgData.word.map((data) => {
-      if (getReivewCount(data.id, mock)) {
+      if (getReivewCount(data.id)) {
         return { ...data, fill: '#FFF' };
       }
       return data;
