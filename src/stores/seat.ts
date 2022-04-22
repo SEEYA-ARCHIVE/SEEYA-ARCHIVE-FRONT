@@ -1,4 +1,5 @@
 import { atom, selector, selectorFamily } from 'recoil';
+import { MOCK_SEAT_AREA } from 'src/api/mock/seat_areas';
 import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
 
 interface SeatType {

@@ -1,26 +1,13 @@
 import React, { MouseEvent, useEffect, useState, VFC } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import { MOCK_SEAT_AREA } from 'src/api/mock/seat_areas';
 import { SeatAreaType } from 'src/api/seat';
 import { getSeatArea } from 'src/stores/seat';
 import styled, { css } from 'styled-components';
+import { Area, PolygonPathType } from './Area';
+import { Word, WordPathType } from './Word';
 
-interface PolygonPathType {
-  id: string;
-  d: string;
-  stroke: string;
-  fill: string;
-  'stroke-width'?: string;
-  'stroke-dasharray'?: string;
-  count?: number;
-}
-
-interface WordPathType {
-  id: string;
-  d: string;
-  fill: string;
-}
-interface SVGDataType {
+export interface SVGDataType {
   width: number;
   height: number;
   viewBox: string;
@@ -44,23 +31,48 @@ const FLOOR_COLOR: Record<string, string> = {
   2: '#FFB118',
   3: '#13ACC1',
 };
-
+/**
+ * 1. 코멘트 띄우기
+ * - isCommentOpen
+ * - reviewCount => word에서 진행
+ * 2. 색깔 변경하기
+ * - setSvgData
+ */
 /** component */
 export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   const [svgData, setSvgData] = useState(data);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
   const [polygonPosition, setPolygonPosition] = useState<DOMRect | null>(null);
-  const seatArea = useRecoilValue(getSeatArea(hallId));
+
+  const [focusedArea, setFocusedArea] = useState<string | null>(null);
+  /**
+   * useRecoilValue는 Suspense를 NextJS에서 못써서 사용 못한다.
+   * 그러면 불편할텐데.. 다른 라이브러리 고민도 할만할 듯
+   */
+  const seatArea = useRecoilValueLoadable(getSeatArea(hallId));
 
   const { width, height, viewBox, xmlns, polygon, word } = svgData;
+
+  const showComment = () => setIsCommentOpen(true);
+  const hideComment = () => setIsCommentOpen(false);
+
+  useEffect(() => {
+    if (focusedArea) {
+      showComment();
+    } else {
+      hideComment();
+    }
+  }, [focusedArea]);
 
   useEffect(() => {
     if (!mock) return;
 
+    const getFloorFromId = (id: string) => Number(id.split('-')[0][1]);
+    const getAreaFromId = (id: string) => id.split('-')[1];
     const getReivewCount = (id: string) => {
-      const floor = Number(id.split('-')[0][1]);
-      const area = id.split('-')[1];
+      const floor = getFloorFromId(id);
+      const area = getAreaFromId(id);
       if (!area || !floor) return 0;
 
       return mock.find((data) => {
@@ -69,24 +81,24 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
     };
 
     const updatedPolygons = svgData.polygon.map((data) => {
-      const seatReviews = getReivewCount(data.id);
-
-      if (seatReviews) {
-        const floor = data.id.split('-')[0].split('')[1];
+      if (getReivewCount(data.id)) {
+        const floor = getFloorFromId(data.id);
         const style = {
           fill: FLOOR_COLOR[floor] ?? data.fill,
           stroke: 'none',
           'stroke-width': 'none',
           'stroke-dasharray': 'none',
         };
-        return { ...data, ...style, count: seatReviews };
+        return { ...data, ...style };
       }
       return data;
     });
 
     const updatedWords = svgData.word.map((data) => {
-      if (getReivewCount(data.id)) {
-        return { ...data, fill: '#FFF' };
+      const seatReviews = getReivewCount(data.id);
+
+      if (seatReviews) {
+        return { ...data, fill: '#FFF', count: seatReviews };
       }
       return data;
     });
@@ -94,48 +106,23 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
     setSvgData({ ...svgData, polygon: updatedPolygons, word: updatedWords });
   }, []);
 
-  const showComment = () => setIsCommentOpen(true);
-  const hideComment = () => setIsCommentOpen(false);
-
-  const handlePolygonEnter = (e: MouseEvent) => {
-    if (!isCommentOpen) showComment();
-    const polygon = e.target as SVGPathWithId;
-    const id = polygon.id;
-    setReviewCount(polygon.dataset.review ? +polygon.dataset.review : 0);
-    const wordPath = document.querySelectorAll(`path[id="${id}"]`)[1];
-
-    if (!wordPath) return;
-    setPolygonPosition(wordPath.getBoundingClientRect());
-  };
-
-  const handlePolygonClick = (e: MouseEvent) => {
-    /** 리뷰 리스트 모달 */
-  };
-
-  const SVGPolygons = polygon.map((data) => (
-    <PolygonPath
-      key={data.id}
-      id={data.id}
-      d={data.d}
-      data-review={data.count}
-      fill={data.fill}
-      stroke={data.stroke}
-      strokeWidth={data['stroke-width']}
-      strokeDasharray={data['stroke-dasharray']}
-      onMouseEnter={handlePolygonEnter}
-      onMouseLeave={hideComment}
-      onClick={handlePolygonClick}
-    />
-  ));
+  const SVGPolygons = polygon.map((data) => <Area key={data.id} {...data} setFocusedArea={setFocusedArea} />);
 
   const SVGWords = word.map((data) => (
-    <WordPath key={data.id} id={data.id} d={data.d} fill={data.fill} onMouseEnter={showComment} />
+    <Word
+      key={data.id}
+      focusedArea={focusedArea}
+      svgData={svgData}
+      setReviewCount={setReviewCount}
+      setPolygonPosition={setPolygonPosition}
+      {...data}
+    />
   ));
 
   return (
     <>
       {!!reviewCount && (
-        <SeatComment isCommentOpen={isCommentOpen} onMouseEnter={showComment} polygonPosition={polygonPosition}>
+        <SeatComment isCommentOpen={isCommentOpen} polygonPosition={polygonPosition}>
           {reviewCount}건<div className="arrow"></div>
         </SeatComment>
       )}
