@@ -13,12 +13,12 @@ interface Props {
 const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
 const MOCK_REVIEW_DATA = [
   {
-    imgSrc: sampleThumbnail.src,
-    author: '박은서',
-    surplusPic: 2,
-    createdAt: '2022/3/27',
-    tagList: ['세븐틴', '올림픽홀', '월드투어'],
-    helpCount: 25,
+    id: 1,
+    images: {
+      previewImages: sampleThumbnail.src,
+      numImages: 2,
+    },
+    createdAt: '2022-02-13T00:47:28+09:00',
   },
 ];
 
@@ -44,19 +44,13 @@ export const ReviewListModal: FC = () => {
         </TitleWrapper>
         <ScrollWrapper>
           <ReviewListWrapper>
-            {MOCK_REVIEW_DATA.map((data, idx) => {
-              const { imgSrc, author, surplusPic, createdAt, tagList, helpCount } = data;
-              return (
-                <ReviewCard
-                  key={imgSrc + idx}
-                  imgSrc={imgSrc}
-                  author={author}
-                  surplusPic={surplusPic}
-                  createdAt={createdAt}
-                  tagList={tagList}
-                  helpCount={helpCount}
-                />
-              );
+            {MOCK_REVIEW_DATA.map((data) => {
+              const {
+                id,
+                createdAt,
+                images: { previewImages, numImages },
+              } = data;
+              return <ReviewCard key={id} imgSrc={previewImages} surplusPic={numImages} createdAt={createdAt} />;
             })}
           </ReviewListWrapper>
         </ScrollWrapper>

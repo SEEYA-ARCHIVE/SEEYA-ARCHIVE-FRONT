@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React, { FC } from 'react';
+import { convertDateToFormattedString } from 'src/utils/timeUtil';
 import styled from 'styled-components';
 import { Card } from '../common/card/Card';
 import Icon from '../common/icon/Icon';
@@ -7,30 +8,34 @@ import { Tag } from '../common/tag/Tag';
 
 interface Props {
   imgSrc: string;
-  author: string;
+  author?: string;
   surplusPic: number;
   createdAt: string;
-  tagList: string[];
-  helpCount: number;
+  tagList?: string[];
+  helpCount?: number;
 }
 
 export const ReviewCard: FC<Props> = ({ imgSrc, author, surplusPic, createdAt, tagList, helpCount }) => {
+  const formattedDate = convertDateToFormattedString(createdAt);
   return (
     <Card>
       <ImageWrapper>
         <Img src={imgSrc} layout="fill" objectFit="cover" />
         <PicInfo>
-          <NameText>{author}</NameText>
+          <NameText>{author ?? '시야봇'}</NameText>
           <SurplusText>{surplusPic ? `+${surplusPic}` : ''}</SurplusText>
         </PicInfo>
       </ImageWrapper>
       <InfoWrapper>
-        <DateText>{createdAt}</DateText>
+        <DateText>{formattedDate}</DateText>
         <TagList>
-          {tagList.map((tag) => (
+          {/* TODO: Prototype 이후 */}
+          {/* {tagList?.map((tag) => (
             <Tag key={tag} text={tag} />
-          ))}
+          ))} */}
+          <Tag text="올림픽홀" />
         </TagList>
+        {/* TODO: Prototype 이후 */}
         {/* <HelpTextWrapper>
           <HelpText>{helpCount}명에게 도움이 되었습니다.</HelpText>
           <PointerIcon name="iconThumbsUp" />
