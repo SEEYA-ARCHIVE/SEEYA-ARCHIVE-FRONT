@@ -21,10 +21,6 @@ interface Props {
   className?: string;
 }
 
-interface SVGPathWithId extends SVGPathElement {
-  id: string;
-}
-
 const mock = MOCK_SEAT_AREA;
 
 const FLOOR_COLOR: Record<string, string> = {
@@ -32,7 +28,7 @@ const FLOOR_COLOR: Record<string, string> = {
   3: '#13ACC1',
 };
 
-const OPACITY_FLOOR_COLOR = {
+const OPACITY_FLOOR_COLOR: Record<string, string> = {
   2: '#ffcd68',
   3: '#A8CBCF',
 };
@@ -64,6 +60,16 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   const getFloorFromId = (id: string) => Number(id.split('-')[0][1]);
   const getAreaFromId = (id: string) => id.split('-')[1];
 
+  const getReivewCount = (id: string) => {
+    const floor = getFloorFromId(id);
+    const area = getAreaFromId(id);
+    if (!area || !floor) return 0;
+
+    return mock.find((data) => {
+      return data.floor === floor && data.area === area.toUpperCase();
+    })?.countReviews;
+  };
+
   const setAreaOpacityColor = (id: string) => {
     const floor = getFloorFromId(id);
     const area = getAreaFromId(id);
@@ -73,7 +79,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
 
       const floor = getFloorFromId(data.id);
       const style = {
-        fill: FLOOR_COLOR[floor] ?? data.fill,
+        fill: OPACITY_FLOOR_COLOR[floor] ?? data.fill,
         stroke: 'none',
         'stroke-width': 'none',
         'stroke-dasharray': 'none',
@@ -83,29 +89,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
 
     setSvgData({ ...svgData, area: updatedArea });
   };
-  const setAreaOriginColor = () => {};
-
-  useEffect(() => {
-    if (focusedArea) {
-      showComment();
-    } else {
-      hideComment();
-    }
-  }, [focusedArea]);
-
-  useEffect(() => {
-    if (!mock) return;
-
-    const getReivewCount = (id: string) => {
-      const floor = getFloorFromId(id);
-      const area = getAreaFromId(id);
-      if (!area || !floor) return 0;
-
-      return mock.find((data) => {
-        return data.floor === floor && data.area === area.toUpperCase();
-      })?.countReviews;
-    };
-
+  const setSeatColor = () => {
     const updatedArea = svgData.area.map((data) => {
       if (getReivewCount(data.id)) {
         const floor = getFloorFromId(data.id);
@@ -130,9 +114,26 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
     });
 
     setSvgData({ ...svgData, area: updatedArea, word: updatedWords });
+  };
+
+  useEffect(() => {
+    if (focusedArea) {
+      showComment();
+      setAreaOpacityColor(focusedArea);
+    } else {
+      hideComment();
+      setSeatColor();
+    }
+  }, [focusedArea]);
+
+  useEffect(() => {
+    if (!mock) return;
+    setSeatColor();
   }, []);
 
-  const SVGArea = area.map((data) => <Area key={data.id} {...data} setFocusedArea={setFocusedArea} />);
+  const SVGArea = area.map((data) => (
+    <Area key={data.id} svgData={svgData} setFocusedArea={setFocusedArea} {...data} />
+  ));
 
   const SVGWords = word.map((data) => (
     <Word
