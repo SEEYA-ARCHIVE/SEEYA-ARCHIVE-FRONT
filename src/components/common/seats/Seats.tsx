@@ -112,6 +112,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
     <Word
       key={data.id}
       focusedArea={focusedArea}
+      setFocusedArea={setFocusedArea}
       svgData={svgData}
       setReviewCount={setReviewCount}
       setPolygonPosition={setPolygonPosition}
@@ -122,7 +123,12 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   return (
     <>
       {!!reviewCount && (
-        <SeatComment isCommentOpen={isCommentOpen} polygonPosition={polygonPosition}>
+        <SeatComment
+          isCommentOpen={isCommentOpen}
+          polygonPosition={polygonPosition}
+          onMouseEnter={() => {
+            setFocusedArea(focusedArea);
+          }}>
           {reviewCount}건<div className="arrow"></div>
         </SeatComment>
       )}
@@ -147,6 +153,7 @@ const SVGWrap = styled.div`
     display: block;
   }
 `;
+
 const SeatComment = styled.div<{ isCommentOpen: boolean; polygonPosition: DOMRect | null }>`
   cursor: pointer;
   visibility: ${({ isCommentOpen }) => (isCommentOpen ? 'visible' : 'hidden')};

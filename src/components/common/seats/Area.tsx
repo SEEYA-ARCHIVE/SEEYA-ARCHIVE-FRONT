@@ -20,7 +20,6 @@ export const Area: FC<Props> = ({ id, setFocusedArea, ...props }) => {
   const handleEnter = () => {
     timer.current = setTimeout(() => {
       timer.current = null;
-      console.log(1);
       setFocusedArea(id);
     }, 100);
   };
@@ -29,7 +28,6 @@ export const Area: FC<Props> = ({ id, setFocusedArea, ...props }) => {
       clearTimeout(timer.current);
       return;
     }
-    console.log(2);
     setFocusedArea(null);
   };
   return <PolygonPath {...props} onMouseEnter={handleEnter} onMouseLeave={handleLeave}></PolygonPath>;
