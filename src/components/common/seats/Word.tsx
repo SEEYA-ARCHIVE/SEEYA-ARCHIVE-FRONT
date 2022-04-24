@@ -11,12 +11,21 @@ export interface WordPathType {
 
 interface Props extends WordPathType {
   focusedArea: string | null;
+  setFocusedArea: Dispatch<SetStateAction<string | null>>;
   svgData: SVGDataType;
   setReviewCount: Dispatch<SetStateAction<number>>;
   setPolygonPosition: Dispatch<SetStateAction<DOMRect | null>>;
 }
 
-export const Word: FC<Props> = ({ id, svgData, setReviewCount, setPolygonPosition, focusedArea, ...props }) => {
+export const Word: FC<Props> = ({
+  id,
+  svgData,
+  setReviewCount,
+  setPolygonPosition,
+  focusedArea,
+  setFocusedArea,
+  ...props
+}) => {
   const wordRef = useRef<SVGPathElement>(null);
 
   const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
@@ -28,7 +37,14 @@ export const Word: FC<Props> = ({ id, svgData, setReviewCount, setPolygonPositio
     setPolygonPosition(wordRef.current.getBoundingClientRect());
   }, [focusedArea]);
 
-  return <WordPath ref={wordRef} {...props}></WordPath>;
+  return (
+    <WordPath
+      ref={wordRef}
+      onMouseEnter={() => {
+        setFocusedArea(focusedArea);
+      }}
+      {...props}></WordPath>
+  );
 };
 
 const WordPath = styled.path`
