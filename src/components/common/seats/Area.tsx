@@ -1,5 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
 import styled from 'styled-components';
+import { SVGDataType } from './Seats';
 
 export interface AreaPathType {
   id: string;
@@ -11,19 +12,25 @@ export interface AreaPathType {
 }
 
 interface Props extends AreaPathType {
+  svgData: SVGDataType;
   setFocusedArea: Dispatch<SetStateAction<string | null>>;
 }
 
-export const Area: FC<Props> = ({ id, setFocusedArea, ...props }) => {
+export const Area: FC<Props> = ({ id, svgData, setFocusedArea, ...props }) => {
   const timer = useRef<NodeJS.Timer | null>(null);
+  const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
 
   const handleEnter = () => {
+    if (!reviewCount) return;
+
     timer.current = setTimeout(() => {
       timer.current = null;
       setFocusedArea(id);
     }, 100);
   };
   const handleLeave = () => {
+    if (!reviewCount) return;
+
     if (timer.current) {
       clearTimeout(timer.current);
       setFocusedArea(null);
