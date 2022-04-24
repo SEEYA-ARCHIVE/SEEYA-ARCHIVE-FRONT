@@ -26,6 +26,7 @@ export const Area: FC<Props> = ({ id, setFocusedArea, ...props }) => {
   const handleLeave = () => {
     if (timer.current) {
       clearTimeout(timer.current);
+      setFocusedArea(null);
       return;
     }
     setFocusedArea(null);
