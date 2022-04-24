@@ -4,7 +4,7 @@ import { MOCK_SEAT_AREA } from 'src/api/mock/seat_areas';
 import { SeatAreaType } from 'src/api/seat';
 import { getSeatArea } from 'src/stores/seat';
 import styled, { css } from 'styled-components';
-import { Area, PolygonPathType } from './Area';
+import { Area, AreaPathType } from './Area';
 import { Word, WordPathType } from './Word';
 
 export interface SVGDataType {
@@ -12,7 +12,7 @@ export interface SVGDataType {
   height: number;
   viewBox: string;
   xmlns: string;
-  polygon: PolygonPathType[];
+  area: AreaPathType[];
   word: WordPathType[];
 }
 interface Props {
@@ -31,6 +31,11 @@ const FLOOR_COLOR: Record<string, string> = {
   2: '#FFB118',
   3: '#13ACC1',
 };
+
+const OPACITY_FLOOR_COLOR = {
+  2: '#ffcd68',
+  3: '#A8CBCF',
+};
 /**
  * 1. 코멘트 띄우기
  * - isCommentOpen
@@ -43,7 +48,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   const [svgData, setSvgData] = useState(data);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
-  const [polygonPosition, setPolygonPosition] = useState<DOMRect | null>(null);
+  const [areaPosition, setAreaPosition] = useState<DOMRect | null>(null);
 
   const [focusedArea, setFocusedArea] = useState<string | null>(null);
   /**
@@ -52,10 +57,33 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
    */
   const seatArea = useRecoilValueLoadable(getSeatArea(hallId));
 
-  const { width, height, viewBox, xmlns, polygon, word } = svgData;
+  const { width, height, viewBox, xmlns, area, word } = svgData;
 
   const showComment = () => setIsCommentOpen(true);
   const hideComment = () => setIsCommentOpen(false);
+  const getFloorFromId = (id: string) => Number(id.split('-')[0][1]);
+  const getAreaFromId = (id: string) => id.split('-')[1];
+
+  const setAreaOpacityColor = (id: string) => {
+    const floor = getFloorFromId(id);
+    const area = getAreaFromId(id);
+
+    const updatedArea = svgData.area.map((data) => {
+      if (data.id !== id) return data;
+
+      const floor = getFloorFromId(data.id);
+      const style = {
+        fill: FLOOR_COLOR[floor] ?? data.fill,
+        stroke: 'none',
+        'stroke-width': 'none',
+        'stroke-dasharray': 'none',
+      };
+      return { ...data, ...style };
+    });
+
+    setSvgData({ ...svgData, area: updatedArea });
+  };
+  const setAreaOriginColor = () => {};
 
   useEffect(() => {
     if (focusedArea) {
@@ -68,8 +96,6 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   useEffect(() => {
     if (!mock) return;
 
-    const getFloorFromId = (id: string) => Number(id.split('-')[0][1]);
-    const getAreaFromId = (id: string) => id.split('-')[1];
     const getReivewCount = (id: string) => {
       const floor = getFloorFromId(id);
       const area = getAreaFromId(id);
@@ -80,7 +106,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
       })?.countReviews;
     };
 
-    const updatedPolygons = svgData.polygon.map((data) => {
+    const updatedArea = svgData.area.map((data) => {
       if (getReivewCount(data.id)) {
         const floor = getFloorFromId(data.id);
         const style = {
@@ -103,10 +129,10 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
       return data;
     });
 
-    setSvgData({ ...svgData, polygon: updatedPolygons, word: updatedWords });
+    setSvgData({ ...svgData, area: updatedArea, word: updatedWords });
   }, []);
 
-  const SVGPolygons = polygon.map((data) => <Area key={data.id} {...data} setFocusedArea={setFocusedArea} />);
+  const SVGArea = area.map((data) => <Area key={data.id} {...data} setFocusedArea={setFocusedArea} />);
 
   const SVGWords = word.map((data) => (
     <Word
@@ -115,7 +141,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
       setFocusedArea={setFocusedArea}
       svgData={svgData}
       setReviewCount={setReviewCount}
-      setPolygonPosition={setPolygonPosition}
+      setAreaPosition={setAreaPosition}
       {...data}
     />
   ));
@@ -125,7 +151,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
       {!!reviewCount && (
         <SeatComment
           isCommentOpen={isCommentOpen}
-          polygonPosition={polygonPosition}
+          areaPosition={areaPosition}
           onMouseEnter={() => {
             setFocusedArea(focusedArea);
           }}>
@@ -134,7 +160,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
       )}
       <SVGWrap className={className}>
         <svg width={width} height={height} viewBox={viewBox} xmlns={xmlns}>
-          {SVGPolygons}
+          {SVGArea}
           {SVGWords}
         </svg>
       </SVGWrap>
@@ -154,7 +180,7 @@ const SVGWrap = styled.div`
   }
 `;
 
-const SeatComment = styled.div<{ isCommentOpen: boolean; polygonPosition: DOMRect | null }>`
+const SeatComment = styled.div<{ isCommentOpen: boolean; areaPosition: DOMRect | null }>`
   cursor: pointer;
   visibility: ${({ isCommentOpen }) => (isCommentOpen ? 'visible' : 'hidden')};
   display: flex;
@@ -169,12 +195,12 @@ const SeatComment = styled.div<{ isCommentOpen: boolean; polygonPosition: DOMRec
   border-radius: 12px;
   font-size: 9px;
   font-weight: 700;
-  ${({ polygonPosition }) => {
+  ${({ areaPosition }) => {
     return (
-      polygonPosition &&
+      areaPosition &&
       css`
-        top: ${polygonPosition.top - polygonPosition.height / 2 - 34}px;
-        left: ${polygonPosition.left + polygonPosition.width / 2 - 15}px;
+        top: ${areaPosition.top - areaPosition.height / 2 - 34}px;
+        left: ${areaPosition.left + areaPosition.width / 2 - 15}px;
       `
     );
   }}
@@ -188,21 +214,4 @@ const SeatComment = styled.div<{ isCommentOpen: boolean; polygonPosition: DOMRec
     border-radius: 2px;
   }
   z-index: 9999;
-`;
-
-const PolygonPath = styled.path`
-  cursor: pointer;
-  position: relative;
-  &:before {
-    content: '';
-    width: 100px;
-    height: 100px;
-    background-color: blue;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-`;
-const WordPath = styled.path`
-  user-select: none;
 `;

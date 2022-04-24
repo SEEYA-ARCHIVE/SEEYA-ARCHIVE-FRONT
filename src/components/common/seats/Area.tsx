@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
 import styled from 'styled-components';
 
-export interface PolygonPathType {
+export interface AreaPathType {
   id: string;
   d: string;
   stroke: string;
@@ -10,7 +10,7 @@ export interface PolygonPathType {
   'stroke-dasharray'?: string;
 }
 
-interface Props extends PolygonPathType {
+interface Props extends AreaPathType {
   setFocusedArea: Dispatch<SetStateAction<string | null>>;
 }
 
@@ -31,10 +31,10 @@ export const Area: FC<Props> = ({ id, setFocusedArea, ...props }) => {
     }
     setFocusedArea(null);
   };
-  return <PolygonPath {...props} onMouseEnter={handleEnter} onMouseLeave={handleLeave}></PolygonPath>;
+  return <AreaPath {...props} onMouseEnter={handleEnter} onMouseLeave={handleLeave}></AreaPath>;
 };
 
-const PolygonPath = styled.path`
+const AreaPath = styled.path`
   cursor: pointer;
   position: relative;
   &:before {

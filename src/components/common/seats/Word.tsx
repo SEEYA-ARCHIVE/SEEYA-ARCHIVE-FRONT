@@ -14,14 +14,14 @@ interface Props extends WordPathType {
   setFocusedArea: Dispatch<SetStateAction<string | null>>;
   svgData: SVGDataType;
   setReviewCount: Dispatch<SetStateAction<number>>;
-  setPolygonPosition: Dispatch<SetStateAction<DOMRect | null>>;
+  setAreaPosition: Dispatch<SetStateAction<DOMRect | null>>;
 }
 
 export const Word: FC<Props> = ({
   id,
   svgData,
   setReviewCount,
-  setPolygonPosition,
+  setAreaPosition,
   focusedArea,
   setFocusedArea,
   ...props
@@ -34,7 +34,7 @@ export const Word: FC<Props> = ({
     if (id !== focusedArea || !wordRef.current) return;
 
     setReviewCount(reviewCount);
-    setPolygonPosition(wordRef.current.getBoundingClientRect());
+    setAreaPosition(wordRef.current.getBoundingClientRect());
   }, [focusedArea]);
 
   return (
