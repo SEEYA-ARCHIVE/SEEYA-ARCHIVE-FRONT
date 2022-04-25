@@ -1,37 +1,50 @@
-import React, { FC, useState } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import React, { FC, useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { Select } from 'src/components/common/select/Select';
 import { ReviewCard } from 'src/components/reviewListPage/ReviewCard';
 import Icon from '../icon/Icon';
-import { sampleThumbnail } from '../image/imagePath';
+import { useRecoilValueLoadable } from 'recoil';
+import { IReviewPreivew } from 'src/types/api';
+import { getReviewList } from 'src/stores/review';
 
 interface Props {
-  // TODO 구역 정보 받기
+  seatId: number;
 }
-
-// TODO 임시 데이터
 const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
-const MOCK_REVIEW_DATA = [
-  {
-    id: 1,
-    images: {
-      previewImages: sampleThumbnail.src,
-      numImages: 2,
-    },
-    createdAt: '2022-02-13T00:47:28+09:00',
-  },
-];
 
-export const ReviewListModal: FC = () => {
+export const ReviewListModal: FC<Props> = ({ seatId }) => {
   const [isShow, setIsShow] = useState(true);
   const [sort, setSort] = useState('');
-  const reviewCount = MOCK_REVIEW_DATA.length; // TODO 데이터 받는 방식에 따라 수정 pagination or all
+  const [reviewList, setReviewList] = useState<IReviewPreivew[]>([]);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [page, setPage] = useState(1);
+
+  const { contents: reviewListContents, state: reviewListState } = useRecoilValueLoadable(
+    getReviewList([seatId, page]),
+  );
 
   const handleChevronClick = () => {
     setIsShow(false);
-
-    // TODO modal 구현 브랜치 머지 후, closeCurrentModal 함수 Timeout으로 실행
   };
+
+  const fetchData = async () => {
+    switch (reviewListState) {
+      case 'loading':
+        break;
+      case 'hasValue':
+        setReviewList((prev) => [...prev, ...reviewListContents.results]);
+
+        if (!reviewCount) setReviewCount(reviewListContents.count);
+        if (reviewListContents.next) setPage((prev) => prev + 1);
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [reviewListState]);
 
   return (
     <Wrapper isShow={isShow}>
@@ -44,13 +57,13 @@ export const ReviewListModal: FC = () => {
         </TitleWrapper>
         <ScrollWrapper>
           <ReviewListWrapper>
-            {MOCK_REVIEW_DATA.map((data) => {
+            {reviewList.map((data) => {
               const {
                 id,
-                createdAt,
+                createAt,
                 images: { previewImages, numImages },
               } = data;
-              return <ReviewCard key={id} imgSrc={previewImages} surplusPic={numImages} createdAt={createdAt} />;
+              return <ReviewCard key={id} imgSrc={previewImages} surplusPic={numImages} createdAt={createAt} />;
             })}
           </ReviewListWrapper>
         </ScrollWrapper>
