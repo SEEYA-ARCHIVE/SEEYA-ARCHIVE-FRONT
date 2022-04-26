@@ -15,7 +15,7 @@ const Seat: FC<Props> = () => {
   return (
     <SeatPageWrapper>
       <Header />
-      <SeatInfo />
+      <SeatInfo hallId={1}/>
       <Seats hallId={1} data={oylmpicData} className="seats" />
       <FABCompareBox />
       <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} />

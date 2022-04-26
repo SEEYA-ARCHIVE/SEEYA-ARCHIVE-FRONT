@@ -1,34 +1,57 @@
-import React, { FC, useState } from 'react';
-import { Select } from 'src/components/common/select/Select';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-interface Props {}
+import { useRecoilValueLoadable } from 'recoil';
+import { MOCK_SEAT_AREA } from 'src/api/mock/seat_areas';
+import { Select } from 'src/components/common/select/Select';
+import { getSeatArea } from 'src/stores/seat';
+
+import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
+
+interface Props {
+  hallId: number;
+}
 
 //selector로 받아 올 변수
 const SEAT_COUNT = 15;
-const SEATS_OPTIONS = {
-  2: ['B1', 'B2', 'C1', 'C2', 'C3', 'D1', 'D2', 'G', 'H'],
-  3: ['A1', 'A2', 'A3', 'A4', 'C1', 'C2', 'C3', 'E1', 'E2', 'E3', 'E4', 'E5'],
-};
-type SeatType = typeof SEATS_OPTIONS;
-type FloorType = keyof SeatType;
 
-export const SeatInfo: FC<Props> = () => {
-  const [floor, setFloor] = useState(Object.keys(SEATS_OPTIONS)[0]);
-  const [section, setSection] = useState(SEATS_OPTIONS[floor as unknown as FloorType][0]);
+const mock = MOCK_SEAT_AREA;
+const MOCK_SEAT_DATA = oylmpicData;
 
-  const floorOptions = Object.keys(SEATS_OPTIONS).map((floor) => ({ value: floor, label: `${floor}층` }));
-  const sectionOptions = SEATS_OPTIONS[floor as unknown as FloorType].map((section) => ({
-    value: section,
-    label: section,
-  }));
+export const SeatInfo: FC<Props> = ({ hallId }) => {
+  const seatArea = useRecoilValueLoadable(getSeatArea(hallId));
+
+  const [floor, setFloor] = useState('2');
+  const [section, setSection] = useState('');
+  /**
+   * TODO: 비동기 값적용
+   */
+  const sectionOptions = MOCK_SEAT_DATA.word.reduce((acc, { floor, area }) => {
+    if (!floor || !area) return acc;
+
+    const areaUppserCase = area.toUpperCase();
+    if (floor in acc) {
+      acc[floor].push({ value: areaUppserCase, label: areaUppserCase });
+    } else {
+      acc[floor] = [{ value: areaUppserCase, label: areaUppserCase }];
+    }
+    return acc;
+  }, {} as Record<string, { value: string; label: string }[]>);
+
+  const floorOptions = Object.keys(sectionOptions).map((floor) => {
+    return { value: floor, label: `${floor}층` };
+  });
 
   return (
     <SeatInfoWrapper>
       <h1>올림픽 홀</h1>
       <SelectBoxWrapper>
         <Select value={floor} onChange={setFloor} options={floorOptions} />
-        <Select value={section} onChange={setSection} options={sectionOptions} />
+        <Select
+          value={section}
+          onChange={setSection}
+          options={sectionOptions[floor].sort((a, b) => a.label.localeCompare(b.label))}
+        />
         구역
       </SelectBoxWrapper>
       <div>
