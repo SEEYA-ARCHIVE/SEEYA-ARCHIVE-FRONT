@@ -1,17 +1,19 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { SVGDataType } from './Seats';
+import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface WordPathType {
   id: string;
+  floor: number | null;
+  area: string | null;
   d: string;
   fill: string;
   count?: number;
 }
 
 interface Props extends WordPathType {
-  focusedArea: string | null;
-  setFocusedArea: Dispatch<SetStateAction<string | null>>;
+  focusedArea: SVGInfoType | null;
+  setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
   svgData: SVGDataType;
   setReviewCount: Dispatch<SetStateAction<number>>;
   setAreaPosition: Dispatch<SetStateAction<DOMRect | null>>;
@@ -19,6 +21,8 @@ interface Props extends WordPathType {
 
 export const Word: FC<Props> = ({
   id,
+  floor,
+  area,
   svgData,
   setReviewCount,
   setAreaPosition,
@@ -31,7 +35,7 @@ export const Word: FC<Props> = ({
   const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
 
   useEffect(() => {
-    if (id !== focusedArea || !wordRef.current) return;
+    if (floor !== focusedArea?.floor || area !== focusedArea.area || !wordRef.current) return;
 
     setReviewCount(reviewCount);
     setAreaPosition(wordRef.current.getBoundingClientRect());

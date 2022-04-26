@@ -21,6 +21,11 @@ interface Props {
   className?: string;
 }
 
+export interface SVGInfoType {
+  floor: number | null;
+  area: string | null;
+}
+
 const mock = MOCK_SEAT_AREA;
 
 const FLOOR_COLOR: Record<string, string> = {
@@ -46,7 +51,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   const [reviewCount, setReviewCount] = useState(0);
   const [areaPosition, setAreaPosition] = useState<DOMRect | null>(null);
 
-  const [focusedArea, setFocusedArea] = useState<string | null>(null);
+  const [focusedArea, setFocusedArea] = useState<SVGInfoType | null>(null);
   /**
    * useRecoilValue는 Suspense를 NextJS에서 못써서 사용 못한다.
    * 그러면 불편할텐데.. 다른 라이브러리 고민도 할만할 듯
@@ -57,27 +62,23 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
 
   const showComment = () => setIsCommentOpen(true);
   const hideComment = () => setIsCommentOpen(false);
-  const getFloorFromId = (id: string) => Number(id.split('-')[0][1]);
-  const getAreaFromId = (id: string) => id.split('-')[1];
 
-  const getReivewCount = (id: string) => {
-    const floor = getFloorFromId(id);
-    const area = getAreaFromId(id);
+  const getReivewCount = ({ floor, area }: SVGInfoType) => {
     if (!area || !floor) return 0;
-
+    /**
+     * TODO: 비동기 값적용
+     */
     return mock.find((data) => {
       return data.floor === floor && data.area === area.toUpperCase();
     })?.countReviews;
   };
 
-  const setAreaOpacityColor = (id: string) => {
-    const floor = getFloorFromId(id);
-    const area = getAreaFromId(id);
+  const setAreaOpacity = ({ floor, area }: SVGInfoType) => {
+    if (!floor || !area) return;
 
     const updatedArea = svgData.area.map((data) => {
-      if (data.id !== id) return data;
+      if (data.floor !== floor || data.area !== area) return data;
 
-      const floor = getFloorFromId(data.id);
       const style = {
         fill: OPACITY_FLOOR_COLOR[floor] ?? data.fill,
         stroke: 'none',
@@ -89,12 +90,14 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
 
     setSvgData({ ...svgData, area: updatedArea });
   };
-  const setSeatColor = () => {
+
+  const setSeatStyle = () => {
     const updatedArea = svgData.area.map((data) => {
-      if (getReivewCount(data.id)) {
-        const floor = getFloorFromId(data.id);
+      const seatReviews = getReivewCount(data);
+
+      if (seatReviews && data.floor) {
         const style = {
-          fill: FLOOR_COLOR[floor] ?? data.fill,
+          fill: FLOOR_COLOR[data.floor] ?? data.fill,
           stroke: 'none',
           'stroke-width': 'none',
           'stroke-dasharray': 'none',
@@ -105,7 +108,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
     });
 
     const updatedWords = svgData.word.map((data) => {
-      const seatReviews = getReivewCount(data.id);
+      const seatReviews = getReivewCount(data);
 
       if (seatReviews) {
         return { ...data, fill: '#FFF', count: seatReviews };
@@ -119,16 +122,19 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
   useEffect(() => {
     if (focusedArea) {
       showComment();
-      setAreaOpacityColor(focusedArea);
+      setAreaOpacity(focusedArea);
     } else {
       hideComment();
-      setSeatColor();
+      setSeatStyle();
     }
   }, [focusedArea]);
 
+  /**
+   * TODO: 비동기 값적용
+   */
   useEffect(() => {
     if (!mock) return;
-    setSeatColor();
+    setSeatStyle();
   }, []);
 
   const SVGArea = area.map((data) => (

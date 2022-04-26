@@ -1,9 +1,11 @@
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
 import styled from 'styled-components';
-import { SVGDataType } from './Seats';
+import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface AreaPathType {
   id: string;
+  floor: number | null;
+  area: string | null;
   d: string;
   stroke: string;
   fill: string;
@@ -13,10 +15,10 @@ export interface AreaPathType {
 
 interface Props extends AreaPathType {
   svgData: SVGDataType;
-  setFocusedArea: Dispatch<SetStateAction<string | null>>;
+  setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
 }
 
-export const Area: FC<Props> = ({ id, svgData, setFocusedArea, ...props }) => {
+export const Area: FC<Props> = ({ id, floor, area, svgData, setFocusedArea, ...props }) => {
   const timer = useRef<NodeJS.Timer | null>(null);
   const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
 
@@ -25,7 +27,7 @@ export const Area: FC<Props> = ({ id, svgData, setFocusedArea, ...props }) => {
 
     timer.current = setTimeout(() => {
       timer.current = null;
-      setFocusedArea(id);
+      setFocusedArea({ floor, area });
     }, 100);
   };
   const handleLeave = () => {

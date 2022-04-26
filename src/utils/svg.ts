@@ -26,3 +26,6 @@ export const getSvgData = (elem: any) => {
   });
   console.log(JSON.stringify(seatObj));
 };
+
+const getFloorFromId = (id: string) => Number(id.split('-')[0][1]);
+const getAreaFromId = (id: string) => id.split('-')[1] ?? null;
