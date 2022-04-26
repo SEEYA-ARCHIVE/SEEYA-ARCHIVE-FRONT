@@ -1,27 +1,11 @@
 import { IReviewListResponse } from 'src/types/api';
 import { sampleThumbnail } from 'src/components/common/image/imagePath';
 
-const MOCK_REVIEW_DATA = {
+const MOCK_REVIEW_DATA_1 = {
   count: 15,
-  next: null,
+  next: 'https://page=2',
   previous: null,
   results: [
-    {
-      id: 7,
-      createAt: '2022-02-13T00:47:28+09:00',
-      images: {
-        previewImages: sampleThumbnail.src,
-        numImages: 2,
-      },
-    },
-    {
-      id: 27,
-      createAt: '2015-02-27T15:37:30+09:00',
-      images: {
-        previewImages: sampleThumbnail.src,
-        numImages: 1,
-      },
-    },
     {
       id: 29,
       createAt: '2022-02-08T16:02:11+09:00',
@@ -87,6 +71,21 @@ const MOCK_REVIEW_DATA = {
       },
     },
     {
+      id: 58212,
+      createAt: '2019-04-10T23:58:02+09:00',
+      images: {
+        previewImages: sampleThumbnail.src,
+        numImages: 1,
+      },
+    },
+  ],
+};
+const MOCK_REVIEW_DATA_2 = {
+  count: 15,
+  next: null,
+  previous: null,
+  results: [
+    {
       id: 72,
       createAt: '2022-02-13T00:47:28+09:00',
       images: {
@@ -126,9 +125,22 @@ const MOCK_REVIEW_DATA = {
         numImages: 1,
       },
     },
+    {
+      id: 27,
+      createAt: '2015-02-27T15:37:30+09:00',
+      images: {
+        previewImages: sampleThumbnail.src,
+        numImages: 1,
+      },
+    },
   ],
 };
 
 export const getReviewListAPI = (seatId: number, page: number): Promise<IReviewListResponse> => {
-  return new Promise((resolve) => setTimeout(() => resolve(MOCK_REVIEW_DATA), 500));
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      if (page === 1) resolve(MOCK_REVIEW_DATA_1);
+      else resolve(MOCK_REVIEW_DATA_2);
+    }, 2000),
+  );
 };

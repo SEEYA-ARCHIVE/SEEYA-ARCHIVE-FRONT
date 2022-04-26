@@ -6,6 +6,7 @@ import Icon from '../icon/Icon';
 import { useRecoilValueLoadable } from 'recoil';
 import { IReviewPreivew } from 'src/types/api';
 import { getReviewList } from 'src/stores/review';
+import ReviewList from 'src/components/reviewListPage/ReviewList';
 
 interface Props {
   seatId: number;
@@ -18,14 +19,12 @@ export const ReviewListModal: FC<Props> = ({ seatId }) => {
   const [reviewList, setReviewList] = useState<IReviewPreivew[]>([]);
   const [reviewCount, setReviewCount] = useState(0);
   const [page, setPage] = useState(1);
-
   const { contents: reviewListContents, state: reviewListState } = useRecoilValueLoadable(
     getReviewList([seatId, page]),
   );
 
-  const handleChevronClick = () => {
-    setIsShow(false);
-  };
+  const handleChevronClick = () => setIsShow(false);
+  const addPage = () => setPage((prev) => prev + 1);
 
   const fetchData = async () => {
     switch (reviewListState) {
@@ -33,9 +32,8 @@ export const ReviewListModal: FC<Props> = ({ seatId }) => {
         break;
       case 'hasValue':
         setReviewList((prev) => [...prev, ...reviewListContents.results]);
-
         if (!reviewCount) setReviewCount(reviewListContents.count);
-        if (reviewListContents.next) setPage((prev) => prev + 1);
+
         break;
       default:
         break;
@@ -57,14 +55,7 @@ export const ReviewListModal: FC<Props> = ({ seatId }) => {
         </TitleWrapper>
         <ScrollWrapper>
           <ReviewListWrapper>
-            {reviewList.map((data) => {
-              const {
-                id,
-                createAt,
-                images: { previewImages, numImages },
-              } = data;
-              return <ReviewCard key={id} imgSrc={previewImages} surplusPic={numImages} createdAt={createAt} />;
-            })}
+            <ReviewList list={reviewList} colCount={3} count={reviewCount} page={page} addPage={addPage} />
           </ReviewListWrapper>
         </ScrollWrapper>
       </ReviewWrapper>
@@ -140,15 +131,10 @@ const ScrollWrapper = styled.div`
 
 const ReviewListWrapper = styled.div`
   width: 675px;
+  height: 100%;
   margin-top: 15px;
 
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-row-gap: 15px;
-  grid-column-gap: 12px;
-
   padding-bottom: 10px;
-  padding-right: 20px;
 `;
 
 const IconWrapper = styled.div`
