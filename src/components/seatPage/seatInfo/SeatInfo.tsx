@@ -7,6 +7,7 @@ import { Select } from 'src/components/common/select/Select';
 import { getSeatArea } from 'src/stores/seat';
 
 import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
+import { Button } from 'src/components/common/button/Button';
 
 interface Props {
   hallId: number;
@@ -22,11 +23,11 @@ export const SeatInfo: FC<Props> = ({ hallId }) => {
   const seatArea = useRecoilValueLoadable(getSeatArea(hallId));
 
   const [floor, setFloor] = useState('2');
-  const [section, setSection] = useState('');
+  const [area, setArea] = useState('');
   /**
    * TODO: 비동기 값적용
    */
-  const sectionOptions = MOCK_SEAT_DATA.word.reduce((acc, { floor, area }) => {
+  const areaOptions = MOCK_SEAT_DATA.word.reduce((acc, { floor, area }) => {
     if (!floor || !area) return acc;
 
     const areaUppserCase = area.toUpperCase();
@@ -38,9 +39,19 @@ export const SeatInfo: FC<Props> = ({ hallId }) => {
     return acc;
   }, {} as Record<string, { value: string; label: string }[]>);
 
-  const floorOptions = Object.keys(sectionOptions).map((floor) => {
+  const floorOptions = Object.keys(areaOptions).map((floor) => {
     return { value: floor, label: `${floor}층` };
   });
+
+  const handleSelectClick = () => {
+    const areaData = mock.find((data) => data.floor.toString() === floor && data.area === area);
+
+    if (!areaData?.countReviews) {
+      //openModal (리뷰 없습니다.)
+    }
+
+    //openModal 상세페이지 오픈
+  };
 
   return (
     <SeatInfoWrapper>
@@ -48,11 +59,14 @@ export const SeatInfo: FC<Props> = ({ hallId }) => {
       <SelectBoxWrapper>
         <Select value={floor} onChange={setFloor} options={floorOptions} />
         <Select
-          value={section}
-          onChange={setSection}
-          options={sectionOptions[floor].sort((a, b) => a.label.localeCompare(b.label))}
+          value={area}
+          onChange={setArea}
+          options={areaOptions[floor].sort((a, b) => a.label.localeCompare(b.label))}
         />
-        구역
+        <span>구역</span>
+        <Button className="seat_select_btn" bgColor={'mint'} onClick={handleSelectClick}>
+          선택
+        </Button>
       </SelectBoxWrapper>
       <div>
         <span className="highlight">총 {SEAT_COUNT}</span>의 사진 리뷰가 있습니다.
@@ -70,6 +84,13 @@ const SeatInfoWrapper = styled.div`
   font-size: 12px;
   .highlight {
     color: ${({ theme }) => theme.fontColor.mint};
+  }
+
+  .seat_select_btn {
+    width: 44px;
+    height: 34px;
+    padding: 0;
+    border-radius: 4px;
   }
 `;
 
