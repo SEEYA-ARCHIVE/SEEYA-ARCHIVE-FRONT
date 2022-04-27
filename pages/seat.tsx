@@ -7,14 +7,16 @@ import { Seats } from 'src/components/common/seats/Seats';
 import { FABCompareBox } from 'src/components/seatPage/FABCompareBox/FABCompareBox';
 import { SeatInfo } from 'src/components/seatPage/seatInfo/SeatInfo';
 
+import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
+
 interface Props {}
 
 const Seat: FC<Props> = () => {
   return (
     <SeatPageWrapper>
       <Header />
-      <SeatInfo />
-      <Seats name="seatsOlympicHall" className="seats" />
+      <SeatInfo hallId={1}/>
+      <Seats hallId={1} data={oylmpicData} className="seats" />
       <FABCompareBox />
       <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} />
       <FABButton value="업로드" bgColor="yellow" position={{ bottom: 40, right: 90 }} />
