@@ -11,14 +11,15 @@ interface Props {
   height?: number;
   borderRadius?: number;
   alt?: string;
+  onClick?: () => void;
 }
 
-export const Img: FC<Props> = ({ name, src, width, height, borderRadius, alt }) => {
+export const Img: FC<Props> = ({ name, src, width, height, borderRadius, alt, onClick }) => {
   const imgSrc = name ? images[name] : src;
 
   return (
-    <ImgWrapper width={width} height={height} borderRadius={borderRadius}>
-      <ImageComponent src={imgSrc ?? ''} width={width} height={height} borderRadius={borderRadius} alt={alt} />
+    <ImgWrapper onClick={onClick} width={width} height={height} borderRadius={borderRadius}>
+      <ImageComponent src={imgSrc ?? ''} width={width} height={height} borderRadius={borderRadius} alt={alt ?? ''} />
     </ImgWrapper>
   );
 };
