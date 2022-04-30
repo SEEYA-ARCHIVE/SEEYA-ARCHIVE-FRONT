@@ -11,7 +11,7 @@ const ReviewText: VFC<Props> = ({ text }) => {
   };
 
   const hashtagFormatter = (text: string) => {
-    const splitter = text.split(/((?:#[a-zA-Z0-9ㄱ-ㅎ가-힣]*))/gi);
+    const splitter = text.split(/(#[^\s#]+)/g);
     return splitter.filter(Boolean).map((v, idx) => {
       if (v.includes('#')) {
         return (
@@ -41,6 +41,7 @@ const TextWrapper = styled.div`
   .hashtag {
     color: ${({ theme }) => theme.color.blue5};
     font-weight: 700;
+    cursor: pointer;
   }
 `;
 export default ReviewText;
