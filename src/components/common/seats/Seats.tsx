@@ -101,6 +101,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
         };
         return { ...data, ...style };
       }
+
       return data;
     });
 
