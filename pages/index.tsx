@@ -1,11 +1,18 @@
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { NextPage } from 'next';
 
 import { Header } from 'src/components/common/header/Header';
 import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
 import { MainUpload } from 'src/components/mainPage/mainUpload/MainUpload';
 import { MainHallSearch } from 'src/components/mainPage/mainHallSearch/MainHallSearch';
+import { getHallListAPI, HallListType } from 'src/api/hall';
 
-const Home = () => {
+interface Props {
+  hallData: HallListType;
+}
+
+const Home: NextPage<Props> = ({ hallData }) => {
   return (
     <>
       <Header />
@@ -13,12 +20,17 @@ const Home = () => {
         <MainInfo />
         <div>
           <MainUpload />
-          <MainHallSearch />
+          <MainHallSearch hallData={hallData} />
           <div className="find_hall">찾는 공연장이 없으신가요? 여기를 클릭하세요</div>
         </div>
       </MainWrapper>
     </>
   );
+};
+
+Home.getInitialProps = async () => {
+  const hallData = await getHallListAPI();
+  return { hallData };
 };
 
 export default Home;
