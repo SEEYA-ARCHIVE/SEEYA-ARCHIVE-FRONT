@@ -176,6 +176,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
 };
 
 /** styled component */
+
 const SVGWrap = styled.div`
   display: inline-block;
 
@@ -193,7 +194,7 @@ const SeatComment = styled.div<{ isCommentOpen: boolean; areaPosition: DOMRect |
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: fixed;
   background-color: ${({ theme }) => theme.color.purple};
   color: ${({ theme }) => theme.fontColor.white};
   width: 34px;

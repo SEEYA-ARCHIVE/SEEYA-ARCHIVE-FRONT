@@ -27,7 +27,7 @@ const MainWrapper = styled.div`
   max-width: 920px;
   display: flex;
   justify-content: space-between;
-  padding: 165px 30px;
+  padding: 225px 30px;
 
   margin: auto;
 
