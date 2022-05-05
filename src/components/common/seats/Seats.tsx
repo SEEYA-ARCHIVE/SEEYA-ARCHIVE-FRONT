@@ -101,7 +101,12 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
         };
         return { ...data, ...style };
       }
+<<<<<<< HEAD
 
+=======
+      window.k = seatsData;
+      console.log({ seatsData, svgData, updatedArea });
+>>>>>>> 007353d (feat: 배치도 페이지 API 연동)
       return data;
     });
 
