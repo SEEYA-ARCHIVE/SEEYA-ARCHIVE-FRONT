@@ -43,7 +43,6 @@ const Background = styled.div<Pick<Props, 'backgroundTransparent' | 'backgroundB
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 1000;
   background: ${({ backgroundTransparent }) => (backgroundTransparent ? 'transparent' : 'rgba(123, 123, 123, 0.75);')};
 
   ${({ backgroundBlur }) =>
@@ -55,5 +54,4 @@ const Background = styled.div<Pick<Props, 'backgroundTransparent' | 'backgroundB
 
 const Content = styled.div`
   position: absolute;
-  z-index: 1001;
 `;

@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import { FixedSizeGrid as Grid, GridChildComponentProps, GridOnItemsRenderedProps } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
-import { IReviewPreivew } from 'src/types/api';
+import { IReviewPreivew } from 'src/types/api/review';
 import { ReviewCard } from './ReviewCard';
 import styled from 'styled-components';
 
 interface Props {
+  seatAreaId: number;
   list: IReviewPreivew[];
   colCount: number;
   count: number;
@@ -14,9 +15,9 @@ interface Props {
   addPage: () => void;
 }
 
-const LIMIT = 10;
+const LIMIT = 6;
 
-const ReviewList: FC<Props> = ({ list, colCount, count, page, addPage }) => {
+const ReviewList: FC<Props> = ({ seatAreaId, list, colCount, count, page, addPage }) => {
   const isItemLoaded = (index: number) => index < list.length;
 
   const Cell = ({ columnIndex, rowIndex, data, style }: GridChildComponentProps) => {
@@ -33,7 +34,14 @@ const ReviewList: FC<Props> = ({ list, colCount, count, page, addPage }) => {
 
     return (
       <div style={style}>
-        <ReviewCard key={id} surplusPic={numImages} createdAt={createAt} imgSrc={previewImage} />
+        <ReviewCard
+          key={id}
+          seatAreaId={seatAreaId}
+          reviewId={id}
+          surplusPic={numImages}
+          createdAt={createAt}
+          imgSrc={previewImage}
+        />
       </div>
     );
   };

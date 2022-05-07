@@ -8,7 +8,8 @@ import Icon from '../common/icon/Icon';
 import { Tag } from '../common/tag/Tag';
 
 interface Props {
-  id: number;
+  seatAreaId: number;
+  reviewId: number;
   imgSrc: string;
   author?: string;
   surplusPic: number;
@@ -17,7 +18,16 @@ interface Props {
   helpCount?: number;
 }
 
-export const ReviewCard: FC<Props> = ({ id, imgSrc, author, surplusPic, createdAt, tagList, helpCount }) => {
+export const ReviewCard: FC<Props> = ({
+  seatAreaId,
+  reviewId,
+  imgSrc,
+  author,
+  surplusPic,
+  createdAt,
+  tagList,
+  helpCount,
+}) => {
   const formattedDate = convertDateToFormattedString(createdAt);
   const { openModal } = useModal();
   const onClickCard = () => {

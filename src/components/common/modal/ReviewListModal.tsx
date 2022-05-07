@@ -4,18 +4,18 @@ import { Select } from 'src/components/common/select/Select';
 import { ReviewCard } from 'src/components/reviewListPage/ReviewCard';
 import Icon from '../icon/Icon';
 import { useRecoilValueLoadable } from 'recoil';
-import { IReviewPreivew } from 'src/types/api';
+import { IReviewPreivew } from 'src/types/api/review';
 import { getReviewList } from 'src/stores/review';
 import ReviewList from 'src/components/reviewListPage/ReviewList';
 import { ModalHOC } from './ModalHOC';
 import useModal from 'src/hooks/useModal';
 
 interface Props {
-  seatId: number;
+  seatAreaId: number;
 }
 const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
 
-const ReviewListModal: FC<Props> = ({ seatId }) => {
+const ReviewListModal: FC<Props> = ({ seatAreaId }) => {
   const [isShow, setIsShow] = useState(true);
   const [sort, setSort] = useState('');
   const [reviewList, setReviewList] = useState<IReviewPreivew[]>([]);
@@ -23,7 +23,7 @@ const ReviewListModal: FC<Props> = ({ seatId }) => {
   const [page, setPage] = useState(1);
   const { closeCurrentModal } = useModal();
   const { contents: reviewListContents, state: reviewListState } = useRecoilValueLoadable(
-    getReviewList([seatId, page]),
+    getReviewList([seatAreaId, page]),
   );
 
   const handleChevronClick = () => {
