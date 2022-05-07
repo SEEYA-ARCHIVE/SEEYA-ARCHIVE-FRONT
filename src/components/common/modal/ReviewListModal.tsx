@@ -7,23 +7,33 @@ import { useRecoilValueLoadable } from 'recoil';
 import { IReviewPreivew } from 'src/types/api';
 import { getReviewList } from 'src/stores/review';
 import ReviewList from 'src/components/reviewListPage/ReviewList';
+import { ModalHOC } from './ModalHOC';
+import useModal from 'src/hooks/useModal';
 
 interface Props {
   seatId: number;
 }
 const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
 
-export const ReviewListModal: FC<Props> = ({ seatId }) => {
+const ReviewListModal: FC<Props> = ({ seatId }) => {
   const [isShow, setIsShow] = useState(true);
   const [sort, setSort] = useState('');
   const [reviewList, setReviewList] = useState<IReviewPreivew[]>([]);
   const [reviewCount, setReviewCount] = useState(0);
   const [page, setPage] = useState(1);
+  const { closeCurrentModal } = useModal();
   const { contents: reviewListContents, state: reviewListState } = useRecoilValueLoadable(
     getReviewList([seatId, page]),
   );
 
-  const handleChevronClick = () => setIsShow(false);
+  const handleChevronClick = () => {
+    setIsShow(false);
+
+    setTimeout(() => {
+      closeCurrentModal();
+    }, 1000);
+  };
+
   const addPage = () => setPage((prev) => prev + 1);
 
   const fetchData = async () => {
@@ -141,4 +151,7 @@ const IconWrapper = styled.div`
   position: absolute;
   top: 45%;
   left: 0;
+  cursor: pointer;
 `;
+
+export default ModalHOC(ReviewListModal);

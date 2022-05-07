@@ -14,7 +14,6 @@ interface Props {
   addPage: () => void;
 }
 
-const GUTTER_SIZE = 10;
 const LIMIT = 10;
 
 const ReviewList: FC<Props> = ({ list, colCount, count, page, addPage }) => {
@@ -22,21 +21,19 @@ const ReviewList: FC<Props> = ({ list, colCount, count, page, addPage }) => {
 
   const Cell = ({ columnIndex, rowIndex, data, style }: GridChildComponentProps) => {
     const cursorIndex = rowIndex * colCount + columnIndex;
-    console.log(cursorIndex);
-    console.log(list.length);
 
-    if (!isItemLoaded(cursorIndex)) return <div style={style}>Loading</div>;
+    if (!isItemLoaded(cursorIndex)) return <></>;
 
     const reviewItem = data[cursorIndex];
     const {
       id,
       createAt,
-      images: { previewImages, numImages },
+      images: { previewImage, numImages },
     } = reviewItem;
 
     return (
       <div style={style}>
-        <ReviewCard key={id} surplusPic={numImages} createdAt={createAt} imgSrc={previewImages} />
+        <ReviewCard key={id} surplusPic={numImages} createdAt={createAt} imgSrc={previewImage} />
       </div>
     );
   };
@@ -54,8 +51,8 @@ const ReviewList: FC<Props> = ({ list, colCount, count, page, addPage }) => {
         {({ height, width }) => (
           <InfiniteLoader isItemLoaded={isItemLoaded} itemCount={list.length + 1} loadMoreItems={loadMore}>
             {({ onItemsRendered, ref }) => {
-              // onItemsRendered는 Grid가 아닌 List를 사용하면 <List onItemsRendered={onItemsRendered} />이렇게 넘겨주면 됩니다.
-              // 그러나 Grid를 사용하면 리스트의 바닥에 스크롤이 도달해도 자동으로 onItemsRendered가 실행 되지 않습니다. 그래서 아래처럼 임의 함수를 만들어서 <Grid onItemsRendered={newItemsRendered} /> 형태로 넘깁니다.
+              // Grid를 사용하면 리스트의 바닥에 스크롤이 도달해도 자동으로 onItemsRendered가 실행 되지 않음.
+              // 그래서 아래처럼 임의 함수를 만들어서 넘김.
               const newItemsRendered = (gridData: GridOnItemsRenderedProps) => {
                 const { visibleRowStopIndex, overscanRowStartIndex, overscanRowStopIndex, overscanColumnStopIndex } =
                   gridData;
