@@ -1,12 +1,26 @@
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import styled, { ThemeProvider } from 'styled-components';
+import { RecoilRoot } from 'recoil';
+import { useRouter } from 'next/router';
 
 import { GlobalStyle } from 'src/styles/global-style';
 import { theme } from 'src/styles/theme';
-import { RecoilRoot } from 'recoil';
 import { Modal } from 'src/components/common/modal/Modal';
+import { pageview } from 'src/utils/gtag';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      pageview(url);
+      console.log(url);
+    };
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
   return (
     <>
       <RecoilRoot>
