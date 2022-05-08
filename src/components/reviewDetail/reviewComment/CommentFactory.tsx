@@ -1,15 +1,44 @@
-import React, { VFC } from 'react';
+import React, { useEffect, useState, VFC } from 'react';
+import styled, { css } from 'styled-components';
 import Icon from 'src/components/common/icon/Icon';
-import styled from 'styled-components';
+import { getLocalStorage, setLocalStorage } from 'src/utils/storage';
 
-interface Props {}
+interface Props {
+  reviewId: number;
+}
 
-const CommentFactory: VFC<Props> = () => {
+const CommentFactory: VFC<Props> = ({ reviewId }) => {
+  const [isLiked, setIsLiked] = useState(false);
+  const userLikeList = getLocalStorage('like');
+
+  useEffect(() => {
+    if (!userLikeList.length) return;
+
+    if (userLikeList.includes(reviewId)) setIsLiked(true);
+  }, []);
+
+  const onClickLikeButton = () => {
+    setIsLiked((prev) => !prev!);
+
+    if (!userLikeList.length) {
+      setLocalStorage('like', [reviewId]);
+      return;
+    }
+
+    if (userLikeList.includes(reviewId)) {
+      const filterdList = userLikeList.filter((id: number) => id !== reviewId);
+      setLocalStorage('like', filterdList);
+      return;
+    }
+
+    setLocalStorage('like', [...userLikeList, reviewId]);
+  };
+
   return (
     <Wrapper>
       <InteractionWrapper>
         <LikeWrapper>
-          <LikeButton>
+          <LikeButton isLiked={isLiked} onClick={onClickLikeButton}>
             <Icon name="iconThumbsUp" size={15} />
           </LikeButton>
           도움이 돼요!
@@ -40,20 +69,39 @@ const LikeWrapper = styled.div`
   display: flex;
   gap: 6px;
   align-items: center;
-  cursor: pointer;
 
   font-size: 12px;
   font-weight: 500;
   color: ${({ theme }) => theme.fontColor.black};
 `;
 
-const LikeButton = styled.button`
+const LikeButton = styled.button<{ isLiked: boolean }>`
   background-color: ${({ theme }) => theme.color.white};
 
   border-radius: 14px;
   border: 1px solid ${({ theme }) => theme.color.gray2};
 
   padding: 3px 10px;
+
+  cursor: pointer;
+
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.color.gray2};
+  }
+
+  ${({ isLiked }) =>
+    isLiked &&
+    css`
+      background-color: ${({ theme }) => theme.color.mint};
+      border: 1px solid ${({ theme }) => theme.color.mint};
+      svg > path {
+        stroke: ${({ theme }) => theme.color.white};
+      }
+
+      &:focus {
+        border: 1px solid ${({ theme }) => theme.color.mint};
+      }
+    `}
 `;
 
 const RepotButton = styled.button`

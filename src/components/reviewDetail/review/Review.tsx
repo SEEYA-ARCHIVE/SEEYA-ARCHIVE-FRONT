@@ -1,20 +1,20 @@
 import React, { VFC } from 'react';
-import Icon from 'src/components/common/icon/Icon';
-import { convertDateToFormattedStringDate } from 'src/utils/date';
 import styled from 'styled-components';
-import CommentFactory from '../reviewComment/CommentFactory';
-import ReviewComments from '../reviewComment/ReviewComments';
-import ReviewTagList from '../reviewTagList/ReviewTagList';
-import ReviewText from './ReviewText';
+import CommentFactory from 'src/components/reviewDetail/reviewComment/CommentFactory';
+import ReviewComments from 'src/components/reviewDetail/reviewComment/ReviewComments';
+import ReviewTagList from 'src/components/reviewDetail/reviewTagList/ReviewTagList';
+import ReviewText from 'src/components/reviewDetail/review/ReviewText';
+import { convertDateToFormattedStringDate } from 'src/utils/date';
 
 interface Props {
+  reviewId: number;
   reviewText: string;
   concertHall: string;
   seatArea: string;
   createAt: string;
 }
 
-const Review: VFC<Props> = ({ reviewText, concertHall, seatArea, createAt }) => {
+const Review: VFC<Props> = ({ reviewId, reviewText, concertHall, seatArea, createAt }) => {
   const formattedCreateAt = convertDateToFormattedStringDate(createAt);
 
   return (
@@ -30,7 +30,7 @@ const Review: VFC<Props> = ({ reviewText, concertHall, seatArea, createAt }) => 
       <CommentsWrapper>
         <ReviewComments />
       </CommentsWrapper>
-      <CommentFactory />
+      <CommentFactory reviewId={reviewId} />
     </ReviewWrapper>
   );
 };
