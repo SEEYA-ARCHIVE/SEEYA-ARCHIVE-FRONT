@@ -1,14 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Select } from 'src/components/common/select/Select';
-import { ReviewCard } from 'src/components/reviewListPage/ReviewCard';
-import Icon from '../icon/Icon';
 import { useRecoilValueLoadable } from 'recoil';
+import useModal from 'src/hooks/useModal';
+import { Select } from 'src/components/common/select/Select';
 import { IReviewPreivew } from 'src/types/api/review';
 import { getReviewList } from 'src/stores/review';
 import ReviewList from 'src/components/reviewListPage/ReviewList';
 import { ModalHOC } from './ModalHOC';
-import useModal from 'src/hooks/useModal';
+import Icon from '../icon/Icon';
 
 interface Props {
   seatAreaId: number;
@@ -65,7 +64,14 @@ const ReviewListModal: FC<Props> = ({ seatAreaId }) => {
         </TitleWrapper>
         <ScrollWrapper>
           <ReviewListWrapper>
-            <ReviewList list={reviewList} colCount={3} count={reviewCount} page={page} addPage={addPage} />
+            <ReviewList
+              seatAreaId={seatAreaId}
+              list={reviewList}
+              colCount={3}
+              count={reviewCount}
+              page={page}
+              addPage={addPage}
+            />
           </ReviewListWrapper>
         </ScrollWrapper>
       </ReviewWrapper>

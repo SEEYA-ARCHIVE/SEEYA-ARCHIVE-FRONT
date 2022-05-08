@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
+import Link from 'next/link';
+import styled from 'styled-components';
 import { FixedSizeGrid as Grid, GridChildComponentProps, GridOnItemsRenderedProps } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { IReviewPreivew } from 'src/types/api/review';
 import { ReviewCard } from './ReviewCard';
-import styled from 'styled-components';
 
 interface Props {
   seatAreaId: number;
@@ -34,14 +35,18 @@ const ReviewList: FC<Props> = ({ seatAreaId, list, colCount, count, page, addPag
 
     return (
       <div style={style}>
-        <ReviewCard
-          key={id}
-          seatAreaId={seatAreaId}
-          reviewId={id}
-          surplusPic={numImages}
-          createdAt={createAt}
-          imgSrc={previewImage}
-        />
+        <Link href={`/seat?seatAreaId=${seatAreaId}&reviewId=${id}`} passHref>
+          <a>
+            <ReviewCard
+              key={id}
+              seatAreaId={seatAreaId}
+              reviewId={id}
+              surplusPic={numImages}
+              createdAt={createAt}
+              imgSrc={previewImage}
+            />
+          </a>
+        </Link>
       </div>
     );
   };
