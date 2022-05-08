@@ -34,6 +34,12 @@ const CommentFactory: VFC<Props> = ({ reviewId }) => {
     setLocalStorage('like', [...userLikeList, reviewId]);
   };
 
+  const onClickReportButton = () => {
+    window.open(
+      'https://docs.google.com/forms/d/e/1FAIpQLSd6TDa06LY6PvrY4kB2jpdXYQI0pnfw9F--JYZd1nadcyWX_g/viewform?usp=sf_link',
+    );
+  };
+
   return (
     <Wrapper>
       <InteractionWrapper>
@@ -43,7 +49,7 @@ const CommentFactory: VFC<Props> = ({ reviewId }) => {
           </LikeButton>
           도움이 돼요!
         </LikeWrapper>
-        <RepotButton>
+        <RepotButton onClick={onClickReportButton}>
           <Icon name="iconReport" size={12} />
           신고하기
         </RepotButton>
