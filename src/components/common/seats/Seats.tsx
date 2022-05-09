@@ -136,7 +136,14 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   }, []);
 
   const SVGArea = area.map((data) => (
-    <Area key={data.id} svgData={svgData} setFocusedArea={setFocusedArea} {...data} />
+    <Area
+      key={data.id}
+      svgData={svgData}
+      setFocusedArea={setFocusedArea}
+      strokeDasharray={data['stroke-dasharray']}
+      strokeWidth={data['stroke-width']}
+      {...data}
+    />
   ));
 
   const SVGWords = word.map((data) => (
