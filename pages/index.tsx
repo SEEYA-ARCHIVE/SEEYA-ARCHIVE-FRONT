@@ -5,7 +5,7 @@ import { NextPage } from 'next';
 import { Header } from 'src/components/common/header/Header';
 import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
 import { MainUpload } from 'src/components/mainPage/mainUpload/MainUpload';
-import { MainHallSearch } from 'src/components/mainPage/mainHallSearch/MainHallSearch';
+import { MainHallIconList } from 'src/components/mainPage/mainHallSearch/MainHallIconList';
 import { getHallListAPI, HallListType } from 'src/api/hall';
 
 interface Props {
@@ -18,6 +18,7 @@ const Home: NextPage<Props> = ({ hallData }) => {
       <Header />
       <MainWrapper>
         <MainInfo />
+        <MainHallIconList hallData={hallData} />
       </MainWrapper>
     </Wrapper>
   );
@@ -33,8 +34,6 @@ export default Home;
 const Wrapper = styled.div``;
 
 const MainWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
   padding: 240px 60px;
 
   margin: auto;

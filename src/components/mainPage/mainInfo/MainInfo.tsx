@@ -23,6 +23,8 @@ export const MainInfo: FC<Props> = () => {
 };
 
 const Wrapper = styled.div`
+  margin-bottom: 70px;
+
   .main-icon {
     margin-bottom: 20px;
   }
