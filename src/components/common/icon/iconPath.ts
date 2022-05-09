@@ -6,3 +6,4 @@ export { default as iconPlus } from 'public/assets/icon/Plus.svg';
 export { default as iconTypoLogo } from 'public/assets/icon/TypoLogo.svg';
 export { default as iconReport } from 'public/assets/icon/Report.svg';
 export { default as iconX } from 'public/assets/icon/X.svg';
+export { default as iconMainTypoLogo } from 'public/assets/icon/LogoMainTypo.svg';
