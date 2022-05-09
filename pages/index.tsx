@@ -22,6 +22,7 @@ const Home: NextPage<Props> = ({ hallData }) => {
         <MainHallIconList hallData={hallData} />
         <MainLottie />
       </MainWrapper>
+      <MainLottie />
     </Wrapper>
   );
 };
