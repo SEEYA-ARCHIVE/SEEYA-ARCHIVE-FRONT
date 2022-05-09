@@ -102,11 +102,15 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
         return { ...data, ...style };
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
       window.k = seatsData;
       console.log({ seatsData, svgData, updatedArea });
 >>>>>>> 007353d (feat: 배치도 페이지 API 연동)
+=======
+
+>>>>>>> 6e58906 (chore: 주석 삭제 및 gitignore 추가)
       return data;
     });
 
