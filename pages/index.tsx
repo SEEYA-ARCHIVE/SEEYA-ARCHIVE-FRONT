@@ -36,8 +36,6 @@ export default Home;
 const Wrapper = styled.div``;
 
 const MainWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
   padding: 240px 60px;
 
   margin: auto;
