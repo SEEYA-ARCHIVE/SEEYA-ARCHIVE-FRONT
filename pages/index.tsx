@@ -20,8 +20,8 @@ const Home: NextPage<Props> = ({ hallData }) => {
       <MainWrapper>
         <MainInfo />
         <MainHallIconList hallData={hallData} />
+        <MainLottie />
       </MainWrapper>
-      <MainLottie />
     </Wrapper>
   );
 };
@@ -36,6 +36,8 @@ export default Home;
 const Wrapper = styled.div``;
 
 const MainWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding: 240px 60px;
 
   margin: auto;
