@@ -1,9 +1,8 @@
 import React, { MouseEvent, useEffect, useState, VFC } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import { MOCK_SEAT_AREA } from 'src/api/mock/seat_areas';
+import styled, { css } from 'styled-components';
+
 import { SeatAreaType } from 'src/api/seat';
 import { getSeatArea } from 'src/stores/seat';
-import styled, { css } from 'styled-components';
 import { Area, AreaPathType } from './Area';
 import { Word, WordPathType } from './Word';
 
@@ -19,6 +18,7 @@ interface Props {
   hallId: number;
   data: SVGDataType;
   className?: string;
+  seatsData: SeatAreaType[];
 }
 
 export interface SVGInfoType {
@@ -26,16 +26,14 @@ export interface SVGInfoType {
   area: string | null;
 }
 
-const mock = MOCK_SEAT_AREA;
-
 const FLOOR_COLOR: Record<string, string> = {
-  2: '#FFB118',
-  3: '#13ACC1',
+  1: '#FFB118',
+  2: '#13ACC1',
 };
 
 const OPACITY_FLOOR_COLOR: Record<string, string> = {
-  2: '#ffcd68',
-  3: '#A8CBCF',
+  1: '#ffcd68',
+  2: '#A8CBCF',
 };
 /**
  * 1. 코멘트 띄우기
@@ -45,7 +43,7 @@ const OPACITY_FLOOR_COLOR: Record<string, string> = {
  * - setSvgData
  */
 /** component */
-export const Seats: VFC<Props> = ({ hallId, data, className }) => {
+export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const [svgData, setSvgData] = useState(data);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
@@ -56,7 +54,6 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
    * useRecoilValue는 Suspense를 NextJS에서 못써서 사용 못한다.
    * 그러면 불편할텐데.. 다른 라이브러리 고민도 할만할 듯
    */
-  const seatArea = useRecoilValueLoadable(getSeatArea(hallId));
 
   const { width, height, viewBox, xmlns, area, word } = svgData;
 
@@ -68,7 +65,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
     /**
      * TODO: 비동기 값적용
      */
-    return mock.find((data) => {
+    return seatsData.find((data) => {
       return data.floor === floor && data.area === area.toUpperCase();
     })?.countReviews;
   };
@@ -104,6 +101,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
         };
         return { ...data, ...style };
       }
+
       return data;
     });
 
@@ -133,7 +131,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
    * TODO: 비동기 값적용
    */
   useEffect(() => {
-    if (!mock) return;
+    if (!seatsData) return;
     setSeatStyle();
   }, []);
 
@@ -176,6 +174,7 @@ export const Seats: VFC<Props> = ({ hallId, data, className }) => {
 };
 
 /** styled component */
+
 const SVGWrap = styled.div`
   display: inline-block;
 
@@ -193,7 +192,7 @@ const SeatComment = styled.div<{ isCommentOpen: boolean; areaPosition: DOMRect |
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: fixed;
   background-color: ${({ theme }) => theme.color.purple};
   color: ${({ theme }) => theme.fontColor.white};
   width: 34px;

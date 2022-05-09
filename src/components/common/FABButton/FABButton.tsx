@@ -26,7 +26,7 @@ export const FABButton: FC<Props> = ({ bgColor, position, value }) => {
 };
 
 const FABWrapper = styled.button<Pick<Props, 'bgColor' | 'position'>>`
-  position: fixed;
+  position: absolute;
   width: 80px;
   height: 80px;
   border-radius: 50%;

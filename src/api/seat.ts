@@ -6,6 +6,9 @@ export interface SeatAreaType {
   area: string;
   countReviews: number;
 }
-export const getSeatAreaAPI = (hallId: number): Promise<SeatAreaType[]> => {
-  return new Promise((resolve) => resolve(MOCK_SEAT_AREA));
+export const getSeatAreaAPI = async (hallId: number): Promise<SeatAreaType[]> => {
+  const url = `${process.env.NEXT_PUBLIC_HOST}/concert_halls/${hallId}/seat_areas`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
 };

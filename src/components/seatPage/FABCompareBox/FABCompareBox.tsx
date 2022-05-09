@@ -39,7 +39,7 @@ export const FABCompareBox: FC<Props> = () => {
 const CompareBox = styled.div`
   width: 160px;
 
-  position: fixed;
+  position: absolute;
   right: 50px;
   top: 50%;
   transform: translate(0, -60%);

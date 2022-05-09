@@ -42,6 +42,7 @@ const Wrap = styled.div`
   height: 100vh;
 `;
 const Layout = styled.div`
+  position: relative;
   max-width: 1280px;
   height: 100vh;
   margin: auto;
