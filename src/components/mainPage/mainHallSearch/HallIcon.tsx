@@ -24,7 +24,7 @@ export const HallIcon: FC<Props> = ({ name, iconName, concertHallId }) => {
       return;
     }
 
-    router.push(`seat?id=${concertHallId}`);
+    router.push(`seat?hallId=${concertHallId}`);
   };
 
   const handleMouseEnter = () => {

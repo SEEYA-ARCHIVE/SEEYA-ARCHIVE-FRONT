@@ -32,7 +32,7 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
 };
 
 Seat.getInitialProps = async ({ query }) => {
-  const hallId = Number(query.id) ?? 1;
+  const hallId = Number(query.hallId) ?? 1;
   const seatsData = await getSeatAreaAPI(hallId);
 
   return { hallId, seatsData };
