@@ -7,6 +7,7 @@ import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
 import { MainUpload } from 'src/components/mainPage/mainUpload/MainUpload';
 import { MainHallIconList } from 'src/components/mainPage/mainHallSearch/MainHallIconList';
 import { getHallListAPI, HallListType } from 'src/api/hall';
+import { MainLottie } from 'src/components/mainPage/mainLottie/MainLottie';
 
 interface Props {
   hallData: HallListType;
@@ -20,6 +21,7 @@ const Home: NextPage<Props> = ({ hallData }) => {
         <MainInfo />
         <MainHallIconList hallData={hallData} />
       </MainWrapper>
+      <MainLottie />
     </Wrapper>
   );
 };
