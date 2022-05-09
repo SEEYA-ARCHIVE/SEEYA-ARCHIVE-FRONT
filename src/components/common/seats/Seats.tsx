@@ -101,8 +101,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
         };
         return { ...data, ...style };
       }
-      window.k = seatsData;
-      console.log({ seatsData, svgData, updatedArea });
+
       return data;
     });
 
