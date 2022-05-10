@@ -5,7 +5,7 @@ import useModal from 'src/hooks/useModal';
 import { Select } from 'src/components/common/select/Select';
 import { IReviewPreivew } from 'src/types/api/review';
 import { getReviewList } from 'src/stores/review';
-import ReviewList from 'src/components/reviewListPage/ReviewList';
+import ReviewList from 'src/components/reviewList/ReviewList';
 import { ModalHOC } from './ModalHOC';
 import Icon from '../icon/Icon';
 
