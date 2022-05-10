@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 import { Button } from 'src/components/common/button/Button';
-import { MainQuestion } from '../mainUpload/MainUpload';
 import { HallListType } from 'src/api/hall';
 import { HallIcon } from './HallIcon';
 
@@ -31,7 +30,7 @@ export const MainHallIconList: FC<Props> = ({ hallData }) => {
           const currentHallData = hallData.find((hall) => hall.name === data.name);
           return (
             <HallIcon
-              key={currentHallData?.concertHallId}
+              key={data.key}
               concertHallId={currentHallData?.concertHallId}
               name={data.name}
               iconName={data.key}
