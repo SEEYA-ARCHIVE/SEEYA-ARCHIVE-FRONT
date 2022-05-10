@@ -2,17 +2,13 @@ import React, { FC } from 'react';
 import useModal from 'src/hooks/useModal';
 import styled, { css } from 'styled-components';
 
-export interface ModalWrappedProps {}
-
 interface Props {
   backgroundBlur?: boolean;
   backgroundLock?: boolean;
   backgroundTransparent?: boolean;
 }
 
-export const ModalHOC = <P extends ModalWrappedProps>(
-  WrappedComponent: React.ComponentType<P>,
-): FC<Props & Omit<P, keyof ModalWrappedProps>> => {
+export const ModalHOC = <P extends object>(WrappedComponent: React.ComponentType<P>): FC<Props & P> => {
   const ModalManageComponent = ({ backgroundBlur, backgroundLock, backgroundTransparent, ...props }: Props) => {
     const { closeCurrentModal } = useModal();
 
