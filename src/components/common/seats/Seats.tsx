@@ -2,9 +2,12 @@ import React, { MouseEvent, useEffect, useState, VFC } from 'react';
 import styled, { css } from 'styled-components';
 
 import { SeatAreaType } from 'src/api/seat';
-import { getSeatArea } from 'src/stores/seat';
 import { Area, AreaPathType } from './Area';
 import { Word, WordPathType } from './Word';
+import { useSetRecoilState } from 'recoil';
+import { selectSeatAtom } from 'src/stores/seat';
+import useModal from 'src/hooks/useModal';
+import { AlertModal } from '../modal/AlertModal';
 
 export interface SVGDataType {
   width: number;
@@ -44,6 +47,9 @@ const OPACITY_FLOOR_COLOR: Record<string, string> = {
  */
 /** component */
 export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
+  const setSelectSeat = useSetRecoilState(selectSeatAtom);
+  const { openModal, closeCurrentModal } = useModal();
+
   const [svgData, setSvgData] = useState(data);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
@@ -62,9 +68,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
 
   const getReivewCount = ({ floor, area }: SVGInfoType) => {
     if (!area || !floor) return 0;
-    /**
-     * TODO: 비동기 값적용
-     */
+
     return seatsData.find((data) => {
       return data.floor === floor && data.area === area.toUpperCase();
     })?.countReviews;
@@ -117,6 +121,16 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     setSvgData({ ...svgData, area: updatedArea, word: updatedWords });
   };
 
+  const handleAreaClick = () => {
+    if (!focusedArea) return;
+    const { floor, area } = focusedArea;
+    if (!floor || !area) return;
+    setSelectSeat({ floor: floor.toString(), area });
+    if (!reviewCount) {
+      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
+    }
+  };
+
   useEffect(() => {
     if (focusedArea) {
       showComment();
@@ -127,9 +141,6 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     }
   }, [focusedArea]);
 
-  /**
-   * TODO: 비동기 값적용
-   */
   useEffect(() => {
     if (!seatsData) return;
     setSeatStyle();
@@ -162,6 +173,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     <>
       {!!reviewCount && (
         <SeatComment
+          onClick={handleAreaClick}
           isCommentOpen={isCommentOpen}
           areaPosition={areaPosition}
           onMouseEnter={() => {

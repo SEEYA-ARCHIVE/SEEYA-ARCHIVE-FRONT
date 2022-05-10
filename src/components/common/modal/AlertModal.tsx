@@ -9,6 +9,7 @@ type AlertType = 'NO_SEAT' | 'NO_PHOTO' | 'NO_FUNC';
 
 interface Props {
   type: AlertType;
+  onClick: () => void;
 }
 
 const ALERT_DATA = {
@@ -29,7 +30,8 @@ const ALERT_DATA = {
   },
 };
 
-export const AlertModal: FC<Props> = ({ type }) => {
+export const AlertModal: FC<Props> = ({ type, onClick }) => {
+  const { closeCurrentModal } = useModal();
   const subMsgList = ALERT_DATA[type].subMsg;
   return (
     <Wrapper type={type}>
@@ -41,7 +43,7 @@ export const AlertModal: FC<Props> = ({ type }) => {
           <p key={msg}>{msg}</p>
         ))}
       </div>
-      <Button className="button" bgColor="red">
+      <Button onClick={closeCurrentModal} className="button" bgColor="red">
         알았어요.
       </Button>
     </Wrapper>

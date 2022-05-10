@@ -36,7 +36,7 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
   return (
     <SeatPageWrapper>
       <Header />
-      <SeatInfo hallId={hallId} />
+      <SeatInfo hallId={hallId} seatsData={seatsData} />
       <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
       <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} />
       <FABButton value="업로드" bgColor="yellow" position={{ bottom: 40, right: 90 }} />

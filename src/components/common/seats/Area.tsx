@@ -1,5 +1,9 @@
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
+import { useSetRecoilState } from 'recoil';
+import useModal from 'src/hooks/useModal';
+import { selectSeatAtom } from 'src/stores/seat';
 import styled from 'styled-components';
+import { AlertModal } from '../modal/AlertModal';
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface AreaPathType {
@@ -30,8 +34,19 @@ export const Area: FC<Props> = ({
   strokeWidth,
   ...props
 }) => {
+  const setSelectSeat = useSetRecoilState(selectSeatAtom);
+  const { openModal, closeCurrentModal } = useModal();
   const timer = useRef<NodeJS.Timer | null>(null);
   const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
+
+  const handleClick = () => {
+    if (!floor || !area) return;
+
+    setSelectSeat({ floor: floor.toString(), area });
+    if (!reviewCount) {
+      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
+    }
+  };
 
   const handleEnter = () => {
     if (!reviewCount) return;
@@ -55,6 +70,7 @@ export const Area: FC<Props> = ({
   return (
     <AreaPath
       {...props}
+      onClick={handleClick}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       strokeDasharray={strokeDasharray}
