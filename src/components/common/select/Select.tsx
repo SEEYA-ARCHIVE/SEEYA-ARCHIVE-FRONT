@@ -8,7 +8,7 @@ interface IOption {
 
 interface Props {
   value: string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
+  onChange: (selectFloor: string) => void;
   options: IOption[];
 }
 
@@ -27,7 +27,7 @@ export const Select: VFC<Props> = ({ value, onChange, options }) => {
     <SelectComponent value={value} onChange={onChangeOption}>
       {options.map((option) => (
         <Option key={option.value} value={option.value}>
-          {option.label}
+          {option.label.toUpperCase()}
         </Option>
       ))}
     </SelectComponent>

@@ -1,36 +1,35 @@
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { useRecoilValueLoadable } from 'recoil';
 import { MOCK_SEAT_AREA } from 'src/api/mock/seat_areas';
 import { Select } from 'src/components/common/select/Select';
-import { getSeatArea } from 'src/stores/seat';
 
 import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
 import { Button } from 'src/components/common/button/Button';
+import { SeatAreaType } from 'src/api/seat';
+import useModal from 'src/hooks/useModal';
+import { AlertModal } from 'src/components/common/modal/AlertModal';
+import { useRecoilState } from 'recoil';
+import { selectSeatAtom } from 'src/stores/seat';
 
 interface Props {
   hallId: number;
+  seatsData: SeatAreaType[];
 }
 
-//selector로 받아 올 변수
-const SEAT_COUNT = 15;
+export const SeatInfo: FC<Props> = ({ seatsData }) => {
+  const { openModal, closeCurrentModal } = useModal();
+  const [selectSeat, setSelectSeat] = useRecoilState(selectSeatAtom);
 
-const mock = MOCK_SEAT_AREA;
-const MOCK_SEAT_DATA = oylmpicData;
+  const totalReviewCount = seatsData.reduce((acc, cur) => acc + cur.countReviews, 0);
 
-export const SeatInfo: FC<Props> = ({ hallId }) => {
-  const seatArea = useRecoilValueLoadable(getSeatArea(hallId));
-
-  const [floor, setFloor] = useState('2');
-  const [area, setArea] = useState('');
   /**
-   * TODO: 비동기 값적용
+   * TODO: 서버에서 배치도 데이터 받아오면 그때 적용
    */
-  const areaOptions = MOCK_SEAT_DATA.word.reduce((acc, { floor, area }) => {
+  const areaOptions = oylmpicData.word.reduce((acc, { floor, area }) => {
     if (!floor || !area) return acc;
 
-    const areaUppserCase = area.toUpperCase();
+    const areaUppserCase = area;
     if (floor in acc) {
       acc[floor].push({ value: areaUppserCase, label: areaUppserCase });
     } else {
@@ -43,33 +42,40 @@ export const SeatInfo: FC<Props> = ({ hallId }) => {
     return { value: floor, label: `${floor}층` };
   });
 
+  const setFloor = (selectFloor: string) => {
+    setSelectSeat(({ area }) => ({ area, floor: selectFloor }));
+  };
+  const setArea = (selectArea: string) => {
+    setSelectSeat(({ floor }) => ({ floor, area: selectArea }));
+  };
+
   const handleSelectClick = () => {
-    const areaData = mock.find((data) => data.floor.toString() === floor && data.area === area);
+    const areaData = seatsData.find(
+      (data) => data.floor.toString() === selectSeat.floor && data.area === selectSeat.area,
+    );
 
     if (!areaData?.countReviews) {
-      //openModal (리뷰 없습니다.)
+      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
     }
-
-    //openModal 상세페이지 오픈
   };
 
   return (
     <SeatInfoWrapper>
       <h1>올림픽 홀</h1>
       <SelectBoxWrapper>
-        <Select value={floor} onChange={setFloor} options={floorOptions} />
+        <Select value={selectSeat.floor} onChange={setFloor} options={floorOptions} />
         <Select
-          value={area}
+          value={selectSeat.area}
           onChange={setArea}
-          options={areaOptions[floor].sort((a, b) => a.label.localeCompare(b.label))}
+          options={areaOptions[selectSeat.floor].sort((a, b) => a.label.localeCompare(b.label))}
         />
         <span>구역</span>
-        <Button className="seat_select_btn" bgColor={'mint'} onClick={handleSelectClick}>
+        <Button className="seat_select_btn" bgColor="mint" onClick={handleSelectClick}>
           선택
         </Button>
       </SelectBoxWrapper>
       <div>
-        <span className="highlight">총 {SEAT_COUNT}</span>의 사진 리뷰가 있습니다.
+        <span className="highlight">총 {totalReviewCount}개</span>의 사진 리뷰가 있습니다.
       </div>
     </SeatInfoWrapper>
   );
