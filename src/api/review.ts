@@ -1,24 +1,13 @@
-import { IReviewListType } from 'src/types/api/review';
 import axios from 'axios';
+import { ReviewListType, ReviewDetailType } from 'src/types/api/review';
 
-export interface ReviewDetailType {
-  id: number;
-  concertHall: string;
-  createAt: string;
-  updateAt: string;
-  seatArea: string;
-  images: string[];
-  artist: string | null;
-  nextId: number | null;
-  previousId: number | null;
-}
+export const getReviewDetailAPI = async (seatAreaId: number, reviewId: number): Promise<ReviewDetailType> => {
+  const { data } = await axios.get(`http://localhost:8000/seat_areas/${seatAreaId}/reviews/${reviewId}`);
 
-export const getReviewDetailAPI = (seatAreaId: number, reviewId: number): Promise<ReviewDetailType> => {
-  return new Promise((resolve) => resolve(MOCK_REVIEW));
+  return data;
 };
 
-
-export const getReviewListAPI = async (seatId: number, page: number): Promise<IReviewListType> => {
+export const getReviewListAPI = async (seatId: number, page: number): Promise<ReviewListType> => {
   const { data } = await axios.get(`http://3.36.62.207/seat_areas/${seatId}/reviews?page=${page}`);
 
   return data;

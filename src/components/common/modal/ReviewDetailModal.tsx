@@ -3,40 +3,53 @@ import styled, { css } from 'styled-components';
 
 import { ModalHOC, ModalWrappedProps } from './ModalHOC';
 import { ImgViewer } from 'src/components/common/imgViewer/ImgViewer';
-import { MOCK_REVIEW } from 'src/api/mock/review';
 import { iconX } from '../icon/iconPath';
 
 import Review from 'src/components/reviewDetail/review/Review';
 import useModal from 'src/hooks/useModal';
+import { useRecoilValueLoadable } from 'recoil';
+import { getReviewDetail } from 'src/stores/review';
 
 interface Props extends ModalWrappedProps {
   seatAreaId: number;
   reviewId: number;
 }
 
-const IMG1 = 'https://image.edaily.co.kr/images/photo/files/NP/S/2019/12/PS19121100264.jpg';
-const IMG2 = 'https://t1.daumcdn.net/cfile/blog/265619455758EB7434';
-
 const ReviewDetailModal: FC<Props> = ({ seatAreaId, reviewId }) => {
-  const reviewData = MOCK_REVIEW;
+  const [selectedReviewId, setSelectedReviewId] = useState(reviewId);
+  const { contents: reviewData, state: reviewDetailState } = useRecoilValueLoadable(
+    getReviewDetail([seatAreaId, selectedReviewId]),
+  );
+
   const { closeCurrentModal } = useModal();
 
-  const onClickPrevButton = () => {};
+  const onClickPrevButton = () => {
+    if (!reviewData.previousId) return;
 
-  const onClickNextButton = () => {};
+    setSelectedReviewId(reviewData.previousId);
+  };
+
+  const onClickNextButton = () => {
+    if (!reviewData.nextId) return;
+
+    setSelectedReviewId(reviewData.nextId);
+  };
+
+  if (reviewDetailState === 'loading') return <></>;
 
   return (
     <Wrapper>
       <CloseX onClick={closeCurrentModal} />
-      <ImgViewer imgList={[IMG1, IMG2]} userId="시야봇" />
+      <ImgViewer imgList={reviewData.images} userId="시야봇" />
       <Review
+        // TODO : 리뷰 텍스트가 아직 DB에 없음.
         reviewText="콘서트 시야를 탐색하고 계신가요?\n시야 아카이브를 북마크에 추가하고\n공연 티케팅 시에 시야를 참고하세요.\n#시야아카이브#테스트"
-        concertHall={reviewData.concertHall}
+        concertHall={reviewData.concertHallName}
         seatArea={reviewData.seatArea}
         createAt={reviewData.createAt}
       />
-      {reviewData.previousId && <Triangle rotate={90} position={{ left: -57 }} />}
-      {reviewData.nextId && <Triangle rotate={270} position={{ right: -57 }} />}
+      {reviewData.previousId && <Triangle rotate={90} position={{ left: -57 }} onClick={onClickPrevButton} />}
+      {reviewData.nextId && <Triangle rotate={270} position={{ right: -57 }} onClick={onClickNextButton} />}
     </Wrapper>
   );
 };

@@ -1,4 +1,5 @@
 import { selectorFamily } from 'recoil';
+import { ReviewDetailType } from 'src/types/api/review';
 import { getReviewListAPI, getReviewDetailAPI } from 'src/api/review';
 
 export const getReviewList = selectorFamily({
@@ -19,7 +20,7 @@ export const getReviewList = selectorFamily({
     },
 });
 
-export const getReviewDetail = selectorFamily({
+export const getReviewDetail = selectorFamily<ReviewDetailType | null, [number, number]>({
   key: 'GET/reviewDetail',
   get:
     ([seatAreaId, reviewId]: [number, number]) =>
