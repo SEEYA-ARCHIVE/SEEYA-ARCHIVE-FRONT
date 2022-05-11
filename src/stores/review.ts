@@ -20,7 +20,7 @@ export const getReviewList = selectorFamily({
     },
 });
 
-export const getReviewDetail = selectorFamily<ReviewDetailType | null, [number, number]>({
+export const getReviewDetail = selectorFamily({
   key: 'GET/reviewDetail',
   get:
     ([seatAreaId, reviewId]: [number, number]) =>

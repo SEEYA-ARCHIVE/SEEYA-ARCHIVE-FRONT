@@ -10,7 +10,7 @@ export const getReviewDetailAPI = async (seatAreaId: number, reviewId: number): 
 };
 
 export const getReviewListAPI = async (seatId: number, page: number): Promise<ReviewListType> => {
-  const { data } = await axios.get(`http://3.36.62.207/seat_areas/${seatId}/reviews?page=${page}`);
+  const { data } = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST}/seat_areas/${seatId}/reviews?page=${page}`);
 
   return data;
 };
