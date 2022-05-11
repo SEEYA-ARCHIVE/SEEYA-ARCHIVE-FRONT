@@ -33,6 +33,17 @@ export const theme = {
         transform: translateX(0%);
       }
     `,
+    slideOut: keyframes`
+      0% {
+        transform: translateX(0%);
+      }
+      30% {
+        transform: translateX(-2%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    `,
   },
 };
 

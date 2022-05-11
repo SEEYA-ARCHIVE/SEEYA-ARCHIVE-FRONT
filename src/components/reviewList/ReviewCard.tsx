@@ -1,39 +1,62 @@
+import Image from 'next/image';
 import React, { FC } from 'react';
+import useModal from 'src/hooks/useModal';
+import { convertDateToFormattedString } from 'src/utils/timeUtil';
 import styled from 'styled-components';
 import { Card } from '../common/card/Card';
 import Icon from '../common/icon/Icon';
 import { Tag } from '../common/tag/Tag';
 
 interface Props {
+  seatAreaId: number;
+  reviewId: number;
   imgSrc: string;
-  author: string;
+  author?: string;
   surplusPic: number;
   createdAt: string;
-  tagList: string[];
-  helpCount: number;
+  tagList?: string[];
+  helpCount?: number;
 }
 
-export const ReviewCard: FC<Props> = ({ imgSrc, author, surplusPic, createdAt, tagList, helpCount }) => {
+export const ReviewCard: FC<Props> = ({
+  seatAreaId,
+  reviewId,
+  imgSrc,
+  author,
+  surplusPic,
+  createdAt,
+  tagList,
+  helpCount,
+}) => {
+  const formattedDate = convertDateToFormattedString(createdAt);
+  const { openModal } = useModal();
+  const onClickCard = () => {
+    openModal(<></>);
+  };
+
   return (
     <Card>
       <ImageWrapper>
-        <Img src={imgSrc} />
+        <Img src={imgSrc} layout="fill" objectFit="cover" />
         <PicInfo>
-          <NameText>{author}</NameText>
+          <NameText>{author ?? '시야봇'}</NameText>
           <SurplusText>{surplusPic ? `+${surplusPic}` : ''}</SurplusText>
         </PicInfo>
       </ImageWrapper>
       <InfoWrapper>
-        <DateText>{createdAt}</DateText>
+        <DateText>{formattedDate}</DateText>
         <TagList>
-          {tagList.map((tag) => (
+          {/* TODO: Prototype 이후 */}
+          {/* {tagList?.map((tag) => (
             <Tag key={tag} text={tag} />
-          ))}
+          ))} */}
+          <Tag text="올림픽홀" />
         </TagList>
-        <HelpTextWrapper>
+        {/* TODO: Prototype 이후 */}
+        {/* <HelpTextWrapper>
           <HelpText>{helpCount}명에게 도움이 되었습니다.</HelpText>
-          <Icon name="iconThumbsUp" />
-        </HelpTextWrapper>
+          <PointerIcon name="iconThumbsUp" />
+        </HelpTextWrapper> */}
       </InfoWrapper>
     </Card>
   );
@@ -45,14 +68,19 @@ const ImageWrapper = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   height: 217px;
+
+  overflow: hidden;
+  cursor: pointer;
 `;
 
-const Img = styled.img`
+const Img = styled(Image)`
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  transition: 0.5s all;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const PicInfo = styled.div`
@@ -80,7 +108,6 @@ const SurplusText = styled.p`
 `;
 
 const InfoWrapper = styled.div`
-  height: 88px;
   padding: 12px;
 `;
 
@@ -106,4 +133,8 @@ const HelpText = styled.p`
   color: #333333;
   font-size: 12px;
   font-weight: 500;
+`;
+
+const PointerIcon = styled(Icon)`
+  cursor: pointer;
 `;

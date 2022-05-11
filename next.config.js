@@ -8,6 +8,9 @@ const nextConfig = {
     });
     return config;
   },
+  images: {
+    domains: ['7th-team2-seeya-archive.s3.ap-northeast-2.amazonaws.com'],
+  },
 };
 
 module.exports = nextConfig;

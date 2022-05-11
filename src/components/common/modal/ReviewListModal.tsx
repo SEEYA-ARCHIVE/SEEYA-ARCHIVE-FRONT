@@ -1,35 +1,60 @@
-import React, { FC, useState } from 'react';
-import styled from 'styled-components';
+import React, { FC, useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
+import { useRecoilValueLoadable } from 'recoil';
+import useModal from 'src/hooks/useModal';
 import { Select } from 'src/components/common/select/Select';
-import { ReviewCard } from 'src/components/reviewListPage/ReviewCard';
+import { IReviewPreivew } from 'src/types/api/review';
+import { getReviewList } from 'src/stores/review';
+import ReviewList from 'src/components/reviewList/ReviewList';
+import { ModalHOC } from './ModalHOC';
 import Icon from '../icon/Icon';
-import { sampleThumbnail } from '../image/imagePath';
 
 interface Props {
-  // TODO 구역 정보 받기
+  seatAreaId: number;
 }
+const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
 
-// TODO 임시 데이터
-const SORT_OPTIONS = [
-  { value: 'latest', label: '최신순' },
-  { value: 'price', label: '가격순' },
-];
-const MOCK_REVIEW_DATA = [
-  {
-    imgSrc: sampleThumbnail.src,
-    author: '박은서',
-    surplusPic: 2,
-    createdAt: '2022/3/27',
-    tagList: ['세븐틴', '올림픽홀', '월드투어'],
-    helpCount: 25,
-  },
-];
-
-export const ReviewListModal: FC = () => {
+const ReviewListModal: FC<Props> = ({ seatAreaId }) => {
+  const [isShow, setIsShow] = useState(true);
   const [sort, setSort] = useState('');
-  const reviewCount = MOCK_REVIEW_DATA.length; // TODO 데이터 받는 방식에 따라 수정 pagination or all
+  const [reviewList, setReviewList] = useState<IReviewPreivew[]>([]);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const { closeCurrentModal } = useModal();
+  const { contents: reviewListContents, state: reviewListState } = useRecoilValueLoadable(
+    getReviewList([seatAreaId, page]),
+  );
+
+  const handleChevronClick = () => {
+    setIsShow(false);
+
+    setTimeout(() => {
+      closeCurrentModal();
+    }, 1000);
+  };
+
+  const addPage = () => setPage((prev) => prev + 1);
+
+  const fetchData = async () => {
+    switch (reviewListState) {
+      case 'loading':
+        break;
+      case 'hasValue':
+        setReviewList((prev) => [...prev, ...reviewListContents.results]);
+        if (!reviewCount) setReviewCount(reviewListContents.count);
+
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [reviewListState]);
+
   return (
-    <Wrapper>
+    <Wrapper isShow={isShow}>
       <ReviewWrapper>
         <TitleWrapper>
           <Title>
@@ -39,29 +64,25 @@ export const ReviewListModal: FC = () => {
         </TitleWrapper>
         <ScrollWrapper>
           <ReviewListWrapper>
-            {MOCK_REVIEW_DATA.map((data, idx) => {
-              const { imgSrc, author, surplusPic, createdAt, tagList, helpCount } = data;
-              return (
-                <ReviewCard
-                  key={imgSrc + idx}
-                  imgSrc={imgSrc}
-                  author={author}
-                  surplusPic={surplusPic}
-                  createdAt={createdAt}
-                  tagList={tagList}
-                  helpCount={helpCount}
-                />
-              );
-            })}
+            <ReviewList
+              seatAreaId={seatAreaId}
+              list={reviewList}
+              colCount={3}
+              count={reviewCount}
+              page={page}
+              addPage={addPage}
+            />
           </ReviewListWrapper>
         </ScrollWrapper>
       </ReviewWrapper>
-      <StyledChevron name="iconCircleChevronRight" />
+      <IconWrapper onClick={handleChevronClick}>
+        <Icon name="iconCircleChevronRight" />
+      </IconWrapper>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isShow: boolean }>`
   position: fixed;
   top: 0;
   right: 0;
@@ -69,9 +90,17 @@ const Wrapper = styled.div`
   height: 100%;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
   background-color: ${({ theme }) => theme.color.white};
-  animation: ${({ theme }) => theme.animation.slideIn} 1s ease-in-out;
   border-left: 4px solid ${({ theme }) => theme.color.mint};
   padding: 36px 0 0 54px;
+
+  animation: ${({ theme, isShow }) =>
+    isShow
+      ? css`
+          ${theme.animation.slideIn} 1s ease-in
+        `
+      : css`
+          ${theme.animation.slideOut} 1s ease-in-out
+        `};
 `;
 
 const ReviewWrapper = styled.div`
@@ -100,7 +129,7 @@ const Title = styled.p`
 `;
 
 const ScrollWrapper = styled.div`
-  width: 695px;
+  width: 705px;
   height: calc(100% - 36px);
   overflow-y: scroll;
 
@@ -118,18 +147,17 @@ const ScrollWrapper = styled.div`
 
 const ReviewListWrapper = styled.div`
   width: 675px;
+  height: 100%;
   margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-row-gap: 15px;
-  grid-column-gap: 12px;
-  grid-auto-rows: minmax(305px, auto);
+
   padding-bottom: 10px;
-  padding-right: 20px;
 `;
 
-const StyledChevron = styled(Icon)`
+const IconWrapper = styled.div`
   position: absolute;
   top: 45%;
   left: 0;
+  cursor: pointer;
 `;
+
+export default ModalHOC(ReviewListModal);

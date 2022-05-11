@@ -25,6 +25,9 @@ export const GlobalStyle = createGlobalStyle`
         border:none;
         cursor: pointer;
     }
+    a{
+        text-decoration: none;
+    }
     .pc-tablet-only {
         display: block;
         ${media.mobile} {
