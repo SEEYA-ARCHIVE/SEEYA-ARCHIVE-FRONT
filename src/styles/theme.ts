@@ -16,7 +16,7 @@ export const theme = {
     purple: '#7B61FF',
   },
   fontColor: {
-    black: '#33333',
+    black: '#333333',
     gray: '#7b7b7b',
     white: '#fff',
     mint: '#13ACC1',
