@@ -25,6 +25,12 @@ export const GlobalStyle = createGlobalStyle`
         border:none;
         cursor: pointer;
     }
+    img{
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+    }
     a{
         text-decoration: none;
     }
