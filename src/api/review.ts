@@ -2,7 +2,9 @@ import axios from 'axios';
 import { ReviewListType, ReviewDetailType } from 'src/types/api/review';
 
 export const getReviewDetailAPI = async (seatAreaId: number, reviewId: number): Promise<ReviewDetailType> => {
-  const { data } = await axios.get(`http://3.36.62.207/seat_areas/${seatAreaId}/reviews/${reviewId}`);
+  const { data } = await axios.get(
+    `http://${process.env.NEXT_PUBLIC_HOST}/seat_areas/${seatAreaId}/reviews/${reviewId}`,
+  );
 
   return data;
 };
