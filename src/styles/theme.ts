@@ -2,7 +2,9 @@ import { keyframes } from 'styled-components';
 
 export const theme = {
   color: {
+    blue5: '#2D7FF9',
     blue: '#00bac7',
+    gray2: '#999999',
     gray3: '#b3b3b3',
     gray5: '#f5f5f5',
     gray: '#f6f6f6',
@@ -16,7 +18,8 @@ export const theme = {
     purple: '#7B61FF',
   },
   fontColor: {
-    black: '#33333',
+    black: '#333333',
+    gray5: '#706B6B',
     gray: '#7b7b7b',
     white: '#fff',
     mint: '#13ACC1',

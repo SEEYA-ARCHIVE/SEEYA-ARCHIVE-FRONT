@@ -14,7 +14,7 @@ export const ImgViewer: FC<Props> = ({ imgList, userId }) => {
   return (
     <Wrapper>
       <PreviewImgWrapper>
-        <Img src={imgList[selectedIdx]} width={500} height={300}></Img>
+        <Img src={imgList[selectedIdx]}></Img>
         <ImgInfoBar>
           <div className="user">{userId}</div>
           <div className="count">+{imgList.length - 1}</div>
@@ -53,6 +53,9 @@ const PreviewImgWrapper = styled.div`
 
 const Img = styled.img<{ isSelected?: boolean }>`
   border-radius: 10px;
+  max-width: 480px;
+  max-height: 420px;
+  object-fit: cover;
 
   ${({ theme, isSelected }) =>
     isSelected &&

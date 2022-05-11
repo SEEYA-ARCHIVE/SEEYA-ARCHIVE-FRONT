@@ -1,7 +1,16 @@
-import { IReviewListType } from 'src/types/api/review';
 import axios from 'axios';
-export const getReviewListAPI = async (seatId: number, page: number): Promise<IReviewListType> => {
-  const { data } = await axios.get(`http://3.36.62.207/seat_areas/${seatId}/reviews?page=${page}`);
+import { ReviewListType, ReviewDetailType } from 'src/types/api/review';
+
+export const getReviewDetailAPI = async (seatAreaId: number, reviewId: number): Promise<ReviewDetailType> => {
+  const { data } = await axios.get(
+    `http://${process.env.NEXT_PUBLIC_HOST}/seat_areas/${seatAreaId}/reviews/${reviewId}`,
+  );
+
+  return data;
+};
+
+export const getReviewListAPI = async (seatId: number, page: number): Promise<ReviewListType> => {
+  const { data } = await axios.get(`http://${process.env.NEXT_PUBLIC_HOST}/seat_areas/${seatId}/reviews?page=${page}`);
 
   return data;
 };
