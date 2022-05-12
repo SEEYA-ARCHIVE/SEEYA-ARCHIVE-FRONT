@@ -46,7 +46,6 @@ const Wrapper = styled.div``;
 
 const MainWrapper = styled.div`
   padding: 240px 60px;
-
   margin: auto;
 
   .find_hall {
