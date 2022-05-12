@@ -24,4 +24,5 @@ const Wrapper = styled.div`
   position: absolute;
   right: 40px;
   top: 50px;
+  z-index: 1;
 `;

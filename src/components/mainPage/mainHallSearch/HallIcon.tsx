@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import * as icons from 'src/components/common/icon/iconPath';
 import Icon from 'src/components/common/icon/Icon';
 import useModal from 'src/hooks/useModal';
+import { AlertModal } from 'src/components/common/modal/AlertModal';
 
 interface Props {
   name: string;
@@ -20,7 +21,7 @@ export const HallIcon: FC<Props> = ({ name, iconName, concertHallId }) => {
 
   const handleClick = () => {
     if (!concertHallId) {
-      openModal(<div>hello</div>);
+      openModal(<AlertModal type="NO_SEAT" />);
       return;
     }
 
@@ -56,6 +57,8 @@ const Wrapper = styled.div`
   font-size: 12px;
   font-weight: 700;
   color: #376f77;
+
+  z-index: 10;
 
   .icon {
     display: flex;
