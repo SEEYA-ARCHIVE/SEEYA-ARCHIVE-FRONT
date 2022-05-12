@@ -1,5 +1,9 @@
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
+import { useSetRecoilState } from 'recoil';
+import useModal from 'src/hooks/useModal';
+import { selectSeatAtom } from 'src/stores/seat';
 import styled from 'styled-components';
+import { AlertModal } from '../modal/AlertModal';
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface AreaPathType {
@@ -16,11 +20,33 @@ export interface AreaPathType {
 interface Props extends AreaPathType {
   svgData: SVGDataType;
   setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
+  strokeDasharray?: string;
+  strokeWidth?: string;
 }
 
-export const Area: FC<Props> = ({ id, floor, area, svgData, setFocusedArea, ...props }) => {
+export const Area: FC<Props> = ({
+  id,
+  floor,
+  area,
+  svgData,
+  setFocusedArea,
+  strokeDasharray,
+  strokeWidth,
+  ...props
+}) => {
+  const setSelectSeat = useSetRecoilState(selectSeatAtom);
+  const { openModal, closeCurrentModal } = useModal();
   const timer = useRef<NodeJS.Timer | null>(null);
   const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
+
+  const handleClick = () => {
+    if (!floor || !area) return;
+
+    setSelectSeat({ floor: floor.toString(), area });
+    if (!reviewCount) {
+      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
+    }
+  };
 
   const handleEnter = () => {
     if (!reviewCount) return;
@@ -40,7 +66,16 @@ export const Area: FC<Props> = ({ id, floor, area, svgData, setFocusedArea, ...p
     }
     setFocusedArea(null);
   };
-  return <AreaPath {...props} onMouseEnter={handleEnter} onMouseLeave={handleLeave}></AreaPath>;
+
+  return (
+    <AreaPath
+      {...props}
+      onClick={handleClick}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+      strokeDasharray={strokeDasharray}
+      strokeWidth={strokeWidth}></AreaPath>
+  );
 };
 
 const AreaPath = styled.path`

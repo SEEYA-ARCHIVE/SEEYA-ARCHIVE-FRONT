@@ -20,3 +20,9 @@ export { default as iconJamsilgymHover } from 'public/assets/icon/halls/hover/Ja
 export { default as iconKSPOdomeHover } from 'public/assets/icon/halls/hover/KSPOdomeHover.svg';
 export { default as iconOlympichallHover } from 'public/assets/icon/halls/hover/OlympichallHover.svg';
 export { default as iconSkydomeHover } from 'public/assets/icon/halls/hover/SkydomeHover.svg';
+
+/**ALERT ICON */
+export { default as iconAlertTopBar } from 'public/assets/icon/alert/AlertTopBar.svg';
+export { default as iconAlertFunc } from 'public/assets/icon/alert/AlertFunc.svg';
+export { default as iconAlertSeat } from 'public/assets/icon/alert/AlertSeat.svg';
+export { default as iconAlertPhoto } from 'public/assets/icon/alert/AlertPhoto.svg';

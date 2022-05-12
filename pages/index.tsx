@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 
 import { Header } from 'src/components/common/header/Header';
 import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
-import { MainUpload } from 'src/components/mainPage/mainUpload/MainUpload';
 import { MainHallIconList } from 'src/components/mainPage/mainHallSearch/MainHallIconList';
 import { getHallListAPI, HallListType } from 'src/api/hall';
 import { MainLottie } from 'src/components/mainPage/mainLottie/MainLottie';
@@ -13,6 +11,21 @@ interface Props {
   hallData: HallListType;
 }
 
+export const getServerSideProps: GetServerSideProps = async () => {
+  const hallData = await getHallListAPI();
+
+  if (!hallData) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: { hallData } };
+};
+
 const Home: NextPage<Props> = ({ hallData }) => {
   return (
     <Wrapper>
@@ -20,15 +33,11 @@ const Home: NextPage<Props> = ({ hallData }) => {
       <MainWrapper>
         <MainInfo />
         <MainHallIconList hallData={hallData} />
+        <MainLottie />
       </MainWrapper>
       <MainLottie />
     </Wrapper>
   );
-};
-
-Home.getInitialProps = async () => {
-  const hallData = await getHallListAPI();
-  return { hallData };
 };
 
 export default Home;
