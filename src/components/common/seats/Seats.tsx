@@ -8,6 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { selectSeatAtom } from 'src/stores/seat';
 import useModal from 'src/hooks/useModal';
 import { AlertModal } from '../modal/AlertModal';
+import ReviewListModal from '../modal/ReviewListModal';
 
 export interface SVGDataType {
   width: number;
@@ -127,9 +128,14 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     if (!focusedArea) return;
     const { floor, area } = focusedArea;
     if (!floor || !area) return;
+
     setSelectSeat({ floor: floor.toString(), area });
+    const seatAreaId = getReivewCount({ floor, area })?.seatAreaId ?? 0;
+
     if (!reviewCount) {
       openModal(<AlertModal type="NO_SEAT" />);
+    } else {
+      openModal(<ReviewListModal seatAreaId={seatAreaId} />);
     }
   };
 
@@ -240,5 +246,5 @@ const SeatComment = styled.div<{ isCommentOpen: boolean; areaPosition: DOMRect |
     transform: rotate(45deg);
     border-radius: 2px;
   }
-  z-index: 9999;
+  z-index: 10;
 `;

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { useRecoilValueLoadable } from 'recoil';
 import useModal from 'src/hooks/useModal';
 import { Select } from 'src/components/common/select/Select';
-import { IReviewPreivew } from 'src/types/api/review';
+import { ReviewPreivew } from 'src/types/api/review';
 import { getReviewList } from 'src/stores/review';
 import ReviewList from 'src/components/reviewList/ReviewList';
 import { ModalHOC } from './ModalHOC';
@@ -17,7 +17,7 @@ const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
 const ReviewListModal: FC<Props> = ({ seatAreaId }) => {
   const [isShow, setIsShow] = useState(true);
   const [sort, setSort] = useState('');
-  const [reviewList, setReviewList] = useState<IReviewPreivew[]>([]);
+  const [reviewList, setReviewList] = useState<ReviewPreivew[]>([]);
   const [reviewCount, setReviewCount] = useState(0);
   const [page, setPage] = useState(1);
   const { closeCurrentModal } = useModal();
@@ -92,6 +92,7 @@ const Wrapper = styled.div<{ isShow: boolean }>`
   background-color: ${({ theme }) => theme.color.white};
   border-left: 4px solid ${({ theme }) => theme.color.mint};
   padding: 36px 0 0 54px;
+  z-index: 11;
 
   animation: ${({ theme, isShow }) =>
     isShow

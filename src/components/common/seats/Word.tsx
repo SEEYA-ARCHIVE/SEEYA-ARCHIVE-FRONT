@@ -4,6 +4,7 @@ import useModal from 'src/hooks/useModal';
 import { selectSeatAtom } from 'src/stores/seat';
 import styled, { css } from 'styled-components';
 import { AlertModal } from '../modal/AlertModal';
+import ReviewListModal from '../modal/ReviewListModal';
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface WordPathType {
@@ -39,7 +40,11 @@ export const Word: FC<Props> = ({
   const { openModal } = useModal();
   const wordRef = useRef<SVGPathElement>(null);
 
-  const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
+  const areaData = svgData.word.find((v) => v.id === id);
+
+  const reviewCount = areaData?.count ?? 0;
+  /** STAGE, FLOOR 등은 seatAreaId가 0 */
+  const seatAreaId = areaData?.seatAreaId ?? 0;
 
   const handleClick = () => {
     if (!floor || !area) return;
@@ -47,6 +52,8 @@ export const Word: FC<Props> = ({
     setSelectSeat({ floor: floor.toString(), area });
     if (!reviewCount) {
       openModal(<AlertModal type="NO_SEAT" />);
+    } else {
+      openModal(<ReviewListModal seatAreaId={seatAreaId} />);
     }
   };
 
