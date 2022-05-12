@@ -12,11 +12,12 @@ interface Props {
     left?: number;
   };
   value: string;
+  className?: string;
 }
 
-export const FABButton: FC<Props> = ({ bgColor, position, value }) => {
+export const FABButton: FC<Props> = ({ bgColor, position, value, className }) => {
   return (
-    <FABWrapper bgColor={bgColor} position={position}>
+    <FABWrapper bgColor={bgColor} position={position} className={className}>
       <div>
         <Icon name="iconComment" />
       </div>
