@@ -24,7 +24,6 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
       <Header />
       <SeatInfo hallId={hallId} />
       <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
-      <FABCompareBox />
       <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} />
       <FABButton value="업로드" bgColor="yellow" position={{ bottom: 40, right: 90 }} />
     </SeatPageWrapper>
@@ -32,7 +31,7 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
 };
 
 Seat.getInitialProps = async ({ query }) => {
-  const hallId = Number(query.id) ?? 1;
+  const hallId = Number(query.hallId) ?? 1;
   const seatsData = await getSeatAreaAPI(hallId);
 
   return { hallId, seatsData };

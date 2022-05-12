@@ -1,37 +1,48 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
+import Icon from 'src/components/common/icon/Icon';
+
 interface Props {}
 
 export const MainInfo: FC<Props> = () => {
   return (
-    <div>
-      <MainTitle>
-        <span className="seeya">시야</span>
-        <span className="archive">아카이브</span>
-      </MainTitle>
-      <MainDesc>
-        <p>콘서트를 기다리고 있나요?</p>
-        <p>어떤 좌석의 시야가 더 좋을지 이곳에서 탐색하세요.</p>
-        <p>최적의 앵글에서 최애를 영접하도록 도와드립니다!</p>
-      </MainDesc>
-    </div>
+    <Wrapper>
+      <Icon name="iconMainTypoLogo" className="main-icon" />
+      <div className="main-title">
+        <p>
+          <span className="highlight">콘서트</span>를
+        </p>
+        <p>기다리고 있나요?</p>
+      </div>
+      <div className="main-desc">
+        <p>어떤 좌석의 시야가 더 좋을지 이곳에서 탐색하세요!</p>
+      </div>
+    </Wrapper>
   );
 };
 
-const MainTitle = styled.div`
-  font-size: 48px;
-  line-height: 56px;
-  margin-bottom: 32px;
-  font-family: 'Black Han Sans', sans-serif;
+const Wrapper = styled.div`
+  margin-bottom: 70px;
 
-  .archive {
+  .main-icon {
+    margin-bottom: 20px;
+  }
+
+  .highlight {
     color: ${({ theme }) => theme.color.mint};
   }
-`;
 
-const MainDesc = styled.div`
-  font-size: 12px;
-  line-height: 20px;
-  color: ${({ theme }) => theme.fontColor.black};
+  .main-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .main-desc {
+    font-weight: 500px;
+    color: ${({ theme }) => theme.fontColor.gray};
+  }
 `;

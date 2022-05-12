@@ -5,8 +5,9 @@ import { NextPage } from 'next';
 import { Header } from 'src/components/common/header/Header';
 import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
 import { MainUpload } from 'src/components/mainPage/mainUpload/MainUpload';
-import { MainHallSearch } from 'src/components/mainPage/mainHallSearch/MainHallSearch';
+import { MainHallIconList } from 'src/components/mainPage/mainHallSearch/MainHallIconList';
 import { getHallListAPI, HallListType } from 'src/api/hall';
+import { MainLottie } from 'src/components/mainPage/mainLottie/MainLottie';
 
 interface Props {
   hallData: HallListType;
@@ -14,17 +15,14 @@ interface Props {
 
 const Home: NextPage<Props> = ({ hallData }) => {
   return (
-    <>
+    <Wrapper>
       <Header />
       <MainWrapper>
         <MainInfo />
-        <div>
-          <MainUpload />
-          <MainHallSearch hallData={hallData} />
-          <div className="find_hall">찾는 공연장이 없으신가요? 여기를 클릭하세요</div>
-        </div>
+        <MainHallIconList hallData={hallData} />
       </MainWrapper>
-    </>
+      <MainLottie />
+    </Wrapper>
   );
 };
 
@@ -35,11 +33,10 @@ Home.getInitialProps = async () => {
 
 export default Home;
 
+const Wrapper = styled.div``;
+
 const MainWrapper = styled.div`
-  max-width: 920px;
-  display: flex;
-  justify-content: space-between;
-  padding: 225px 30px;
+  padding: 240px 60px;
 
   margin: auto;
 

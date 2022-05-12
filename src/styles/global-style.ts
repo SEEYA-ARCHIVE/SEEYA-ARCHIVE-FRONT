@@ -34,6 +34,15 @@ export const GlobalStyle = createGlobalStyle`
     a{
         text-decoration: none;
     }
+    .pc-only{
+        display: block;
+        ${media.mobile} {
+            display: none;
+        }
+          ${media.tablet}{
+            display:none;
+        }
+    }
     .pc-tablet-only {
         display: block;
         ${media.mobile} {
@@ -52,4 +61,5 @@ export const GlobalStyle = createGlobalStyle`
             display: block;
         }
     }
+
 `;
