@@ -36,11 +36,8 @@ export const GlobalStyle = createGlobalStyle`
     }
     .pc-only{
         display: block;
-        ${media.mobile} {
+        ${media.pc} {
             display: none;
-        }
-          ${media.tablet}{
-            display:none;
         }
     }
     .pc-tablet-only {

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Lottie from 'react-lottie';
 import styled from 'styled-components';
 
@@ -14,7 +14,7 @@ const lottieOptions = {
 
 export const MainLottie: FC<Props> = () => {
   return (
-    <Wrapper className="pc-only">
+    <Wrapper>
       <Lottie options={lottieOptions} width={700} height={700}></Lottie>
     </Wrapper>
   );
@@ -25,4 +25,8 @@ const Wrapper = styled.div`
   right: 40px;
   top: 50px;
   z-index: 1;
+
+  @media (max-width: ${1130}px) {
+    display: none;
+  }
 `;

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import Icon from '../icon/Icon';
@@ -5,10 +6,18 @@ import Icon from '../icon/Icon';
 interface Props {}
 
 export const Header: FC<Props> = () => {
+  const router = useRouter();
+
   return (
     <HeaderWrapper>
       <Nav>
-        <Icon name="iconTypoLogo" />
+        <Icon
+          name="iconTypoLogo"
+          className="icon"
+          onClick={() => {
+            router.push('/');
+          }}
+        />
       </Nav>
     </HeaderWrapper>
   );
@@ -35,4 +44,8 @@ const Nav = styled.div`
   align-items: center;
 
   padding: 20px;
+
+  .icon {
+    cursor: pointer;
+  }
 `;

@@ -14,14 +14,17 @@ export interface IconProps {
   strokeColor?: ColorType;
   opacity?: string;
   className?: string;
+
+  onClick?: () => void;
 }
 
 /** component */
-const Icon: VFC<IconProps> = ({ name, size, rotate, fillColor, strokeColor, opacity, className }) => {
+const Icon: VFC<IconProps> = ({ name, size, rotate, fillColor, strokeColor, opacity, className, onClick }) => {
   const SVGIcon = icons[name];
 
   return (
     <SVGWrap
+      onClick={onClick}
       size={size}
       fillColor={fillColor}
       strokeColor={strokeColor}
