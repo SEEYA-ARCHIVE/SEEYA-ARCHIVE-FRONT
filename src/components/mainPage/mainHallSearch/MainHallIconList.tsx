@@ -19,10 +19,6 @@ const HALL_LIST = [
 ];
 
 export const MainHallIconList: FC<Props> = ({ hallData }) => {
-  const router = useRouter();
-
-  console.log(hallData);
-
   return (
     <>
       <HallList>

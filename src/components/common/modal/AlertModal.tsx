@@ -9,7 +9,7 @@ type AlertType = 'NO_SEAT' | 'NO_PHOTO' | 'NO_FUNC';
 
 interface Props {
   type: AlertType;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const ALERT_DATA = {
@@ -43,7 +43,13 @@ export const AlertModal: FC<Props> = ({ type, onClick }) => {
           <p key={msg}>{msg}</p>
         ))}
       </div>
-      <Button onClick={closeCurrentModal} className="button" bgColor="red">
+      <Button
+        onClick={() => {
+          onClick?.();
+          closeCurrentModal();
+        }}
+        className="button"
+        bgColor="red">
         알았어요.
       </Button>
     </Wrapper>

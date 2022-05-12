@@ -12,6 +12,7 @@ export interface WordPathType {
   area: string | null;
   d: string;
   fill: string;
+  seatAreaId?: number;
   count?: number;
 }
 
@@ -35,7 +36,7 @@ export const Word: FC<Props> = ({
   ...props
 }) => {
   const setSelectSeat = useSetRecoilState(selectSeatAtom);
-  const { openModal, closeCurrentModal } = useModal();
+  const { openModal } = useModal();
   const wordRef = useRef<SVGPathElement>(null);
 
   const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
@@ -45,7 +46,7 @@ export const Word: FC<Props> = ({
 
     setSelectSeat({ floor: floor.toString(), area });
     if (!reviewCount) {
-      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
+      openModal(<AlertModal type="NO_SEAT" />);
     }
   };
 
