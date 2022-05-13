@@ -10,6 +10,7 @@ import { SeatInfo } from 'src/components/seatPage/seatInfo/SeatInfo';
 
 import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
 import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
+import { media } from 'src/styles/theme';
 
 interface Props {
   hallId: number;
@@ -38,8 +39,8 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
       <Header />
       <SeatInfo hallId={hallId} seatsData={seatsData} />
       <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
-      <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} />
-      <FABButton value="업로드" bgColor="yellow" position={{ bottom: 40, right: 90 }} />
+      <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} className="qa_btn" />
+      <FABButton value="업로드" bgColor="yellow" position={{ bottom: 40, right: 90 }} className="upload_btn" />
     </SeatPageWrapper>
   );
 };
@@ -55,5 +56,29 @@ const SeatPageWrapper = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    ${media.tablet} {
+      top: 250px;
+      left: 50px;
+      transform: none;
+    }
+
+    ${media.mobile} {
+      left: 10px;
+    }
+  }
+
+  .qa_btn {
+    ${media.tablet} {
+      bottom: 30px;
+      right: 30px;
+    }
+  }
+
+  .upload_btn {
+    ${media.tablet} {
+      right: 30px;
+      bottom: -65px;
+    }
   }
 `;

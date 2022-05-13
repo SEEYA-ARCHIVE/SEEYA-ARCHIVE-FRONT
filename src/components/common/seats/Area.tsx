@@ -4,6 +4,7 @@ import useModal from 'src/hooks/useModal';
 import { selectSeatAtom } from 'src/stores/seat';
 import styled from 'styled-components';
 import { AlertModal } from '../modal/AlertModal';
+import ReviewListModal from '../modal/ReviewListModal';
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface AreaPathType {
@@ -15,6 +16,7 @@ export interface AreaPathType {
   fill: string;
   'stroke-width'?: string;
   'stroke-dasharray'?: string;
+  seatAreaId?: number;
 }
 
 interface Props extends AreaPathType {
@@ -35,16 +37,22 @@ export const Area: FC<Props> = ({
   ...props
 }) => {
   const setSelectSeat = useSetRecoilState(selectSeatAtom);
-  const { openModal, closeCurrentModal } = useModal();
+  const { openModal } = useModal();
   const timer = useRef<NodeJS.Timer | null>(null);
-  const reviewCount = svgData.word.find((v) => v.id === id)?.count ?? 0;
+  const areaData = svgData.word.find((v) => v.id === id);
+
+  const reviewCount = areaData?.count ?? 0;
+  /** STAGE, FLOOR 등은 seatAreaId가 0 */
+  const seatAreaId = areaData?.seatAreaId ?? 0;
 
   const handleClick = () => {
     if (!floor || !area) return;
 
     setSelectSeat({ floor: floor.toString(), area });
     if (!reviewCount) {
-      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
+      openModal(<AlertModal type="NO_SEAT" />);
+    } else {
+      openModal(<ReviewListModal seatAreaId={seatAreaId} />);
     }
   };
 

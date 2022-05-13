@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
 
 import { Button } from 'src/components/common/button/Button';
 import { HallListType } from 'src/api/hall';
@@ -19,10 +18,6 @@ const HALL_LIST = [
 ];
 
 export const MainHallIconList: FC<Props> = ({ hallData }) => {
-  const router = useRouter();
-
-  console.log(hallData);
-
   return (
     <>
       <HallList>

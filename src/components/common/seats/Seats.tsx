@@ -8,6 +8,7 @@ import { useSetRecoilState } from 'recoil';
 import { selectSeatAtom } from 'src/stores/seat';
 import useModal from 'src/hooks/useModal';
 import { AlertModal } from '../modal/AlertModal';
+import ReviewListModal from '../modal/ReviewListModal';
 
 export interface SVGDataType {
   width: number;
@@ -48,7 +49,7 @@ const OPACITY_FLOOR_COLOR: Record<string, string> = {
 /** component */
 export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const setSelectSeat = useSetRecoilState(selectSeatAtom);
-  const { openModal, closeCurrentModal } = useModal();
+  const { openModal } = useModal();
 
   const [svgData, setSvgData] = useState(data);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
@@ -67,11 +68,13 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const hideComment = () => setIsCommentOpen(false);
 
   const getReivewCount = ({ floor, area }: SVGInfoType) => {
-    if (!area || !floor) return 0;
+    if (!area || !floor) return null;
 
-    return seatsData.find((data) => {
+    const currentSeatData = seatsData.find((data) => {
       return data.floor === floor && data.area === area.toUpperCase();
-    })?.countReviews;
+    });
+
+    return { seatAreaId: currentSeatData?.seatAreaId, count: currentSeatData?.countReviews };
   };
 
   const setAreaOpacity = ({ floor, area }: SVGInfoType) => {
@@ -96,26 +99,26 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     const updatedArea = svgData.area.map((data) => {
       const seatReviews = getReivewCount(data);
 
-      if (seatReviews && data.floor) {
+      if (seatReviews?.count && data.floor) {
         const style = {
           fill: FLOOR_COLOR[data.floor] ?? data.fill,
           stroke: 'none',
           'stroke-width': 'none',
           'stroke-dasharray': 'none',
         };
-        return { ...data, ...style };
+        return { ...data, ...style, seatAreaId: seatReviews.seatAreaId };
       }
 
-      return data;
+      return { ...data, seatAreaId: seatReviews?.seatAreaId };
     });
 
     const updatedWords = svgData.word.map((data) => {
       const seatReviews = getReivewCount(data);
 
-      if (seatReviews) {
-        return { ...data, fill: '#FFF', count: seatReviews };
+      if (seatReviews?.count) {
+        return { ...data, fill: '#FFF', count: seatReviews?.count, seatAreaId: seatReviews?.seatAreaId };
       }
-      return data;
+      return { ...data, seatAreaId: seatReviews?.seatAreaId };
     });
 
     setSvgData({ ...svgData, area: updatedArea, word: updatedWords });
@@ -125,9 +128,14 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     if (!focusedArea) return;
     const { floor, area } = focusedArea;
     if (!floor || !area) return;
+
     setSelectSeat({ floor: floor.toString(), area });
+    const seatAreaId = getReivewCount({ floor, area })?.seatAreaId ?? 0;
+
     if (!reviewCount) {
-      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
+      openModal(<AlertModal type="NO_SEAT" />);
+    } else {
+      openModal(<ReviewListModal seatAreaId={seatAreaId} />);
     }
   };
 
@@ -238,5 +246,5 @@ const SeatComment = styled.div<{ isCommentOpen: boolean; areaPosition: DOMRect |
     transform: rotate(45deg);
     border-radius: 2px;
   }
-  z-index: 9999;
+  z-index: 10;
 `;

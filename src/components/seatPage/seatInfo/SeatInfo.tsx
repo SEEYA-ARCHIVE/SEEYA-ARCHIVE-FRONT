@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const SeatInfo: FC<Props> = ({ seatsData }) => {
-  const { openModal, closeCurrentModal } = useModal();
+  const { openModal } = useModal();
   const [selectSeat, setSelectSeat] = useRecoilState(selectSeatAtom);
 
   const totalReviewCount = seatsData.reduce((acc, cur) => acc + cur.countReviews, 0);
@@ -55,7 +55,7 @@ export const SeatInfo: FC<Props> = ({ seatsData }) => {
     );
 
     if (!areaData?.countReviews) {
-      openModal(<AlertModal type="NO_SEAT" onClick={closeCurrentModal} />);
+      openModal(<AlertModal type="NO_SEAT" />);
     }
   };
 
