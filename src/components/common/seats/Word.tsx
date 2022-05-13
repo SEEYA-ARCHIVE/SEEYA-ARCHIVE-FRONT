@@ -18,6 +18,7 @@ export interface WordPathType {
 }
 
 interface Props extends WordPathType {
+  hallId: number;
   focusedArea: SVGInfoType | null;
   setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
   svgData: SVGDataType;
@@ -26,6 +27,7 @@ interface Props extends WordPathType {
 }
 
 export const Word: FC<Props> = ({
+  hallId,
   id,
   floor,
   area,
@@ -53,7 +55,7 @@ export const Word: FC<Props> = ({
     if (!reviewCount) {
       openModal(<AlertModal type="NO_SEAT" />);
     } else {
-      openModal(<ReviewListModal seatAreaId={seatAreaId} />);
+      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} backgroundLock />);
     }
   };
 

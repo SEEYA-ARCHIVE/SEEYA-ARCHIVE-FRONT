@@ -135,7 +135,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     if (!reviewCount) {
       openModal(<AlertModal type="NO_SEAT" />);
     } else {
-      openModal(<ReviewListModal seatAreaId={seatAreaId} />);
+      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} backgroundLock />);
     }
   };
 
@@ -157,6 +157,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const SVGArea = area.map((data) => (
     <Area
       key={data.id}
+      hallId={hallId}
       svgData={svgData}
       setFocusedArea={setFocusedArea}
       strokeDasharray={data['stroke-dasharray']}
@@ -168,6 +169,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const SVGWords = word.map((data) => (
     <Word
       key={data.id}
+      hallId={hallId}
       focusedArea={focusedArea}
       setFocusedArea={setFocusedArea}
       svgData={svgData}
