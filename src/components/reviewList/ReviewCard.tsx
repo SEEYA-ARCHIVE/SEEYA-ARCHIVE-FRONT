@@ -5,9 +5,11 @@ import { convertDateToFormattedString } from 'src/utils/timeUtil';
 import styled from 'styled-components';
 import { Card } from '../common/card/Card';
 import Icon from '../common/icon/Icon';
+import ReviewDetailModal from '../common/modal/ReviewDetailModal';
 import { Tag } from '../common/tag/Tag';
 
 interface Props {
+  hallId: number;
   seatAreaId: number;
   reviewId: number;
   imgSrc: string;
@@ -19,6 +21,7 @@ interface Props {
 }
 
 export const ReviewCard: FC<Props> = ({
+  hallId,
   seatAreaId,
   reviewId,
   imgSrc,
@@ -30,12 +33,15 @@ export const ReviewCard: FC<Props> = ({
 }) => {
   const formattedDate = convertDateToFormattedString(createdAt);
   const { openModal } = useModal();
+
   const onClickCard = () => {
-    openModal(<></>);
+    openModal(
+      <ReviewDetailModal hallId={hallId} seatAreaId={seatAreaId} reviewId={reviewId} backgroundLock backgroundBlur />,
+    );
   };
 
   return (
-    <Card>
+    <Card onClick={onClickCard}>
       <ImageWrapper>
         <Img src={imgSrc} layout="fill" objectFit="cover" />
         <PicInfo>

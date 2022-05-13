@@ -20,6 +20,7 @@ export interface AreaPathType {
 }
 
 interface Props extends AreaPathType {
+  hallId: number;
   svgData: SVGDataType;
   setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
   strokeDasharray?: string;
@@ -27,6 +28,7 @@ interface Props extends AreaPathType {
 }
 
 export const Area: FC<Props> = ({
+  hallId,
   id,
   floor,
   area,
@@ -52,7 +54,7 @@ export const Area: FC<Props> = ({
     if (!reviewCount) {
       openModal(<AlertModal type="NO_SEAT" />);
     } else {
-      openModal(<ReviewListModal seatAreaId={seatAreaId} />);
+      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} backgroundLock />);
     }
   };
 

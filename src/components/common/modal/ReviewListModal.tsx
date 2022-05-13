@@ -10,11 +10,12 @@ import { ModalHOC } from './ModalHOC';
 import Icon from '../icon/Icon';
 
 interface Props {
+  hallId: number;
   seatAreaId: number;
 }
 const SORT_OPTIONS = [{ value: 'latest', label: '최신순' }];
 
-const ReviewListModal: FC<Props> = ({ seatAreaId }) => {
+const ReviewListModal: FC<Props> = ({ hallId, seatAreaId }) => {
   const [isShow, setIsShow] = useState(true);
   const [sort, setSort] = useState('');
   const [reviewList, setReviewList] = useState<ReviewPreivew[]>([]);
@@ -65,6 +66,7 @@ const ReviewListModal: FC<Props> = ({ seatAreaId }) => {
         <ScrollWrapper>
           <ReviewListWrapper>
             <ReviewList
+              hallId={hallId}
               seatAreaId={seatAreaId}
               list={reviewList}
               colCount={3}
@@ -92,7 +94,6 @@ const Wrapper = styled.div<{ isShow: boolean }>`
   background-color: ${({ theme }) => theme.color.white};
   border-left: 4px solid ${({ theme }) => theme.color.mint};
   padding: 36px 0 0 54px;
-  z-index: 11;
 
   animation: ${({ theme, isShow }) =>
     isShow

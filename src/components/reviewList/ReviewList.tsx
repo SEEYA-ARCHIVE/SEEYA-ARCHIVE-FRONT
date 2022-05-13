@@ -2,20 +2,21 @@ import React, { FC } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { GridChildComponentProps } from 'react-window';
-import { IReviewPreivew } from 'src/types/api/review';
+import { ReviewPreivew } from 'src/types/api/review';
 import { ReviewCard } from './ReviewCard';
 import InfiniteScrollGrid from '../common/infiniteScroll/InfiniteScrollGrid';
 
 interface Props {
+  hallId: number;
   seatAreaId: number;
-  list: IReviewPreivew[];
+  list: ReviewPreivew[];
   colCount: number;
   count: number;
   page: number;
   addPage: () => void;
 }
 
-const ReviewList: FC<Props> = ({ seatAreaId, list, colCount, count, page, addPage }) => {
+const ReviewList: FC<Props> = ({ hallId, seatAreaId, list, colCount, count, page, addPage }) => {
   const limit = 6;
 
   const isItemLoaded = (index: number) => index < list.length;
@@ -34,10 +35,11 @@ const ReviewList: FC<Props> = ({ seatAreaId, list, colCount, count, page, addPag
 
     return (
       <div style={style}>
-        <Link href={`/seat?seatAreaId=${seatAreaId}&reviewId=${id}`} passHref>
+        <Link href={`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${id}`} passHref>
           <a>
             <ReviewCard
               key={id}
+              hallId={hallId}
               seatAreaId={seatAreaId}
               reviewId={id}
               surplusPic={numImages}

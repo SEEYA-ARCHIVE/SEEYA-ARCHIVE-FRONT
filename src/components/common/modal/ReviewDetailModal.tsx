@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { ModalHOC, ModalWrappedProps } from './ModalHOC';
+import { ModalHOC } from './ModalHOC';
 import { ImgViewer } from 'src/components/common/imgViewer/ImgViewer';
 import { iconX } from '../icon/iconPath';
 
@@ -9,37 +9,47 @@ import Review from 'src/components/reviewDetail/review/Review';
 import useModal from 'src/hooks/useModal';
 import { useRecoilValueLoadable } from 'recoil';
 import { getReviewDetail } from 'src/stores/review';
+import { useRouter } from 'next/router';
 
-interface Props extends ModalWrappedProps {
+interface Props {
+  hallId: number;
   seatAreaId: number;
   reviewId: number;
 }
 
-const ReviewDetailModal: FC<Props> = ({ seatAreaId, reviewId }) => {
+const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
+  const router = useRouter();
   const [selectedReviewId, setSelectedReviewId] = useState(reviewId);
+  const { closeCurrentModal } = useModal();
+
   const { contents: reviewData, state: reviewDetailState } = useRecoilValueLoadable(
     getReviewDetail([seatAreaId, selectedReviewId]),
   );
 
-  const { closeCurrentModal } = useModal();
+  const onClickCloseButton = () => {
+    closeCurrentModal();
+    router.push(`/seat?hallId=${hallId}`);
+  };
 
   const onClickPrevButton = () => {
     if (!reviewData.previousId) return;
 
     setSelectedReviewId(reviewData.previousId);
+    router.push(`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.previousId}`);
   };
 
   const onClickNextButton = () => {
     if (!reviewData.nextId) return;
 
     setSelectedReviewId(reviewData.nextId);
+    router.push(`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.nextId}`);
   };
 
   if (reviewDetailState === 'loading') return <></>;
 
   return (
     <Wrapper>
-      <CloseX onClick={closeCurrentModal} />
+      <CloseX onClick={onClickCloseButton} />
       <ImgViewer imgList={reviewData.images} userId="시야봇" />
       <Review
         // TODO : 리뷰 텍스트가 아직 DB에 없음.
