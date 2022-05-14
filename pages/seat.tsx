@@ -34,13 +34,33 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
+  const clickQnAButton = () => {
+    window.open('https://forms.gle/NXi2paRYy2TX3FN57');
+  };
+
+  const clickUploadButton = () => {
+    window.open('https://forms.gle/62fdjT7QAYza261R8');
+  };
+
   return (
     <SeatPageWrapper>
       <Header />
       <SeatInfo hallId={hallId} seatsData={seatsData} />
       <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
-      <FABButton value="문의 및 건의" bgColor="mint" position={{ bottom: 135, right: 90 }} className="qa_btn" />
-      <FABButton value="업로드" bgColor="yellow" position={{ bottom: 40, right: 90 }} className="upload_btn" />
+      <FABButton
+        value="문의 및 건의"
+        bgColor="mint"
+        position={{ bottom: 135, right: 90 }}
+        className="qa_btn"
+        onClick={clickQnAButton}
+      />
+      <FABButton
+        value="업로드"
+        bgColor="yellow"
+        position={{ bottom: 40, right: 90 }}
+        className="upload_btn"
+        onClick={clickUploadButton}
+      />
     </SeatPageWrapper>
   );
 };

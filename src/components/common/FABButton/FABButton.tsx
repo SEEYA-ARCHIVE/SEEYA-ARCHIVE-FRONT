@@ -13,11 +13,12 @@ interface Props {
   };
   value: string;
   className?: string;
+  onClick?: () => void;
 }
 
-export const FABButton: FC<Props> = ({ bgColor, position, value, className }) => {
+export const FABButton: FC<Props> = ({ bgColor, position, value, className, onClick }) => {
   return (
-    <FABWrapper bgColor={bgColor} position={position} className={className}>
+    <FABWrapper bgColor={bgColor} position={position} className={className} onClick={onClick}>
       <div>
         <Icon name="iconComment" />
       </div>
