@@ -31,6 +31,8 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
           <link
             href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700&family=Poppins:wght@200&display=swap"
             rel="stylesheet"
