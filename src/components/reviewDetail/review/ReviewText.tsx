@@ -36,6 +36,7 @@ const TextWrapper = styled.div`
   font-size: 12px;
   line-height: 20px;
   white-space: pre-line;
+  word-wrap: break-word;
   color: ${({ theme }) => theme.fontColor.black};
 
   .hashtag {
