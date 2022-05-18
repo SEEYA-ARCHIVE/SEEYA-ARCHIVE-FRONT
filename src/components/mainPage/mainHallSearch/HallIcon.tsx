@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import * as icons from 'src/components/common/icon/iconPath';
 import Icon from 'src/components/common/icon/Icon';
 import useModal from 'src/hooks/useModal';
-import { AlertModal } from 'src/components/common/modal/AlertModal';
+import AlertModal from 'src/components/common/modal/AlertModal';
 
 interface Props {
   name: string;

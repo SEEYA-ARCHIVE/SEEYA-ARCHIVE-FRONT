@@ -8,9 +8,10 @@ import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
 import { Button } from 'src/components/common/button/Button';
 import { SeatAreaType } from 'src/api/seat';
 import useModal from 'src/hooks/useModal';
-import { AlertModal } from 'src/components/common/modal/AlertModal';
+import AlertModal from 'src/components/common/modal/AlertModal';
 import { useRecoilState } from 'recoil';
 import { selectSeatAtom } from 'src/stores/seat';
+import ReviewListModal from 'src/components/common/modal/ReviewListModal';
 
 interface Props {
   hallId: number;
@@ -29,7 +30,7 @@ export const SeatInfo: FC<Props> = ({ seatsData }) => {
   const areaOptions = oylmpicData.word.reduce((acc, { floor, area }) => {
     if (!floor || !area) return acc;
 
-    const areaUppserCase = area;
+    const areaUppserCase = area.toUpperCase();
     if (floor in acc) {
       acc[floor].push({ value: areaUppserCase, label: areaUppserCase });
     } else {
@@ -56,6 +57,8 @@ export const SeatInfo: FC<Props> = ({ seatsData }) => {
 
     if (!areaData?.countReviews) {
       openModal(<AlertModal type="NO_SEAT" />);
+    } else {
+      openModal(<ReviewListModal seatAreaId={areaData.seatAreaId} />);
     }
   };
 

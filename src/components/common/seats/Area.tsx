@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import useModal from 'src/hooks/useModal';
 import { selectSeatAtom } from 'src/stores/seat';
 import styled from 'styled-components';
-import { AlertModal } from '../modal/AlertModal';
+import AlertModal from '../modal/AlertModal';
 import ReviewListModal from '../modal/ReviewListModal';
 import { SVGDataType, SVGInfoType } from './Seats';
 
