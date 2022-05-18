@@ -8,7 +8,7 @@ import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
 import { Button } from 'src/components/common/button/Button';
 import { SeatAreaType } from 'src/api/seat';
 import useModal from 'src/hooks/useModal';
-import { AlertModal } from 'src/components/common/modal/AlertModal';
+import AlertModal from 'src/components/common/modal/AlertModal';
 import { useRecoilState } from 'recoil';
 import { selectSeatAtom } from 'src/stores/seat';
 import ReviewListModal from 'src/components/common/modal/ReviewListModal';
@@ -57,7 +57,7 @@ export const SeatInfo: FC<Props> = ({ seatsData }) => {
 
     if (!areaData?.countReviews) {
       openModal(<AlertModal type="NO_SEAT" />);
-    }else {
+    } else {
       openModal(<ReviewListModal seatAreaId={areaData.seatAreaId} />);
     }
   };

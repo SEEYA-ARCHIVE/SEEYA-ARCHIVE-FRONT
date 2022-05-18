@@ -30,7 +30,7 @@ const ALERT_DATA = {
   },
 };
 
-export const AlertModal: FC<Props> = ({ type, onClick }) => {
+const AlertModal: FC<Props> = ({ type, onClick }) => {
   const { closeCurrentModal } = useModal();
   const subMsgList = ALERT_DATA[type].subMsg;
   return (
@@ -55,6 +55,8 @@ export const AlertModal: FC<Props> = ({ type, onClick }) => {
     </Wrapper>
   );
 };
+
+export default ModalHOC(AlertModal);
 
 const Wrapper = styled.div<{ type: AlertType }>`
   display: flex;

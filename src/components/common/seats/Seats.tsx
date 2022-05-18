@@ -7,7 +7,7 @@ import { Word, WordPathType } from './Word';
 import { useSetRecoilState } from 'recoil';
 import { selectSeatAtom } from 'src/stores/seat';
 import useModal from 'src/hooks/useModal';
-import { AlertModal } from '../modal/AlertModal';
+import AlertModal from '../modal/AlertModal';
 import ReviewListModal from '../modal/ReviewListModal';
 
 export interface SVGDataType {
