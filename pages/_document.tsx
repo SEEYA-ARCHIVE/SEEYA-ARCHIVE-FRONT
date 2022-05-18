@@ -36,6 +36,34 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
 
+          <meta name="title" content="시야 아카이브" />
+          <meta
+            name="description"
+            content="콘서트를 기다리고 있나요? 어떤 좌석의 시야가 더 좋을지 이곳에서 탐색하세요"
+          />
+          <meta name="keywords" content="콘서트를 기다리고 있나요? 어떤 좌석의 시야가 더 좋을지 이곳에서 탐색하세요" />
+          <meta name="google-site-verification" content="z1PJVdEX220aDxq8R-oT3EKoakeKRDj1_MQd9Al-fLQ" />
+          <meta name="naver-site-verification" content="06240e2015927f1bccf43619220f322b8ee5136c" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://www.seeya-archive.com" />
+          <meta property="og:title" content="시야 아카이브" />
+          <meta
+            property="og:description"
+            content="콘서트를 기다리고 있나요? 어떤 좌석의 시야가 더 좋을지 이곳에서 탐색하세요"
+          />
+          <meta
+            property="og:image"
+            content="https://7th-team2-seeya-archive.s3.ap-northeast-2.amazonaws.com/common/og-image.png"
+          />
+          <meta property="twitter:card" content="summary" />
+          <meta property="twitter:title" content="시야 아카이브" />
+          <meta property="twitter:description" content="최적의 자리에서 최애를 영접할 수 있도록 도와드립니다." />
+          <meta
+            property="twitter:image"
+            content="https://7th-team2-seeya-archive.s3.ap-northeast-2.amazonaws.com/common/og-image.png"
+          />
+          <link rel="canonical" href="https://www.seeya-archive.com/" />
+
           <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS_ID}`}></script>

@@ -11,6 +11,7 @@ import { SeatInfo } from 'src/components/seatPage/seatInfo/SeatInfo';
 import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
 import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
 import { media } from 'src/styles/theme';
+import Head from 'next/head';
 
 interface Props {
   hallId: number;
@@ -44,6 +45,9 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
 
   return (
     <SeatPageWrapper>
+      <Head>
+        <title>시야 아카이브 - 좌석 비교</title>
+      </Head>
       <Header />
       <SeatInfo hallId={hallId} seatsData={seatsData} />
       <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
