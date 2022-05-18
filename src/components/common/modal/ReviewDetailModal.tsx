@@ -52,9 +52,8 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
       <CloseX onClick={onClickCloseButton} />
       <ImgViewer imgList={reviewData.images} userId="시야봇" />
       <Review
-        // TODO : 리뷰 텍스트가 아직 DB에 없음.
         reviewId={reviewData.id}
-        reviewText="콘서트 시야를 탐색하고 계신가요?\n시야 아카이브를 북마크에 추가하고\n공연 티케팅 시에 시야를 참고하세요.\n#시야아카이브#테스트"
+        reviewText={reviewData.review}
         concertHall={reviewData.concertHallName}
         seatArea={reviewData.seatArea}
         createAt={reviewData.createAt}

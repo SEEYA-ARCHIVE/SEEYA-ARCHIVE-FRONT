@@ -39,7 +39,7 @@ const ReviewWrapper = styled.div`
   padding: 19px 21.5px;
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 20px;
-  min-width: 300px;
+  width: 300px;
   height: 500px;
 `;
 
