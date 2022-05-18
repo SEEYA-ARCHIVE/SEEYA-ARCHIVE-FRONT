@@ -6,6 +6,7 @@ import { MainInfo } from 'src/components/mainPage/mainInfo/MainInfo';
 import { MainHallIconList } from 'src/components/mainPage/mainHallSearch/MainHallIconList';
 import { getHallListAPI, HallListType } from 'src/api/hall';
 import { MainLottie } from 'src/components/mainPage/mainLottie/MainLottie';
+import Head from 'next/head';
 
 interface Props {
   hallData: HallListType;
@@ -29,6 +30,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 const Home: NextPage<Props> = ({ hallData }) => {
   return (
     <Wrapper>
+      <Head>
+        <title>시야 아카이브</title>
+      </Head>
       <Header />
       <MainWrapper>
         <MainInfo />
