@@ -51,11 +51,17 @@ export default class MyDocument extends Document {
             property="og:description"
             content="콘서트를 기다리고 있나요? 어떤 좌석의 시야가 더 좋을지 이곳에서 탐색하세요"
           />
-          {/* <meta property="og:image" content="" /> */}
+          <meta
+            property="og:image"
+            content="https://7th-team2-seeya-archive.s3.ap-northeast-2.amazonaws.com/common/og-image.png"
+          />
           <meta property="twitter:card" content="summary" />
           <meta property="twitter:title" content="시야 아카이브" />
           <meta property="twitter:description" content="최적의 자리에서 최애를 영접할 수 있도록 도와드립니다." />
-          {/* <meta property="twitter:image" content=""> */}
+          <meta
+            property="twitter:image"
+            content="https://7th-team2-seeya-archive.s3.ap-northeast-2.amazonaws.com/common/og-image.png"
+          />
           <link rel="canonical" href="https://www.seeya-archive.com/" />
 
           <script
