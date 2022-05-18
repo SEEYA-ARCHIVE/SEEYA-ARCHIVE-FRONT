@@ -54,7 +54,7 @@ export const Area: FC<Props> = ({
     if (!reviewCount) {
       openModal(<AlertModal type="NO_SEAT" />);
     } else {
-      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} backgroundLock />);
+      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} />);
     }
   };
 
