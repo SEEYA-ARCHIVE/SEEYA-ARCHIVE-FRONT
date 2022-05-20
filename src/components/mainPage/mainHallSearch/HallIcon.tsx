@@ -60,6 +60,8 @@ const Wrapper = styled.div`
 
   z-index: 10;
 
+  cursor: pointer;
+
   .icon {
     display: flex;
     align-items: flex-end;
