@@ -11,10 +11,10 @@ interface Props {
 
 const HALL_LIST = [
   { name: '올림픽홀', key: 'Olympichall' },
-  { name: '고척 스카이돔', key: 'Skydome' },
-  { name: '화정 체육관', key: 'Hwajunggym' },
-  { name: '올림픽 체조경기장', key: 'KSPOdome' },
-  { name: '잠실 실내체육관', key: 'Jamsilgym' },
+  // { name: '고척 스카이돔', key: 'Skydome' },
+  // { name: '화정 체육관', key: 'Hwajunggym' },
+  // { name: '올림픽 체조경기장', key: 'KSPOdome' },
+  // { name: '잠실 실내체육관', key: 'Jamsilgym' },
 ];
 
 export const MainHallIconList: FC<Props> = ({ hallData }) => {

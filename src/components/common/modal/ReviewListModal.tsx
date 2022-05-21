@@ -36,14 +36,13 @@ const ReviewListModal: FC<Props> = ({ hallId, seatAreaId }) => {
 
   const addPage = () => setPage((prev) => prev + 1);
 
-  const fetchData = async () => {
+  const fetchData = () => {
     switch (reviewListState) {
       case 'loading':
         break;
       case 'hasValue':
         setReviewList((prev) => [...prev, ...reviewListContents.results]);
         if (!reviewCount) setReviewCount(reviewListContents.count);
-
         break;
       default:
         break;
@@ -52,7 +51,7 @@ const ReviewListModal: FC<Props> = ({ hallId, seatAreaId }) => {
 
   useEffect(() => {
     fetchData();
-  }, [reviewListState]);
+  }, [page, reviewListState]);
 
   return (
     <Wrapper isShow={isShow}>

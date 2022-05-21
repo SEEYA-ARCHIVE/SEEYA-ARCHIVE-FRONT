@@ -18,7 +18,7 @@ interface Props {
   seatsData: SeatAreaType[];
 }
 
-export const SeatInfo: FC<Props> = ({ seatsData }) => {
+export const SeatInfo: FC<Props> = ({ hallId, seatsData }) => {
   const { openModal } = useModal();
   const [selectSeat, setSelectSeat] = useRecoilState(selectSeatAtom);
 
@@ -58,7 +58,7 @@ export const SeatInfo: FC<Props> = ({ seatsData }) => {
     if (!areaData?.countReviews) {
       openModal(<AlertModal type="NO_SEAT" />);
     } else {
-      openModal(<ReviewListModal seatAreaId={areaData.seatAreaId} />);
+      openModal(<ReviewListModal hallId={hallId} seatAreaId={areaData.seatAreaId} />);
     }
   };
 
