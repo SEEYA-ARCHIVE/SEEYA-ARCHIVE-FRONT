@@ -3,7 +3,7 @@ import { ColorType } from 'src/types/commonType';
 import styled from 'styled-components';
 
 interface Props {
-  children: string;
+  children: React.ReactNode;
   onClick?: () => void | Promise<void>;
   className?: string;
   bgColor: ColorType;
