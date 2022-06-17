@@ -17,6 +17,8 @@ export const theme = {
     yellow: '#FFB118',
     darkGray: '#333333',
     purple: '#7B61FF',
+    kakao: '#FEE500',
+    twitter: '#2AA9E0',
   },
   fontColor: {
     black: '#333333',
