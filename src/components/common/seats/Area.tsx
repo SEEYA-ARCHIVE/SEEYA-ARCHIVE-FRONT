@@ -1,10 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
-import { useSetRecoilState } from 'recoil';
-import useModal from 'src/hooks/useModal';
-import { selectSeatAtom } from 'src/stores/seat';
+
 import styled from 'styled-components';
-import AlertModal from '../modal/AlertModal';
-import ReviewListModal from '../modal/ReviewListModal';
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface AreaPathType {
@@ -25,6 +21,7 @@ interface Props extends AreaPathType {
   setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
   strokeDasharray?: string;
   strokeWidth?: string;
+  handleSeatAreaClick: (floor?: number | null, area?: string | null) => void;
 }
 
 export const Area: FC<Props> = ({
@@ -36,27 +33,12 @@ export const Area: FC<Props> = ({
   setFocusedArea,
   strokeDasharray,
   strokeWidth,
+  handleSeatAreaClick,
   ...props
 }) => {
-  const setSelectSeat = useSetRecoilState(selectSeatAtom);
-  const { openModal } = useModal();
   const timer = useRef<NodeJS.Timer | null>(null);
   const areaData = svgData.word.find((v) => v.id === id);
-
   const reviewCount = areaData?.count ?? 0;
-  /** STAGE, FLOOR 등은 seatAreaId가 0 */
-  const seatAreaId = areaData?.seatAreaId ?? 0;
-
-  const handleClick = () => {
-    if (!floor || !area) return;
-
-    setSelectSeat({ floor: floor.toString(), area });
-    if (!reviewCount) {
-      openModal(<AlertModal type="NO_SEAT" />);
-    } else {
-      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} />);
-    }
-  };
 
   const handleEnter = () => {
     if (!reviewCount) return;
@@ -80,7 +62,7 @@ export const Area: FC<Props> = ({
   return (
     <AreaPath
       {...props}
-      onClick={handleClick}
+      onClick={() => handleSeatAreaClick(floor, area)}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       strokeDasharray={strokeDasharray}

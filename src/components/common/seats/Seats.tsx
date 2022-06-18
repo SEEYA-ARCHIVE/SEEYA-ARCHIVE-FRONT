@@ -56,12 +56,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
   const [areaPosition, setAreaPosition] = useState<DOMRect | null>(null);
-
   const [focusedArea, setFocusedArea] = useState<SVGInfoType | null>(null);
-  /**
-   * useRecoilValue는 Suspense를 NextJS에서 못써서 사용 못한다.
-   * 그러면 불편할텐데.. 다른 라이브러리 고민도 할만할 듯
-   */
 
   const { width, height, viewBox, xmlns, area, word } = svgData;
 
@@ -125,12 +120,10 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     setSvgData({ ...svgData, area: updatedArea, word: updatedWords });
   };
 
-  const handleAreaClick = () => {
-    if (!focusedArea) return;
-    const { floor, area } = focusedArea;
+  const handleSeatAreaClick = (floor?: number | null, area?: string | null) => {
     if (!floor || !area) return;
-
     setSelectSeat({ floor: floor.toString(), area });
+
     const seatAreaId = getReivewCount({ floor, area })?.seatAreaId ?? 0;
 
     if (!reviewCount) {
@@ -163,6 +156,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
       setFocusedArea={setFocusedArea}
       strokeDasharray={data['stroke-dasharray']}
       strokeWidth={data['stroke-width']}
+      handleSeatAreaClick={handleSeatAreaClick}
       {...data}
     />
   ));
@@ -176,6 +170,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
       svgData={svgData}
       setReviewCount={setReviewCount}
       setAreaPosition={setAreaPosition}
+      handleSeatAreaClick={handleSeatAreaClick}
       {...data}
     />
   ));
@@ -184,7 +179,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     <>
       {!!reviewCount && (
         <SeatComment
-          onClick={handleAreaClick}
+          onClick={() => handleSeatAreaClick(focusedArea?.floor, focusedArea?.area)}
           isCommentOpen={isCommentOpen}
           areaPosition={areaPosition}
           onMouseEnter={() => {

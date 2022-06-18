@@ -1,10 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import useModal from 'src/hooks/useModal';
-import { selectSeatAtom } from 'src/stores/seat';
-import styled, { css } from 'styled-components';
-import AlertModal from '../modal/AlertModal';
-import ReviewListModal from '../modal/ReviewListModal';
+import styled from 'styled-components';
+
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface WordPathType {
@@ -24,6 +20,7 @@ interface Props extends WordPathType {
   svgData: SVGDataType;
   setReviewCount: Dispatch<SetStateAction<number>>;
   setAreaPosition: Dispatch<SetStateAction<DOMRect | null>>;
+  handleSeatAreaClick: (floor?: number | null, area?: string | null) => void;
 }
 
 export const Word: FC<Props> = ({
@@ -36,28 +33,14 @@ export const Word: FC<Props> = ({
   setAreaPosition,
   focusedArea,
   setFocusedArea,
+  handleSeatAreaClick,
   ...props
 }) => {
-  const setSelectSeat = useSetRecoilState(selectSeatAtom);
-  const { openModal } = useModal();
   const wordRef = useRef<SVGPathElement>(null);
 
   const areaData = svgData.word.find((v) => v.id === id);
 
   const reviewCount = areaData?.count ?? 0;
-  /** STAGE, FLOOR 등은 seatAreaId가 0 */
-  const seatAreaId = areaData?.seatAreaId ?? 0;
-
-  const handleClick = () => {
-    if (!floor || !area) return;
-
-    setSelectSeat({ floor: floor.toString(), area });
-    if (!reviewCount) {
-      openModal(<AlertModal type="NO_SEAT" />);
-    } else {
-      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} />);
-    }
-  };
 
   useEffect(() => {
     if (floor !== focusedArea?.floor || area !== focusedArea.area || !wordRef.current) return;
@@ -69,7 +52,7 @@ export const Word: FC<Props> = ({
   return (
     <WordPath
       ref={wordRef}
-      onClick={handleClick}
+      onClick={() => handleSeatAreaClick(floor, area)}
       onMouseEnter={() => {
         setFocusedArea(focusedArea);
       }}
