@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
+import { ROUTE } from 'src/route';
 import styled from 'styled-components';
 import Icon from '../icon/Icon';
 
@@ -15,7 +16,7 @@ export const Header: FC<Props> = () => {
           name="iconTypoLogo"
           className="icon"
           onClick={() => {
-            router.push('/');
+            router.push(ROUTE.HOME);
           }}
         />
       </Nav>

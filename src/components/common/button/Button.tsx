@@ -3,7 +3,6 @@ import { ColorType } from 'src/types/commonType';
 import styled from 'styled-components';
 
 interface Props {
-  children: string;
   onClick?: () => void | Promise<void>;
   className?: string;
   bgColor: ColorType;

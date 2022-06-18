@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 import { SeatAreaType } from 'src/api/seat';
+import { SeatCompateButton } from './SeatCompateButton';
 
 interface Props {
   hallId: number;
@@ -17,6 +18,7 @@ export const SeatInfo: FC<Props> = ({ hallId, seatsData }) => {
       <div>
         <span className="highlight">총 {totalReviewCount}개</span>의 사진 리뷰가 있습니다.
       </div>
+      <SeatCompateButton />
     </SeatInfoWrapper>
   );
 };

@@ -10,6 +10,7 @@ import useModal from 'src/hooks/useModal';
 import { useRecoilValueLoadable } from 'recoil';
 import { getReviewDetail } from 'src/stores/review';
 import { useRouter } from 'next/router';
+import { ROUTE } from 'src/route';
 
 interface Props {
   hallId: number;
@@ -28,21 +29,21 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
 
   const onClickCloseButton = () => {
     closeCurrentModal();
-    router.push(`/seat?hallId=${hallId}`);
+    router.push(`${ROUTE.SEAT}?hallId=${hallId}`);
   };
 
   const onClickPrevButton = () => {
     if (!reviewData.previousId) return;
 
     setSelectedReviewId(reviewData.previousId);
-    router.push(`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.previousId}`);
+    router.push(`${ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.previousId}`);
   };
 
   const onClickNextButton = () => {
     if (!reviewData.nextId) return;
 
     setSelectedReviewId(reviewData.nextId);
-    router.push(`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.nextId}`);
+    router.push(`${ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.nextId}`);
   };
 
   if (reviewDetailState === 'loading') return <></>;
