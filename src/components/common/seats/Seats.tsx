@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState, VFC } from 'react';
+import React, { useEffect, useState, VFC } from 'react';
 import styled, { css } from 'styled-components';
 
 import { SeatAreaType } from 'src/api/seat';
@@ -9,6 +9,7 @@ import { selectSeatAtom } from 'src/stores/seat';
 import useModal from 'src/hooks/useModal';
 import AlertModal from '../modal/AlertModal';
 import ReviewListModal from '../modal/ReviewListModal';
+import { SeatsFloorInfo } from './SeatsFloorInfo';
 
 export interface SVGDataType {
   width: number;
@@ -193,6 +194,7 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
         </SeatComment>
       )}
       <SVGWrap className={className}>
+        <SeatsFloorInfo />
         <svg width={width} height={height} viewBox={viewBox} xmlns={xmlns}>
           {SVGArea}
           {SVGWords}
@@ -205,7 +207,9 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
 /** styled component */
 
 const SVGWrap = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   & svg {
     width: auto;
