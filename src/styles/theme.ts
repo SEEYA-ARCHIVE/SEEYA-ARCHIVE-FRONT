@@ -24,6 +24,7 @@ export const theme = {
     gray: '#7b7b7b',
     white: '#fff',
     mint: '#13ACC1',
+    blue: '#2D7FF9',
   },
   boxShadow: {
     normal: '0 3px 8px 0 rgb(0 0 0 / 10%)',
