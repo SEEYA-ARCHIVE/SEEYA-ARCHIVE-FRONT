@@ -7,18 +7,21 @@ import { SeatCompateButton } from './SeatCompateButton';
 interface Props {
   hallId: number;
   seatsData: SeatAreaType[];
+  mode: 'seat' | 'compare';
 }
 
-export const SeatInfo: FC<Props> = ({ hallId, seatsData }) => {
+export const SeatInfo: FC<Props> = ({ hallId, seatsData, mode }) => {
   const totalReviewCount = seatsData.reduce((acc, cur) => acc + cur.countReviews, 0);
 
   return (
     <SeatInfoWrapper>
       <h1>올림픽 홀</h1>
-      <div>
-        <span className="highlight">총 {totalReviewCount}개</span>의 사진 리뷰가 있습니다.
-      </div>
-      <SeatCompateButton />
+      {mode === 'seat' && (
+        <div>
+          <span className="highlight">총 {totalReviewCount}개</span>의 사진 리뷰가 있습니다.
+        </div>
+      )}
+      <SeatCompateButton hallId={hallId} isSeatMode={mode === 'seat'} />
     </SeatInfoWrapper>
   );
 };

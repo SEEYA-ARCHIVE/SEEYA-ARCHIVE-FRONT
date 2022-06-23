@@ -6,33 +6,45 @@ import Icon from 'src/components/common/icon/Icon';
 import { useRouter } from 'next/router';
 import { ROUTE } from 'src/route';
 
-interface Props {}
+interface Props {
+  hallId: number;
+  isSeatMode: boolean;
+}
 
-export const SeatCompateButton: FC<Props> = () => {
+export const SeatCompateButton: FC<Props> = ({ hallId, isSeatMode }) => {
   const router = useRouter();
 
   return (
-    <Wrap>
-      <CompareInfoWord>두 개의 구역을 동시에 비교하세요.</CompareInfoWord>
+    <Wrap isSeatMode={isSeatMode}>
+      {isSeatMode && <CompareInfoWord>두 개의 구역을 동시에 비교하세요.</CompareInfoWord>}
       <CompareButton
-        bgColor="blue5"
+        bgColor={isSeatMode ? 'blue5' : 'white'}
+        borderColor={!isSeatMode ? 'blue5' : undefined}
+        color={!isSeatMode ? 'blue5' : undefined}
+        borderRadius="8px"
         onClick={() => {
-          router.push(ROUTE.SEAT_COMPARE);
+          router.push({ pathname: isSeatMode ? ROUTE.SEAT_COMPARE : ROUTE.SEAT, query: { hallId } });
         }}>
-        <Icon name="iconSeatCompare" />
-        비교 시작하기
+        {isSeatMode ? (
+          <>
+            <Icon name="iconSeatCompare" />
+            <span>비교 시작하기</span>
+          </>
+        ) : (
+          <span>배치도로 돌아가기</span>
+        )}
       </CompareButton>
     </Wrap>
   );
 };
 
-const Wrap = styled.div`
+const Wrap = styled.div<{ isSeatMode: boolean }>`
   width: 140px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  margin-top: 36px;
+  margin-top: ${({ isSeatMode }) => (isSeatMode ? '36px' : '16px')};
 `;
 
 const CompareInfoWord = styled.div`

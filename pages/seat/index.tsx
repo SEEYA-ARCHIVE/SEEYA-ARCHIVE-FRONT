@@ -49,7 +49,7 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
         <title>시야 아카이브 - 좌석 비교</title>
       </Head>
       <Header />
-      <SeatInfo hallId={hallId} seatsData={seatsData} />
+      <SeatInfo hallId={hallId} seatsData={seatsData} mode="seat" />
       <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
       <FABButton
         value="문의 및 건의"
