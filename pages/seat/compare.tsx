@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps, NextPage } from 'next';
 
@@ -9,8 +9,13 @@ import styled from 'styled-components';
 
 import { ThumbnailList } from 'src/components/comparePage/thumbnailViewer/ThumbnailList';
 
+import oylmpicData from 'src/components/common/seats/data/miniSeatOlympic.json';
+
 /**MOCK */
 import { reviewList1 } from 'src/api/mock/compareReviewList';
+import { getSvgData } from 'src/utils/svg';
+import { Seats } from 'src/components/common/seats/Seats';
+
 interface Props {
   hallId: number;
   seatsData: SeatAreaType[];
@@ -28,10 +33,16 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       },
     };
   }
+
   return { props: { hallId, seatsData } };
 };
 
-const compare: NextPage<Props> = ({ hallId, seatsData }) => {
+const Compare: NextPage<Props> = ({ hallId, seatsData }) => {
+  const k = useRef<any>(null);
+  console.log('??', k.current);
+  useEffect(() => {
+    getSvgData(k.current);
+  });
   return (
     <ComparePageWrapper>
       <Head>
@@ -45,6 +56,7 @@ const compare: NextPage<Props> = ({ hallId, seatsData }) => {
           <ThumbnailList reviewList={[]} />
         </ReviewList>
       </ComparePageContents>
+      <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
     </ComparePageWrapper>
   );
 };
@@ -66,4 +78,4 @@ const ReviewList = styled.div`
   }
 `;
 
-export default compare;
+export default Compare;

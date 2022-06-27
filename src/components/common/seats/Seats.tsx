@@ -10,6 +10,7 @@ import useModal from 'src/hooks/useModal';
 import AlertModal from '../modal/AlertModal';
 import ReviewListModal from '../modal/ReviewListModal';
 import { SeatsFloorInfo } from './SeatsFloorInfo';
+import { useSeatsHover } from './hooks/useSeatsHover';
 
 export interface SVGDataType {
   width: number;
@@ -57,6 +58,8 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const [reviewCount, setReviewCount] = useState(0);
   const [areaPosition, setAreaPosition] = useState<DOMRect | null>(null);
   const [focusedArea, setFocusedArea] = useState<SVGInfoType | null>(null);
+
+  const { isHover, hoverAreaPosition, setHoverAreaPosition, setHoveredArea } = useSeatsHover();
 
   const { width, height, viewBox, xmlns, area, word } = svgData;
 

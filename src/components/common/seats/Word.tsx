@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface WordPathType {
-  id: string;
+  id?: string;
   floor: number | null;
   area: string | null;
   d: string;
