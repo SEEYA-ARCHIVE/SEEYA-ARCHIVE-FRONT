@@ -14,18 +14,18 @@ interface Props {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const seatAreaId = Number(query.seatAreaId);
   const reviewId = Number(query.reviewId);
-  const reviewData = await getReviewDetailAPI(seatAreaId, reviewId);
 
-  if (!reviewData) {
+  try {
+    const reviewData = await getReviewDetailAPI(seatAreaId, reviewId);
+    return { props: { reviewData } };
+  } catch {
     return {
       redirect: {
-        destination: `/seat`,
+        destination: `/`,
         permanent: false,
       },
     };
   }
-
-  return { props: { reviewData } };
 };
 
 const ReviewPage: NextPage<Props> = ({ reviewData }) => {
