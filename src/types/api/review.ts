@@ -24,6 +24,7 @@ export interface ReviewDetailType {
   updateAt: string;
   seatArea: string;
   images: string[];
+  review: string;
   artist: string | null;
   nextId: number | null;
   previousId: number | null;
