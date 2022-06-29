@@ -9,29 +9,9 @@ interface Props {
 
 const CommentFactory: VFC<Props> = ({ reviewId }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const userLikeList = getLocalStorage('like');
-
-  useEffect(() => {
-    if (!userLikeList.length) return;
-
-    if (userLikeList.includes(reviewId)) setIsLiked(true);
-  }, []);
 
   const onClickLikeButton = () => {
     setIsLiked((prev) => !prev!);
-
-    if (!userLikeList.length) {
-      setLocalStorage('like', [reviewId]);
-      return;
-    }
-
-    if (userLikeList.includes(reviewId)) {
-      const filterdList = userLikeList.filter((id: number) => id !== reviewId);
-      setLocalStorage('like', filterdList);
-      return;
-    }
-
-    setLocalStorage('like', [...userLikeList, reviewId]);
   };
 
   const onClickReportButton = () => {
