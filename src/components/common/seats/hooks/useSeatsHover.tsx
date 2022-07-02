@@ -15,5 +15,5 @@ export const useSeatsHover = () => {
     }
   }, [hoveredArea]);
 
-  return { isHover, hoverAreaPosition, setHoverAreaPosition, setHoveredArea };
+  return { isHover, hoverAreaPosition, setHoverAreaPosition, hoveredArea, setHoveredArea };
 };

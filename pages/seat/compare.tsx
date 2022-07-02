@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps, NextPage } from 'next';
+import styled from 'styled-components';
 
 import { SeatInfo } from 'src/components/seatPage/seatInfo/SeatInfo';
 import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
 import { Header } from 'src/components/common/header/Header';
-import styled from 'styled-components';
+import { MiniSeats } from 'src/components/common/seats/MiniSeats';
 
 import { ThumbnailList } from 'src/components/comparePage/thumbnailViewer/ThumbnailList';
 
@@ -14,7 +15,6 @@ import oylmpicData from 'src/components/common/seats/data/miniSeatOlympic.json';
 /**MOCK */
 import { reviewList1 } from 'src/api/mock/compareReviewList';
 import { getSvgData } from 'src/utils/svg';
-import { Seats } from 'src/components/common/seats/Seats';
 
 interface Props {
   hallId: number;
@@ -39,10 +39,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
 const Compare: NextPage<Props> = ({ hallId, seatsData }) => {
   const k = useRef<any>(null);
-  console.log('??', k.current);
+
   useEffect(() => {
     getSvgData(k.current);
   });
+
   return (
     <ComparePageWrapper>
       <Head>
@@ -56,7 +57,7 @@ const Compare: NextPage<Props> = ({ hallId, seatsData }) => {
           <ThumbnailList reviewList={[]} />
         </ReviewList>
       </ComparePageContents>
-      <Seats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
+      <MiniSeats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />
     </ComparePageWrapper>
   );
 };

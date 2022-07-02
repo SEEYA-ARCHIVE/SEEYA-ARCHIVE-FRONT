@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { SeatAreaType } from 'src/api/seat';
 import { Area, AreaPathType } from './Area';
 import { Word, WordPathType } from './Word';
+import { useSetRecoilState } from 'recoil';
 import useModal from 'src/hooks/useModal';
 import AlertModal from '../modal/AlertModal';
 import ReviewListModal from '../modal/ReviewListModal';
@@ -47,13 +48,11 @@ const OPACITY_FLOOR_COLOR: Record<string, string> = {
  * - setSvgData
  */
 /** component */
-export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
+export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   const { openModal } = useModal();
 
   const [svgData, setSvgData] = useState(data);
   const [reviewCount, setReviewCount] = useState(0);
-
-  const { isHover, hoverAreaPosition, setHoverAreaPosition, hoveredArea, setHoveredArea } = useSeatsHover();
 
   const { width, height, viewBox, xmlns, area, word } = svgData;
 
@@ -120,19 +119,10 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     const seatAreaId = getReivewCount({ floor, area })?.seatAreaId ?? 0;
 
     if (!reviewCount) {
-      openModal(<AlertModal type="NO_SEAT" />);
     } else {
       openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} />);
     }
   };
-
-  useEffect(() => {
-    if (hoveredArea) {
-      setAreaOpacity(hoveredArea);
-    } else {
-      setSeatStyle();
-    }
-  }, [hoveredArea]);
 
   useEffect(() => {
     if (!seatsData) return;
@@ -144,7 +134,6 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
       key={data.id}
       hallId={hallId}
       svgData={svgData}
-      setHoveredArea={setHoveredArea}
       strokeDasharray={data['stroke-dasharray']}
       strokeWidth={data['stroke-width']}
       handleSeatAreaClick={handleSeatAreaClick}
@@ -156,11 +145,8 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     <Word
       key={data.id}
       hallId={hallId}
-      hoveredArea={hoveredArea}
-      setHoveredArea={setHoveredArea}
       svgData={svgData}
       setReviewCount={setReviewCount}
-      setHoverAreaPosition={setHoverAreaPosition}
       handleSeatAreaClick={handleSeatAreaClick}
       {...data}
     />
@@ -168,15 +154,6 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
 
   return (
     <>
-      <SeatComment
-        onClick={() => handleSeatAreaClick(hoveredArea?.floor, hoveredArea?.area)}
-        isCommentOpen={isHover && !!reviewCount}
-        hoverAreaPosition={hoverAreaPosition}
-        onMouseEnter={() => {
-          setHoveredArea(hoveredArea);
-        }}>
-        {reviewCount}건<div className="arrow"></div>
-      </SeatComment>
       <SVGWrap className={className}>
         <SeatsFloorInfo />
         <svg width={width} height={height} viewBox={viewBox} xmlns={xmlns}>
@@ -201,40 +178,4 @@ const SVGWrap = styled.div`
 
     display: block;
   }
-`;
-
-const SeatComment = styled.div<{ isCommentOpen: boolean; hoverAreaPosition: DOMRect | null }>`
-  cursor: pointer;
-  visibility: ${({ isCommentOpen }) => (isCommentOpen ? 'visible' : 'hidden')};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  background-color: ${({ theme }) => theme.color.purple};
-  color: ${({ theme }) => theme.fontColor.white};
-  width: 34px;
-  height: 30px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 12px;
-  font-size: 9px;
-  font-weight: 700;
-  ${({ hoverAreaPosition }) => {
-    return (
-      hoverAreaPosition &&
-      css`
-        top: ${hoverAreaPosition.top - hoverAreaPosition.height / 2 - 34}px;
-        left: ${hoverAreaPosition.left + hoverAreaPosition.width / 2 - 15}px;
-      `
-    );
-  }}
-  .arrow {
-    background-color: ${({ theme }) => theme.color.purple};
-    position: absolute;
-    bottom: -3px;
-    width: 10px;
-    height: 10px;
-    transform: rotate(45deg);
-    border-radius: 2px;
-  }
-  z-index: 10;
 `;

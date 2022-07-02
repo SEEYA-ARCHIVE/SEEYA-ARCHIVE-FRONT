@@ -18,7 +18,7 @@ export interface AreaPathType {
 interface Props extends AreaPathType {
   hallId: number;
   svgData: SVGDataType;
-  setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
+  setHoveredArea?: Dispatch<SetStateAction<SVGInfoType | null>>;
   strokeDasharray?: string;
   strokeWidth?: string;
   handleSeatAreaClick: (floor?: number | null, area?: string | null) => void;
@@ -30,7 +30,7 @@ export const Area: FC<Props> = ({
   floor,
   area,
   svgData,
-  setFocusedArea,
+  setHoveredArea,
   strokeDasharray,
   strokeWidth,
   handleSeatAreaClick,
@@ -45,7 +45,7 @@ export const Area: FC<Props> = ({
 
     timer.current = setTimeout(() => {
       timer.current = null;
-      setFocusedArea({ floor, area });
+      setHoveredArea?.({ floor, area });
     }, 100);
   };
   const handleLeave = () => {
@@ -53,10 +53,10 @@ export const Area: FC<Props> = ({
 
     if (timer.current) {
       clearTimeout(timer.current);
-      setFocusedArea(null);
+      setHoveredArea?.(null);
       return;
     }
-    setFocusedArea(null);
+    setHoveredArea?.(null);
   };
 
   return (

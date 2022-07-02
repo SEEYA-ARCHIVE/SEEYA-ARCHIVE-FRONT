@@ -15,12 +15,12 @@ export interface WordPathType {
 
 interface Props extends WordPathType {
   hallId: number;
-  focusedArea: SVGInfoType | null;
-  setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
   svgData: SVGDataType;
   setReviewCount: Dispatch<SetStateAction<number>>;
-  setAreaPosition: Dispatch<SetStateAction<DOMRect | null>>;
   handleSeatAreaClick: (floor?: number | null, area?: string | null) => void;
+  hoveredArea?: SVGInfoType | null;
+  setHoveredArea?: Dispatch<SetStateAction<SVGInfoType | null>>;
+  setHoverAreaPosition?: Dispatch<SetStateAction<DOMRect | null>>;
 }
 
 export const Word: FC<Props> = ({
@@ -30,9 +30,9 @@ export const Word: FC<Props> = ({
   area,
   svgData,
   setReviewCount,
-  setAreaPosition,
-  focusedArea,
-  setFocusedArea,
+  setHoverAreaPosition,
+  hoveredArea,
+  setHoveredArea,
   handleSeatAreaClick,
   ...props
 }) => {
@@ -43,18 +43,18 @@ export const Word: FC<Props> = ({
   const reviewCount = areaData?.count ?? 0;
 
   useEffect(() => {
-    if (floor !== focusedArea?.floor || area !== focusedArea.area || !wordRef.current) return;
+    if (floor !== hoveredArea?.floor || area !== hoveredArea.area || !wordRef.current) return;
 
     setReviewCount(reviewCount);
-    setAreaPosition(wordRef.current.getBoundingClientRect());
-  }, [focusedArea]);
+    setHoverAreaPosition?.(wordRef.current.getBoundingClientRect());
+  }, [hoveredArea]);
 
   return (
     <WordPath
       ref={wordRef}
       onClick={() => handleSeatAreaClick(floor, area)}
       onMouseEnter={() => {
-        setFocusedArea(focusedArea);
+        setHoveredArea?.(hoveredArea ?? null);
       }}
       {...props}></WordPath>
   );
