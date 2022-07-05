@@ -34,6 +34,9 @@ const HeaderWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+
+  background-color: #fff;
+  z-index: 9999;
 `;
 
 const Nav = styled.div`

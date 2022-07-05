@@ -4,12 +4,8 @@ import styled, { css } from 'styled-components';
 import { SeatAreaType } from 'src/api/seat';
 import { Area, AreaPathType } from './Area';
 import { Word, WordPathType } from './Word';
-import { useSetRecoilState } from 'recoil';
-import useModal from 'src/hooks/useModal';
-import AlertModal from '../modal/AlertModal';
-import ReviewListModal from '../modal/ReviewListModal';
-import { SeatsFloorInfo } from './SeatsFloorInfo';
-import { useSeatsHover } from './hooks/useSeatsHover';
+import { useRecoilState } from 'recoil';
+import { compareSeatState } from 'src/stores/compare';
 
 export interface SVGDataType {
   width: number;
@@ -36,10 +32,7 @@ const FLOOR_COLOR: Record<string, string> = {
   2: '#13ACC1',
 };
 
-const OPACITY_FLOOR_COLOR: Record<string, string> = {
-  1: '#ffcd68',
-  2: '#A8CBCF',
-};
+const SELECTED_FLOOR_COLOR = '#DF3232';
 /**
  * 1. 코멘트 띄우기
  * - isCommentOpen
@@ -48,12 +41,17 @@ const OPACITY_FLOOR_COLOR: Record<string, string> = {
  * - setSvgData
  */
 /** component */
+
+export type SelectedPositionType = { left: DOMRect | null; right: DOMRect | null };
+
 export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
-  const { openModal } = useModal();
-
   const [svgData, setSvgData] = useState(data);
-  const [reviewCount, setReviewCount] = useState(0);
 
+  const [compareSeat, setCompareSeat] = useRecoilState(compareSeatState);
+  const [selectedPosition, setSelectedPosition] = useState<SelectedPositionType>({
+    left: null,
+    right: null,
+  });
   const { width, height, viewBox, xmlns, area, word } = svgData;
 
   const getReivewCount = ({ floor, area }: SVGInfoType) => {
@@ -66,27 +64,13 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
     return { seatAreaId: currentSeatData?.seatAreaId, count: currentSeatData?.countReviews };
   };
 
-  const setAreaOpacity = ({ floor, area }: SVGInfoType) => {
-    if (!floor || !area) return;
-
-    const updatedArea = svgData.area.map((data) => {
-      if (data.floor !== floor || data.area !== area) return data;
-
-      const style = {
-        fill: OPACITY_FLOOR_COLOR[floor] ?? data.fill,
-        stroke: 'none',
-        'stroke-width': 'none',
-        'stroke-dasharray': 'none',
-      };
-      return { ...data, ...style };
-    });
-
-    setSvgData({ ...svgData, area: updatedArea });
-  };
-
   const setSeatStyle = () => {
+    const leftSelectedSeat = compareSeat.left;
+    const rightSelectedSeat = compareSeat.right;
+
     const updatedArea = svgData.area.map((data) => {
       const seatReviews = getReivewCount(data);
+      let seatData;
 
       if (seatReviews?.count && data.floor) {
         const style = {
@@ -95,10 +79,23 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
           'stroke-width': 'none',
           'stroke-dasharray': 'none',
         };
-        return { ...data, ...style, seatAreaId: seatReviews.seatAreaId };
+        seatData = { ...data, ...style, seatAreaId: seatReviews.seatAreaId };
       }
 
-      return { ...data, seatAreaId: seatReviews?.seatAreaId };
+      if (
+        (data.floor === leftSelectedSeat?.floor && data.area === leftSelectedSeat.area) ||
+        (data.floor === rightSelectedSeat?.floor && data.area === rightSelectedSeat.area)
+      ) {
+        const style = {
+          fill: SELECTED_FLOOR_COLOR,
+          stroke: 'none',
+          'stroke-width': 'none',
+          'stroke-dasharray': 'none',
+        };
+        seatData = { ...data, ...style, seatAreaId: seatReviews?.seatAreaId };
+      }
+
+      return seatData || { ...data, seatAreaId: seatReviews?.seatAreaId };
     });
 
     const updatedWords = svgData.word.map((data) => {
@@ -116,18 +113,40 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
   const handleSeatAreaClick = (floor?: number | null, area?: string | null) => {
     if (!floor || !area) return;
 
-    const seatAreaId = getReivewCount({ floor, area })?.seatAreaId ?? 0;
+    const seatReviews = getReivewCount({ floor, area });
 
-    if (!reviewCount) {
-    } else {
-      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} />);
+    if (!seatReviews?.count) return;
+
+    const setCompareSeatState = (position: 'left' | 'right', data: { floor: number; area: string } | null) => {
+      setCompareSeat({ ...compareSeat, [position]: data });
+    };
+
+    const leftCompareSeat = compareSeat.left;
+    const rightCompareSeat = compareSeat.right;
+
+    if (!leftCompareSeat) {
+      setCompareSeatState('left', { floor, area });
+      return;
+    }
+    if (leftCompareSeat && leftCompareSeat.area === area && leftCompareSeat.floor === floor) {
+      setCompareSeatState('left', null);
+      return;
+    }
+
+    if (!rightCompareSeat) {
+      setCompareSeatState('right', { floor, area });
+      return;
+    }
+    if (rightCompareSeat && rightCompareSeat.area === area && rightCompareSeat.floor === floor) {
+      setCompareSeatState('right', null);
+      return;
     }
   };
 
   useEffect(() => {
     if (!seatsData) return;
     setSeatStyle();
-  }, []);
+  }, [compareSeat]);
 
   const SVGArea = area.map((data) => (
     <Area
@@ -146,16 +165,33 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
       key={data.id}
       hallId={hallId}
       svgData={svgData}
-      setReviewCount={setReviewCount}
       handleSeatAreaClick={handleSeatAreaClick}
+      setSelectedPosition={setSelectedPosition}
       {...data}
     />
   ));
 
   return (
     <>
+      {compareSeat.left && (
+        <LeftSelectMark
+          selectedAreaPosition={selectedPosition.left}
+          onClick={() => {
+            handleSeatAreaClick(compareSeat.left?.floor, compareSeat.left?.area);
+          }}>
+          L
+        </LeftSelectMark>
+      )}
+      {compareSeat.right && (
+        <RightSelectMark
+          selectedAreaPosition={selectedPosition.right}
+          onClick={() => {
+            handleSeatAreaClick(compareSeat.right?.floor, compareSeat.right?.area);
+          }}>
+          R
+        </RightSelectMark>
+      )}
       <SVGWrap className={className}>
-        <SeatsFloorInfo />
         <svg width={width} height={height} viewBox={viewBox} xmlns={xmlns}>
           {SVGArea}
           {SVGWords}
@@ -168,6 +204,7 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
 /** styled component */
 
 const SVGWrap = styled.div`
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -178,4 +215,41 @@ const SVGWrap = styled.div`
 
     display: block;
   }
+`;
+
+const SelectMark = styled.div<{ selectedAreaPosition: DOMRect | null }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.fontColor.white};
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  font-weight: 700;
+
+  position: fixed;
+  background-color: ${SELECTED_FLOOR_COLOR};
+`;
+
+const LeftSelectMark = styled(SelectMark)`
+  ${({ selectedAreaPosition }) => {
+    return (
+      selectedAreaPosition &&
+      css`
+        top: ${selectedAreaPosition.top - 8}px;
+        left: ${selectedAreaPosition.left - 7}px;
+      `
+    );
+  }};
+`;
+const RightSelectMark = styled(SelectMark)`
+  ${({ selectedAreaPosition }) => {
+    return (
+      selectedAreaPosition &&
+      css`
+        top: ${selectedAreaPosition.top - 8}px;
+        left: ${selectedAreaPosition.left - 7}px;
+      `
+    );
+  }};
 `;

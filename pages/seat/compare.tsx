@@ -64,11 +64,11 @@ const Compare: NextPage<Props> = ({ hallId, seatsData }) => {
 
 const ComparePageWrapper = styled.div`
   padding-top: 120px;
-  padding-left: 50px;
 `;
 
 const ComparePageContents = styled.div`
   display: flex;
+  padding-left: 50px;
 `;
 
 const ReviewList = styled.div`

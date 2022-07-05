@@ -1,7 +1,9 @@
-import { ReactElement } from 'react';
 import { atom } from 'recoil';
 
-export const modalListState = atom<ReactElement[]>({
-  key: 'modalList',
-  default: [],
+export const compareSeatState = atom<{
+  left: { floor: number; area: string } | null;
+  right: { floor: number; area: string } | null;
+}>({
+  key: 'compateSeat',
+  default: { left: null, right: null },
 });

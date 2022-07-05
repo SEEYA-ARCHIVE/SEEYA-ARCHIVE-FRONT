@@ -1,5 +1,8 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { compareSeatState } from 'src/stores/compare';
 import styled from 'styled-components';
+import { SelectedPositionType } from './MiniSeats';
 
 import { SVGDataType, SVGInfoType } from './Seats';
 
@@ -16,11 +19,12 @@ export interface WordPathType {
 interface Props extends WordPathType {
   hallId: number;
   svgData: SVGDataType;
-  setReviewCount: Dispatch<SetStateAction<number>>;
+  setReviewCount?: Dispatch<SetStateAction<number>>;
   handleSeatAreaClick: (floor?: number | null, area?: string | null) => void;
   hoveredArea?: SVGInfoType | null;
   setHoveredArea?: Dispatch<SetStateAction<SVGInfoType | null>>;
   setHoverAreaPosition?: Dispatch<SetStateAction<DOMRect | null>>;
+  setSelectedPosition?: Dispatch<SetStateAction<SelectedPositionType>>;
 }
 
 export const Word: FC<Props> = ({
@@ -34,8 +38,10 @@ export const Word: FC<Props> = ({
   hoveredArea,
   setHoveredArea,
   handleSeatAreaClick,
+  setSelectedPosition,
   ...props
 }) => {
+  const compareSeat = useRecoilValue(compareSeatState);
   const wordRef = useRef<SVGPathElement>(null);
 
   const areaData = svgData.word.find((v) => v.id === id);
@@ -45,9 +51,27 @@ export const Word: FC<Props> = ({
   useEffect(() => {
     if (floor !== hoveredArea?.floor || area !== hoveredArea.area || !wordRef.current) return;
 
-    setReviewCount(reviewCount);
+    setReviewCount?.(reviewCount);
     setHoverAreaPosition?.(wordRef.current.getBoundingClientRect());
   }, [hoveredArea]);
+
+  useEffect(() => {
+    if (!setSelectedPosition || !wordRef.current) return;
+
+    const leftCompareSeat = compareSeat.left;
+    const rightCompareSeat = compareSeat.right;
+
+    setSelectedPosition((data) => {
+      if (!wordRef.current) return data;
+      if (floor === leftCompareSeat?.floor && area === leftCompareSeat?.area) {
+        return { ...data, left: wordRef.current.getBoundingClientRect() };
+      }
+      if (floor === rightCompareSeat?.floor && area === rightCompareSeat?.area) {
+        return { ...data, right: wordRef.current.getBoundingClientRect() };
+      }
+      return data;
+    });
+  }, [compareSeat]);
 
   return (
     <WordPath
