@@ -87,7 +87,7 @@ const Wrapper = styled.div<{ isShow: boolean }>`
   position: fixed;
   top: 0;
   right: 0;
-  width: 80vw;
+  width: calc(705px + 100px);
   height: 100%;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
   background-color: ${({ theme }) => theme.color.white};
