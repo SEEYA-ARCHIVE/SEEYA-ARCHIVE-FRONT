@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import React from 'react';
 import { getReviewDetailAPI } from 'src/api/review';
 import { Header } from 'src/components/common/header/Header';
@@ -31,15 +32,20 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 const ReviewPage: NextPage<Props> = ({ reviewData }) => {
   return (
     <Wrapper>
+      <Head>
+        <title>시야아카이브 - {reviewData.concertHallName}</title>
+      </Head>
       <Header />
       <ImgViewer imgList={reviewData.images} userId="시야봇" />
-      <Review
-        reviewId={reviewData.id}
-        reviewText={reviewData.review}
-        concertHall={reviewData.concertHallName}
-        seatArea={reviewData.seatArea}
-        createAt={reviewData.createAt}
-      />
+      <ReviewWrapper>
+        <Review
+          reviewId={reviewData.id}
+          reviewText={reviewData.review}
+          concertHall={reviewData.concertHallName}
+          seatArea={reviewData.seatArea}
+          createAt={reviewData.createAt}
+        />
+      </ReviewWrapper>
     </Wrapper>
   );
 };
@@ -55,4 +61,9 @@ const Wrapper = styled.div`
   gap: 24px;
 
   position: relative;
+`;
+
+const ReviewWrapper = styled.div`
+  border-radius: 20px;
+  box-shadow: ${({ theme }) => theme.boxShadow.normal};
 `;
