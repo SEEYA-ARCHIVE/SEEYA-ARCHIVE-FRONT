@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import styled, { ThemeProvider } from 'styled-components';
 import { RecoilRoot } from 'recoil';
@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
   return (
-    <>
+    <Suspense fallback={<></>}>
       <RecoilRoot>
         <GlobalStyle />
         <ThemeProvider theme={theme}>
@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Modal />
         </ThemeProvider>
       </RecoilRoot>
-    </>
+    </Suspense>
   );
 }
 
