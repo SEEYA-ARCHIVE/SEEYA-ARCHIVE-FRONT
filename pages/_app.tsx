@@ -1,5 +1,6 @@
 import { Suspense, useEffect } from 'react';
 import type { AppContext, AppProps } from 'next/app';
+import App from 'next/app';
 import { useRouter } from 'next/router';
 import styled, { ThemeProvider } from 'styled-components';
 import { MutableSnapshot, RecoilRoot } from 'recoil';
@@ -11,7 +12,6 @@ import { pageview } from 'src/utils/gtag';
 import { UserType } from 'src/types/api/user';
 import { initAxiosConfig } from 'src/api/axios';
 import { getUserAPI } from 'src/api/user';
-import App from 'next/app';
 import { userSessionState } from 'src/stores/user';
 
 initAxiosConfig();

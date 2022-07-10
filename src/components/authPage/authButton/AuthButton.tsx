@@ -9,6 +9,7 @@ type OauthProvider = {
   [key in Provider]: {
     label: string;
     iconName: keyof typeof icons;
+    href: string;
   };
 };
 
@@ -18,11 +19,11 @@ interface Props {
 
 export const AuthButton: FC<Props> = ({ provider }) => {
   const oauthProvider: OauthProvider = {
-    kakao: { label: '카카오', iconName: 'iconKakaoSymbol' },
-    twitter: { label: '트위터', iconName: 'iconTwitterSymbol' },
+    kakao: { label: '카카오', iconName: 'iconKakaoSymbol', href: 'https://api.seeya-archive.com/kakao_login' },
+    twitter: { label: '트위터', iconName: 'iconTwitterSymbol', href: '' },
   };
   return (
-    <AuthButtonWrapper provider={provider}>
+    <AuthButtonWrapper provider={provider} href={oauthProvider[provider].href}>
       <Icon name={oauthProvider[provider].iconName} />
       {oauthProvider[provider].label}로 계속하기
     </AuthButtonWrapper>
