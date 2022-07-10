@@ -3,7 +3,7 @@ import useModal from 'src/hooks/useModal';
 import styled, { css } from 'styled-components';
 import { Button } from '../button/Button';
 import Icon from '../icon/Icon';
-import { ModalHOC } from './ModalHOC';
+import { ModalHOC } from 'src/hocs/withModalBackground';
 
 type AlertType = 'NO_SEAT' | 'NO_PHOTO' | 'NO_FUNC';
 
