@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from '../common/button/Button';
-import Icon from '../common/icon/Icon';
 import { Img } from '../common/image/Img';
 import { AuthButton } from './authButton/AuthButton';
 
