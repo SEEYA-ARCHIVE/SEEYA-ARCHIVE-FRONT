@@ -9,13 +9,12 @@ const Auth = () => {
     <AuthPageWrapper>
       <Header />
       <AuthBackground />
-      <AuthBox />
+      <AuthBox authStep="login" />
     </AuthPageWrapper>
   );
 };
 
 export default Auth;
-
 const AuthPageWrapper = styled.div`
   padding-top: 120px;
   width: 100%;
