@@ -4,7 +4,7 @@ import { media } from 'src/styles/theme';
 
 export const GlobalStyle = createGlobalStyle`
     ${reset}
-    :focus {
+    :focus:not(button) {
         outline: none;
         border: none;
     }
