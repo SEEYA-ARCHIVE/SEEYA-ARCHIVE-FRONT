@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Button } from 'src/components/common/button/Button';
 
 type NicknameStatus = 'error' | 'success';
 
@@ -35,7 +34,7 @@ const NicknameSetting = () => {
         {showError &&
           (nicknameStatus === 'success' ? '사용할 수 있는 닉네임입니다.' : '중복입니다. 다른 닉네임을 입력해주세요.')}
       </NicknameStatusText>
-      <SubmitButton bgColor="mint">확인</SubmitButton>
+      <SubmitButton disabled={nicknameStatus === 'error'}>확인</SubmitButton>
     </NicknameWrapper>
   );
 };
@@ -96,13 +95,26 @@ const NicknameStatusText = styled.p<{ status: NicknameStatus }>`
   color: ${({ theme, status }) => (status === 'success' ? theme.color.success : theme.color.error)};
 `;
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled.button`
   margin-top: 128px;
   padding: 3px 29.5px;
 
+  border: none;
   border-radius: 4px;
 
   font-weight: 500;
   font-size: 12px;
   line-height: 28px;
+
+  background-color: ${({ theme }) => theme.color.mint};
+  color: ${({ theme }) => theme.fontColor.white};
+
+  &:disabled {
+    cursor: default;
+
+    opacity: 0.4;
+    background-color: ${({ theme }) => theme.color.gray4};
+    border: 1px solid ${({ theme }) => theme.fontColor.gray};
+    color: ${({ theme }) => theme.fontColor.gray};
+  }
 `;
