@@ -8,24 +8,32 @@ export interface ReviewListType {
 export interface ReviewPreivew {
   id: number;
   createAt: string;
-  images: {
-    previewImages: string;
-    numImages: number;
-  };
+  previewImages: string;
+  artist: string;
   author?: string;
   tagList?: string[];
   like?: number;
 }
 
+export interface ReviewUploader {
+  id: number;
+  email: string;
+  kakaoId: string;
+  nickname: string;
+}
 export interface ReviewDetailType {
   id: number;
+  user: ReviewUploader;
   concertHallName: string;
-  createAt: string;
-  updateAt: string;
+  imageUrlArray: string[];
+  createAt: Date;
+  updateAt: Date;
   seatArea: string;
-  images: string[];
+  artist: string;
   review: string;
-  artist: string | null;
-  nextId: number | null;
-  previousId: number | null;
+  comments: any[];
+  likeUsers: any[];
+  images: string[];
+  previousId?: number;
+  nextId?: number;
 }

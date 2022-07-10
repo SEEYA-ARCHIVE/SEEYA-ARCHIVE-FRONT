@@ -8,7 +8,7 @@ export const getReviewDetailAPI = async (seatAreaId: number, reviewId: number): 
 };
 
 export const getReviewListAPI = async (seatId: number, page: number): Promise<ReviewListType> => {
-  const { data } = await axios.get(`/seat_areas/${seatId}/reviews/?page=${page}`);
+  const { data } = await axios.get(`/seat_areas/${seatId}/reviews?page=${page}`);
 
   return data;
 };
