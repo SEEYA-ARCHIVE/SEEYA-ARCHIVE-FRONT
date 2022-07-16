@@ -36,6 +36,7 @@ export const ModalHOC = <P extends object>(WrappedComponent: React.ComponentType
 };
 
 const Background = styled.div<Pick<Props, 'backgroundTransparent' | 'backgroundBlur'>>`
+  z-index: 1000;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -50,4 +51,5 @@ const Background = styled.div<Pick<Props, 'backgroundTransparent' | 'backgroundB
 
 const Content = styled.div`
   position: absolute;
+  z-index: 1001;
 `;
