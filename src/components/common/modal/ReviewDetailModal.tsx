@@ -16,9 +16,11 @@ interface Props {
   hallId: number;
   seatAreaId: number;
   reviewId: number;
+  /**비교하기 페이지에서 리뷰디테일을 열었는 경우 true */
+  isFromComparePage?: boolean;
 }
 
-const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
+const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId, isFromComparePage = false }) => {
   const router = useRouter();
   const [selectedReviewId, setSelectedReviewId] = useState(reviewId);
   const { closeCurrentModal } = useModal();
@@ -29,21 +31,29 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
 
   const onClickCloseButton = () => {
     closeCurrentModal();
-    router.push(`${ROUTE.SEAT}?hallId=${hallId}`);
+    router.push(`${isFromComparePage ? ROUTE.SEAT_COMPARE : ROUTE.SEAT}?hallId=${hallId}`);
   };
 
   const onClickPrevButton = () => {
     if (!reviewData.previousId) return;
 
     setSelectedReviewId(reviewData.previousId);
-    router.push(`${ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.previousId}`);
+    router.push(
+      `${isFromComparePage ? ROUTE.SEAT_COMPARE : ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${
+        reviewData.previousId
+      }`,
+    );
   };
 
   const onClickNextButton = () => {
     if (!reviewData.nextId) return;
 
     setSelectedReviewId(reviewData.nextId);
-    router.push(`${ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.nextId}`);
+    router.push(
+      `${isFromComparePage ? ROUTE.SEAT_COMPARE : ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${
+        reviewData.nextId
+      }`,
+    );
   };
 
   if (reviewDetailState === 'loading') return <></>;

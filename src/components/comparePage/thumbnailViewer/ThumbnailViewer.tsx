@@ -92,7 +92,9 @@ export const ThumbnailViewer: FC<CompareSeatAreaType> = ({
     const seatData = compareSeat[type];
     if (!seatData) return;
 
-    openModal(<ReviewDetailModal hallId={seatData.hallId} seatAreaId={seatData.seatAreaId} reviewId={id} />);
+    openModal(
+      <ReviewDetailModal hallId={seatData.hallId} seatAreaId={seatData.seatAreaId} reviewId={id} isFromComparePage />,
+    );
   };
   return (
     <Wrap>

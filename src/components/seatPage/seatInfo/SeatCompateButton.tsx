@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { Button } from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { useRouter } from 'next/router';
 import { ROUTE } from 'src/route';
+import { useSetRecoilState } from 'recoil';
+import { compareSeatState } from 'src/stores/compare';
 
 interface Props {
   hallId: number;
@@ -12,6 +14,7 @@ interface Props {
 }
 
 export const SeatCompateButton: FC<Props> = ({ hallId, isSeatMode }) => {
+  const setCompareSeat = useSetRecoilState(compareSeatState);
   const router = useRouter();
 
   return (
@@ -23,6 +26,7 @@ export const SeatCompateButton: FC<Props> = ({ hallId, isSeatMode }) => {
         color={!isSeatMode ? 'blue5' : undefined}
         borderRadius="8px"
         onClick={() => {
+          isSeatMode && setCompareSeat({ left: null, right: null });
           router.push({ pathname: isSeatMode ? ROUTE.SEAT_COMPARE : ROUTE.SEAT, query: { hallId } });
         }}>
         {isSeatMode ? (
