@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import Icon from '../common/icon/Icon';
+import { UploadFormReview } from './UploadFormReview';
+import { UploadFormSeats } from './UploadFormSeats';
 import { UploadImageList } from './uploadImage/UploadImageList';
 
 interface Props {}
@@ -14,13 +16,22 @@ export const UploadForm: FC<Props> = () => {
           <span>시야 사진 업로드</span>
         </Header>
         <UploadImageList />
+        <UploadFormSeats />
+        <UploadFormReview />
+        <ButtonWrap>
+          <button>업로드 하기</button>
+        </ButtonWrap>
       </form>
     </Wrap>
   );
 };
 
 const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 600px;
+  max-height: 630px;
+  overflow: auto;
   background-color: ${({ theme }) => theme.color.white};
   margin: auto;
   padding: 15px 0;
@@ -35,5 +46,18 @@ const Header = styled.div`
   span {
     font-size: 20px;
     font-weight: 700;
+  }
+`;
+
+const ButtonWrap = styled.div`
+  text-align: end;
+  padding-right: 43px;
+  margin-bottom: 20px;
+
+  button {
+    background-color: ${({ theme }) => theme.color.mint};
+    color: ${({ theme }) => theme.fontColor.white};
+    padding: 11px 20px;
+    border-radius: 4px;
   }
 `;
