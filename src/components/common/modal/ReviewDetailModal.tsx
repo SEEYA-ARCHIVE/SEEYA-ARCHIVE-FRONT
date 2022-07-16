@@ -35,14 +35,20 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
     if (!reviewData.previousId) return;
 
     setSelectedReviewId(reviewData.previousId);
-    router.push(`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.previousId}`);
+    router.push(
+      `/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.previousId}`,
+      `/review/${seatAreaId}/${reviewData.previousId}`,
+    );
   };
 
   const onClickNextButton = () => {
     if (!reviewData.nextId) return;
 
     setSelectedReviewId(reviewData.nextId);
-    router.push(`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.nextId}`);
+    router.push(
+      `/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.nextId}`,
+      `/review/${seatAreaId}/${reviewData.nextId}`,
+    );
   };
 
   if (reviewDetailState === 'loading') return <></>;
