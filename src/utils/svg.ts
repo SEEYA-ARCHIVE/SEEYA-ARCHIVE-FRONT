@@ -1,4 +1,5 @@
 export const getSvgData = (elem: any) => {
+  if (!elem) return;
   const pathList = elem.querySelectorAll('path');
   let seatObj: any = {
     polygon: [],
@@ -12,6 +13,8 @@ export const getSvgData = (elem: any) => {
   (pathList as any).forEach((v: any, idx: number) => {
     const obj: any = {};
     obj.d = v.getAttribute('d');
+    obj.floor = '';
+    obj.area = '';
     if (isPolygon(v)) {
       obj.stroke = '#C4C4C4';
       obj.fill = '#EFEFEF';

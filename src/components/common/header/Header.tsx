@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { useRecoilValue } from 'recoil';
+
+import { ROUTE } from 'src/route';
 import { userSessionState } from 'src/stores/user';
 import styled from 'styled-components';
 import Icon from '../icon/Icon';
@@ -18,7 +20,7 @@ export const Header: FC<Props> = () => {
           name="iconTypoLogo"
           className="icon"
           onClick={() => {
-            router.push('/');
+            router.push(ROUTE.HOME);
           }}
         />
         <AuthMenu>
@@ -52,7 +54,8 @@ const HeaderWrapper = styled.header`
   top: 0;
   left: 0;
 
-  z-index: 1;
+  background-color: #fff;
+  z-index: 999;
 `;
 
 const Nav = styled.nav`

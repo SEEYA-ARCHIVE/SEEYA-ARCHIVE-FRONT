@@ -29,6 +29,7 @@ export const theme = {
     gray: '#7b7b7b',
     white: '#fff',
     mint: '#13ACC1',
+    blue: '#2D7FF9',
     kakao: '#191600',
   },
   boxShadow: {

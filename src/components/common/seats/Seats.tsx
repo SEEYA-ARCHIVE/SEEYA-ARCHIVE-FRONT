@@ -1,14 +1,14 @@
-import React, { MouseEvent, useEffect, useState, VFC } from 'react';
+import React, { useEffect, useState, VFC } from 'react';
 import styled, { css } from 'styled-components';
 
 import { SeatAreaType } from 'src/api/seat';
 import { Area, AreaPathType } from './Area';
 import { Word, WordPathType } from './Word';
-import { useSetRecoilState } from 'recoil';
-import { selectSeatAtom } from 'src/stores/seat';
 import useModal from 'src/hooks/useModal';
 import AlertModal from '../modal/AlertModal';
 import ReviewListModal from '../modal/ReviewListModal';
+import { SeatsFloorInfo } from './SeatsFloorInfo';
+import { useSeatsHover } from './hooks/useSeatsHover';
 
 export interface SVGDataType {
   width: number;
@@ -48,24 +48,14 @@ const OPACITY_FLOOR_COLOR: Record<string, string> = {
  */
 /** component */
 export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
-  const setSelectSeat = useSetRecoilState(selectSeatAtom);
   const { openModal } = useModal();
 
   const [svgData, setSvgData] = useState(data);
-  const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
-  const [areaPosition, setAreaPosition] = useState<DOMRect | null>(null);
 
-  const [focusedArea, setFocusedArea] = useState<SVGInfoType | null>(null);
-  /**
-   * useRecoilValue는 Suspense를 NextJS에서 못써서 사용 못한다.
-   * 그러면 불편할텐데.. 다른 라이브러리 고민도 할만할 듯
-   */
+  const { isHover, hoverAreaPosition, setHoverAreaPosition, hoveredArea, setHoveredArea } = useSeatsHover();
 
   const { width, height, viewBox, xmlns, area, word } = svgData;
-
-  const showComment = () => setIsCommentOpen(true);
-  const hideComment = () => setIsCommentOpen(false);
 
   const getReivewCount = ({ floor, area }: SVGInfoType) => {
     if (!area || !floor) return null;
@@ -124,12 +114,9 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     setSvgData({ ...svgData, area: updatedArea, word: updatedWords });
   };
 
-  const handleAreaClick = () => {
-    if (!focusedArea) return;
-    const { floor, area } = focusedArea;
+  const handleSeatAreaClick = (floor?: number | null, area?: string | null) => {
     if (!floor || !area) return;
 
-    setSelectSeat({ floor: floor.toString(), area });
     const seatAreaId = getReivewCount({ floor, area })?.seatAreaId ?? 0;
 
     if (!reviewCount) {
@@ -140,14 +127,12 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
   };
 
   useEffect(() => {
-    if (focusedArea) {
-      showComment();
-      setAreaOpacity(focusedArea);
+    if (hoveredArea) {
+      setAreaOpacity(hoveredArea);
     } else {
-      hideComment();
       setSeatStyle();
     }
-  }, [focusedArea]);
+  }, [hoveredArea]);
 
   useEffect(() => {
     if (!seatsData) return;
@@ -159,9 +144,10 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
       key={data.id}
       hallId={hallId}
       svgData={svgData}
-      setFocusedArea={setFocusedArea}
+      setHoveredArea={setHoveredArea}
       strokeDasharray={data['stroke-dasharray']}
       strokeWidth={data['stroke-width']}
+      handleSeatAreaClick={handleSeatAreaClick}
       {...data}
     />
   ));
@@ -170,29 +156,29 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
     <Word
       key={data.id}
       hallId={hallId}
-      focusedArea={focusedArea}
-      setFocusedArea={setFocusedArea}
+      hoveredArea={hoveredArea}
+      setHoveredArea={setHoveredArea}
       svgData={svgData}
       setReviewCount={setReviewCount}
-      setAreaPosition={setAreaPosition}
+      setHoverAreaPosition={setHoverAreaPosition}
+      handleSeatAreaClick={handleSeatAreaClick}
       {...data}
     />
   ));
 
   return (
     <>
-      {!!reviewCount && (
-        <SeatComment
-          onClick={handleAreaClick}
-          isCommentOpen={isCommentOpen}
-          areaPosition={areaPosition}
-          onMouseEnter={() => {
-            setFocusedArea(focusedArea);
-          }}>
-          {reviewCount}건<div className="arrow"></div>
-        </SeatComment>
-      )}
+      <SeatComment
+        onClick={() => handleSeatAreaClick(hoveredArea?.floor, hoveredArea?.area)}
+        isCommentOpen={isHover && !!reviewCount}
+        hoverAreaPosition={hoverAreaPosition}
+        onMouseEnter={() => {
+          setHoveredArea(hoveredArea);
+        }}>
+        {reviewCount}건<div className="arrow"></div>
+      </SeatComment>
       <SVGWrap className={className}>
+        <SeatsFloorInfo />
         <svg width={width} height={height} viewBox={viewBox} xmlns={xmlns}>
           {SVGArea}
           {SVGWords}
@@ -205,7 +191,9 @@ export const Seats: VFC<Props> = ({ hallId, seatsData, data, className }) => {
 /** styled component */
 
 const SVGWrap = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   & svg {
     width: auto;
@@ -215,7 +203,7 @@ const SVGWrap = styled.div`
   }
 `;
 
-const SeatComment = styled.div<{ isCommentOpen: boolean; areaPosition: DOMRect | null }>`
+const SeatComment = styled.div<{ isCommentOpen: boolean; hoverAreaPosition: DOMRect | null }>`
   cursor: pointer;
   visibility: ${({ isCommentOpen }) => (isCommentOpen ? 'visible' : 'hidden')};
   display: flex;
@@ -230,12 +218,12 @@ const SeatComment = styled.div<{ isCommentOpen: boolean; areaPosition: DOMRect |
   border-radius: 12px;
   font-size: 9px;
   font-weight: 700;
-  ${({ areaPosition }) => {
+  ${({ hoverAreaPosition }) => {
     return (
-      areaPosition &&
+      hoverAreaPosition &&
       css`
-        top: ${areaPosition.top - areaPosition.height / 2 - 34}px;
-        left: ${areaPosition.left + areaPosition.width / 2 - 15}px;
+        top: ${hoverAreaPosition.top - hoverAreaPosition.height / 2 - 34}px;
+        left: ${hoverAreaPosition.left + hoverAreaPosition.width / 2 - 15}px;
       `
     );
   }}

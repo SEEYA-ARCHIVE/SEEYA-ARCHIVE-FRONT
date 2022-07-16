@@ -6,6 +6,7 @@ import * as icons from 'src/components/common/icon/iconPath';
 import Icon from 'src/components/common/icon/Icon';
 import useModal from 'src/hooks/useModal';
 import AlertModal from 'src/components/common/modal/AlertModal';
+import { ROUTE } from 'src/route';
 
 interface Props {
   name: string;
@@ -25,7 +26,7 @@ export const HallIcon: FC<Props> = ({ name, iconName, concertHallId }) => {
       return;
     }
 
-    router.push(`seat?hallId=${concertHallId}`);
+    router.push(`${ROUTE.SEAT}?hallId=${concertHallId}`);
   };
 
   const handleMouseEnter = () => {

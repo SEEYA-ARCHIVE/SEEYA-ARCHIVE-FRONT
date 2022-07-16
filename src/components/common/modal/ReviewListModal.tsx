@@ -85,6 +85,7 @@ const ReviewListModal: FC<Props> = ({ hallId, seatAreaId }) => {
 };
 
 const Wrapper = styled.div<{ isShow: boolean }>`
+  z-index: 999;
   position: fixed;
   top: 0;
   right: 0;

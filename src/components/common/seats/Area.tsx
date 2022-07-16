@@ -1,14 +1,10 @@
 import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
-import { useSetRecoilState } from 'recoil';
-import useModal from 'src/hooks/useModal';
-import { selectSeatAtom } from 'src/stores/seat';
+
 import styled from 'styled-components';
-import AlertModal from '../modal/AlertModal';
-import ReviewListModal from '../modal/ReviewListModal';
 import { SVGDataType, SVGInfoType } from './Seats';
 
 export interface AreaPathType {
-  id: string;
+  id?: string;
   floor: number | null;
   area: string | null;
   d: string;
@@ -22,9 +18,10 @@ export interface AreaPathType {
 interface Props extends AreaPathType {
   hallId: number;
   svgData: SVGDataType;
-  setFocusedArea: Dispatch<SetStateAction<SVGInfoType | null>>;
+  setHoveredArea?: Dispatch<SetStateAction<SVGInfoType | null>>;
   strokeDasharray?: string;
   strokeWidth?: string;
+  handleSeatAreaClick: (floor?: number | null, area?: string | null, seatAreaId?: number) => void;
 }
 
 export const Area: FC<Props> = ({
@@ -33,37 +30,23 @@ export const Area: FC<Props> = ({
   floor,
   area,
   svgData,
-  setFocusedArea,
+  setHoveredArea,
   strokeDasharray,
   strokeWidth,
+  handleSeatAreaClick,
+  seatAreaId,
   ...props
 }) => {
-  const setSelectSeat = useSetRecoilState(selectSeatAtom);
-  const { openModal } = useModal();
   const timer = useRef<NodeJS.Timer | null>(null);
   const areaData = svgData.word.find((v) => v.id === id);
-
   const reviewCount = areaData?.count ?? 0;
-  /** STAGE, FLOOR 등은 seatAreaId가 0 */
-  const seatAreaId = areaData?.seatAreaId ?? 0;
-
-  const handleClick = () => {
-    if (!floor || !area) return;
-
-    setSelectSeat({ floor: floor.toString(), area });
-    if (!reviewCount) {
-      openModal(<AlertModal type="NO_SEAT" />);
-    } else {
-      openModal(<ReviewListModal hallId={hallId} seatAreaId={seatAreaId} />);
-    }
-  };
 
   const handleEnter = () => {
     if (!reviewCount) return;
 
     timer.current = setTimeout(() => {
       timer.current = null;
-      setFocusedArea({ floor, area });
+      setHoveredArea?.({ floor, area });
     }, 100);
   };
   const handleLeave = () => {
@@ -71,16 +54,16 @@ export const Area: FC<Props> = ({
 
     if (timer.current) {
       clearTimeout(timer.current);
-      setFocusedArea(null);
+      setHoveredArea?.(null);
       return;
     }
-    setFocusedArea(null);
+    setHoveredArea?.(null);
   };
 
   return (
     <AreaPath
       {...props}
-      onClick={handleClick}
+      onClick={() => handleSeatAreaClick(floor, area, seatAreaId)}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       strokeDasharray={strokeDasharray}

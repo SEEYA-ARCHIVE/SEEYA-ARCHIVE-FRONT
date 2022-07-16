@@ -63,7 +63,6 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
 };
 
 const Wrap = styled.div`
-  background-color: rgb(0, 14, 86);
   height: 100vh;
 `;
 const Layout = styled.div`

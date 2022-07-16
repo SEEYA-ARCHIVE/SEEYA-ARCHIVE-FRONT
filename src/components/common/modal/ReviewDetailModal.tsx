@@ -10,14 +10,17 @@ import useModal from 'src/hooks/useModal';
 import { useRecoilValueLoadable } from 'recoil';
 import { getReviewDetail } from 'src/stores/review';
 import { useRouter } from 'next/router';
+import { ROUTE } from 'src/route';
 
 interface Props {
   hallId: number;
   seatAreaId: number;
   reviewId: number;
+  /**비교하기 페이지에서 리뷰디테일을 열었는 경우 true */
+  isFromComparePage?: boolean;
 }
 
-const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
+const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId, isFromComparePage = false }) => {
   const router = useRouter();
   const [selectedReviewId, setSelectedReviewId] = useState(reviewId);
   const { closeCurrentModal } = useModal();
@@ -28,7 +31,7 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
 
   const onClickCloseButton = () => {
     closeCurrentModal();
-    router.push(`/seat?hallId=${hallId}`);
+    router.push(`${isFromComparePage ? ROUTE.SEAT_COMPARE : ROUTE.SEAT}?hallId=${hallId}`);
   };
 
   const onClickPrevButton = () => {
@@ -36,7 +39,9 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
 
     setSelectedReviewId(reviewData.previousId);
     router.push(
-      `/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.previousId}`,
+      `${isFromComparePage ? ROUTE.SEAT_COMPARE : ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${
+        reviewData.previousId
+      }`,
       `/review/${seatAreaId}/${reviewData.previousId}`,
     );
   };
@@ -46,7 +51,9 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId }) => {
 
     setSelectedReviewId(reviewData.nextId);
     router.push(
-      `/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${reviewData.nextId}`,
+      `${isFromComparePage ? ROUTE.SEAT_COMPARE : ROUTE.SEAT}?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${
+        reviewData.nextId
+      }`,
       `/review/${seatAreaId}/${reviewData.nextId}`,
     );
   };
