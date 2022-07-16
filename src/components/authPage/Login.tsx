@@ -12,7 +12,6 @@ const Login = () => {
       </Title>
       <ButtonWrapper>
         <AuthButton provider="kakao" />
-        <AuthButton provider="twitter" />
       </ButtonWrapper>
     </LoginWrapper>
   );
