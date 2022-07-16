@@ -7,6 +7,7 @@ export const theme = {
     blue: '#00bac7',
     gray2: '#999999',
     gray3: '#b3b3b3',
+    gray4: '#c4c4c4',
     gray5: '#f5f5f5',
     gray: '#f6f6f6',
     green: '#07b495',
@@ -17,6 +18,10 @@ export const theme = {
     yellow: '#FFB118',
     darkGray: '#333333',
     purple: '#7B61FF',
+    kakao: '#FEE500',
+    twitter: '#2AA9E0',
+    error: '#FF0000',
+    success: '#268F31',
   },
   fontColor: {
     black: '#333333',
@@ -25,6 +30,7 @@ export const theme = {
     white: '#fff',
     mint: '#13ACC1',
     blue: '#2D7FF9',
+    kakao: '#191600',
   },
   boxShadow: {
     normal: '0 3px 8px 0 rgb(0 0 0 / 10%)',

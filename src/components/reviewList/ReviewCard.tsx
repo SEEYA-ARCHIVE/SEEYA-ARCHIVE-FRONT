@@ -14,8 +14,7 @@ interface Props {
   reviewId: number;
   imgSrc: string;
   author?: string;
-  surplusPic: number;
-  createdAt: string;
+  // createdAt: string;
   tagList?: string[];
   helpCount?: number;
 }
@@ -26,12 +25,11 @@ export const ReviewCard: FC<Props> = ({
   reviewId,
   imgSrc,
   author,
-  surplusPic,
-  createdAt,
+  // createdAt,
   tagList,
   helpCount,
 }) => {
-  const formattedDate = convertDateToFormattedString(createdAt);
+  // const formattedDate = convertDateToFormattedString(createdAt);
   const { openModal } = useModal();
 
   const onClickCard = () => {
@@ -46,11 +44,10 @@ export const ReviewCard: FC<Props> = ({
         <Img src={imgSrc} layout="fill" objectFit="cover" />
         <PicInfo>
           <NameText>{author ?? '시야봇'}</NameText>
-          <SurplusText>{surplusPic ? `+${surplusPic}` : ''}</SurplusText>
         </PicInfo>
       </ImageWrapper>
       <InfoWrapper>
-        <DateText>{formattedDate}</DateText>
+        {/* <DateText>{formattedDate}</DateText> */}
         <TagList>
           {/* TODO: Prototype 이후 */}
           {/* {tagList?.map((tag) => (

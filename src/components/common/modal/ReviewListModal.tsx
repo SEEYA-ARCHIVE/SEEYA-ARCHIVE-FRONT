@@ -1,13 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useRecoilValueLoadable } from 'recoil';
+
+import Icon from 'src/components/common/icon/Icon';
 import useModal from 'src/hooks/useModal';
+import ReviewList from 'src/components/reviewList/ReviewList';
 import { Select } from 'src/components/common/select/Select';
 import { ReviewPreivew } from 'src/types/api/review';
 import { getReviewList } from 'src/stores/review';
-import ReviewList from 'src/components/reviewList/ReviewList';
-import { ModalHOC } from './ModalHOC';
-import Icon from '../icon/Icon';
+import { ModalHOC } from 'src/hocs/withModalBackground';
 
 interface Props {
   hallId: number;
@@ -87,7 +88,7 @@ const Wrapper = styled.div<{ isShow: boolean }>`
   position: fixed;
   top: 0;
   right: 0;
-  width: 80vw;
+  width: calc(705px + 100px);
   height: 100%;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
   background-color: ${({ theme }) => theme.color.white};
