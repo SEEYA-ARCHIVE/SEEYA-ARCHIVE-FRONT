@@ -17,7 +17,7 @@ interface Props {
 }
 
 const ReviewList: FC<Props> = ({ hallId, seatAreaId, list, colCount, count, page, addPage }) => {
-  const limit = 6;
+  const LIMIT = 6;
 
   const isItemLoaded = (index: number) => index < list.length;
 
@@ -27,25 +27,17 @@ const ReviewList: FC<Props> = ({ hallId, seatAreaId, list, colCount, count, page
     if (!isItemLoaded(cursorIndex)) return <></>;
 
     const reviewItem = data[cursorIndex];
-    const {
-      id,
-      createAt,
-      images: { previewImage, numImages },
-    } = reviewItem;
+
+    const { id, previewImage } = reviewItem;
 
     return (
       <div style={style}>
-        <Link href={`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${id}`} passHref>
+        <Link
+          href={`/seat?hallId=${hallId}&seatAreaId=${seatAreaId}&reviewId=${id}`}
+          as={`/review/${seatAreaId}/${id}`}
+          passHref>
           <a>
-            <ReviewCard
-              key={id}
-              hallId={hallId}
-              seatAreaId={seatAreaId}
-              reviewId={id}
-              surplusPic={numImages}
-              createdAt={createAt}
-              imgSrc={previewImage}
-            />
+            <ReviewCard key={id} hallId={hallId} seatAreaId={seatAreaId} reviewId={id} imgSrc={previewImage} />
           </a>
         </Link>
       </div>
@@ -53,7 +45,7 @@ const ReviewList: FC<Props> = ({ hallId, seatAreaId, list, colCount, count, page
   };
 
   const loadMore = () => {
-    if (count < limit * page) {
+    if (count < LIMIT * page) {
       return;
     }
     addPage();
