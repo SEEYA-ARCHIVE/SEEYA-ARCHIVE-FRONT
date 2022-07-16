@@ -15,6 +15,7 @@ export { default as iconSmallThumbsUp } from 'public/assets/icon/SmallThumbsUp.s
 export { default as iconSmallComment } from 'public/assets/icon/SmallComment.svg';
 export { default as iconTriangle } from 'public/assets/icon/Triangle.svg';
 export { default as iconLeftArrow } from 'public/assets/icon/LogoLeftArrow.svg';
+export { default as iconUploadImage } from 'public/assets/icon/uploadImage.svg';
 
 /**HALL ICON */
 export { default as iconHwajunggym } from 'public/assets/icon/halls/Hwajunggym.svg';

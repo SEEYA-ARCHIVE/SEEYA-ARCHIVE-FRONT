@@ -1,20 +1,20 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import Icon from '../common/icon/Icon';
+import { UploadImageList } from './uploadImage/UploadImageList';
 
 interface Props {}
 
 export const UploadForm: FC<Props> = () => {
   return (
     <Wrap>
-      <Header>
-        <Icon name="iconLeftArrow" />
-        <span>시야 사진 업로드</span>
-      </Header>
-      <Content>
-        <label htmlFor="imgInput">Select Image</label>
-        <input id="imgInput" type="file" />
-      </Content>
+      <form action="">
+        <Header>
+          <Icon name="iconLeftArrow" />
+          <span>시야 사진 업로드</span>
+        </Header>
+        <UploadImageList />
+      </form>
     </Wrap>
   );
 };
@@ -35,19 +35,5 @@ const Header = styled.div`
   span {
     font-size: 20px;
     font-weight: 700;
-  }
-`;
-
-const Content = styled.div`
-  padding: 0 43px;
-  input {
-    display: none;
-  }
-  label {
-    width: 512px;
-    height: 300px;
-    background: #f5f5f5;
-    border: 4px dashed #e5e5e5;
-    border-radius: 20px;
   }
 `;
