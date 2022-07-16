@@ -15,6 +15,7 @@ export const getSvgData = (elem: any) => {
     obj.d = v.getAttribute('d');
     obj.floor = '';
     obj.area = '';
+    obj.id = '';
     if (isPolygon(v)) {
       obj.stroke = '#C4C4C4';
       obj.fill = '#EFEFEF';

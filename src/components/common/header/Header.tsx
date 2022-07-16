@@ -4,17 +4,20 @@ import { useRecoilState } from 'recoil';
 
 import { ROUTE } from 'src/route';
 import { userSessionState } from 'src/stores/user';
+import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 import Icon from '../icon/Icon';
 
-interface Props {}
+interface Props {
+  bgColor?: keyof typeof theme.color;
+}
 
-export const Header: FC<Props> = () => {
+export const Header: FC<Props> = ({ bgColor }) => {
   const router = useRouter();
   const [userSession, setUserSession] = useRecoilState(userSessionState);
 
   return (
-    <HeaderWrapper>
+    <HeaderWrapper bgColor={bgColor}>
       <Nav>
         <Icon
           name="iconTypoLogo"
@@ -42,7 +45,7 @@ export const Header: FC<Props> = () => {
   );
 };
 
-const HeaderWrapper = styled.header`
+const HeaderWrapper = styled.header<Pick<Props, 'bgColor'>>`
   width: 100vw;
   height: 80px;
 
@@ -53,7 +56,7 @@ const HeaderWrapper = styled.header`
   top: 0;
   left: 0;
 
-  background-color: #fff;
+  background-color: ${({ bgColor, theme }) => theme.color[bgColor ?? '#fff']};
   z-index: 999;
 `;
 
