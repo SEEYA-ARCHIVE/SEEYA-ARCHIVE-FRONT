@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { ModalHOC } from './ModalHOC';
+import { ModalHOC } from 'src/hocs/withModalBackground';
 import { ImgViewer } from 'src/components/common/imgViewer/ImgViewer';
 import { iconX } from '../icon/iconPath';
 
