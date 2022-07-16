@@ -117,15 +117,18 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
 
     if (!seatReviews?.count) return;
 
-    const setCompareSeatState = (position: 'left' | 'right', data: { floor: number; area: string } | null) => {
+    const setCompareSeatState = (
+      position: 'left' | 'right',
+      data: { floor: number; area: string; hallId: number } | null,
+    ) => {
       setCompareSeat({ ...compareSeat, [position]: data });
     };
 
     const leftCompareSeat = compareSeat.left;
     const rightCompareSeat = compareSeat.right;
 
-    if (!leftCompareSeat) {
-      setCompareSeatState('left', { floor, area });
+    if (!leftCompareSeat && !rightCompareSeat) {
+      setCompareSeatState('left', { floor, area, hallId });
       return;
     }
     if (leftCompareSeat && leftCompareSeat.area === area && leftCompareSeat.floor === floor) {
@@ -134,7 +137,7 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
     }
 
     if (!rightCompareSeat) {
-      setCompareSeatState('right', { floor, area });
+      setCompareSeatState('right', { floor, area, hallId });
       return;
     }
     if (rightCompareSeat && rightCompareSeat.area === area && rightCompareSeat.floor === floor) {

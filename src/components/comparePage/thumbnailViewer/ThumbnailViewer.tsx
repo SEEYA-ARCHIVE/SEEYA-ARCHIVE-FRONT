@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
+import { useRecoilState } from 'recoil';
 import Icon from 'src/components/common/icon/Icon';
 import { Img } from 'src/components/common/image/Img';
+import { compareSeatState } from 'src/stores/compare';
 import styled from 'styled-components';
 
 export type CompareReviewType = {
@@ -13,12 +15,29 @@ export type CompareReviewType = {
   reviewDesc: string;
 };
 
+export interface CompareSeatAreaType {
+  id: number;
+  userNickname: string;
+  thumbnailImage: string;
+  seatAreaName: string;
+  review: string;
+  createAt: string;
+  countLikeUsers: number;
+  countComments: number;
+}
+
 const ThumbnailHeader = ({ seatArea, reviewId }: Pick<CompareReviewType, 'seatArea' | 'reviewId'>) => {
+  const [, setCompareArea] = useRecoilState(compareSeatState);
+
+  const resetSelectedCompareArea = () => {};
+
+  const goReivewDetail = () => {};
+
   return (
     <HeaderWrap>
-      <Icon name="iconX_24" />
+      <Icon name="iconX_24" onClick={resetSelectedCompareArea} />
       <div>{seatArea}</div>
-      <Icon name="iconThreeDots" onClick={() => {}} />
+      <Icon name="iconThreeDots" onClick={goReivewDetail} />
     </HeaderWrap>
   );
 };
@@ -49,20 +68,23 @@ const ThumnbnailFooter = ({
   );
 };
 
-export const ThumbnailViewer: FC<CompareReviewType> = ({
-  seatArea,
-  reviewId,
-  imageSrc,
-  userId,
-  commentCount,
-  likeCount,
-  reviewDesc,
+export const ThumbnailViewer: FC<CompareSeatAreaType> = ({
+  id,
+  userNickname,
+  thumbnailImage,
+  seatAreaName,
+  review,
+  createAt,
+  countLikeUsers,
+  countComments,
 }) => {
   return (
     <Wrap>
-      <Img name={'sampleThumbnail'} src={imageSrc} width={389} height={389} />
-      <ThumbnailHeader seatArea={seatArea} reviewId={reviewId} />
-      <ThumnbnailFooter {...{ userId, commentCount, likeCount, reviewDesc }} />
+      <Img src={thumbnailImage} width={389} height={389} />
+      <ThumbnailHeader seatArea={seatAreaName} reviewId={id} />
+      <ThumnbnailFooter
+        {...{ userId: userNickname, commentCount: countComments, likeCount: countLikeUsers, reviewDesc: review }}
+      />
     </Wrap>
   );
 };

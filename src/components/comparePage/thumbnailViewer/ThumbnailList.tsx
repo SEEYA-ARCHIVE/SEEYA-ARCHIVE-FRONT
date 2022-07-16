@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
+import { CompareSeatAreaType } from 'src/api/compare';
 import Icon from 'src/components/common/icon/Icon';
 import styled from 'styled-components';
 import { CompareReviewType, ThumbnailViewer } from './ThumbnailViewer';
 
 interface Props {
-  reviewList: CompareReviewType[];
+  reviewList: CompareSeatAreaType[];
 }
 
 export const ThumbnailList: FC<Props> = ({ reviewList }) => {
@@ -53,6 +54,8 @@ const Wrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  min-height: 430px;
 `;
 
 const ReviewHandlerWrap = styled.div`
