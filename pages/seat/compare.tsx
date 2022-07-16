@@ -17,7 +17,7 @@ import { reviewList1 } from 'src/api/mock/compareReviewList';
 import { getSvgData } from 'src/utils/svg';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import { compareSeatState, getCompareSeatAreaSelector } from 'src/stores/compare';
-import { getCompareSeatAreaAPI } from 'src/api/compare';
+import { CompareSeatAreaType, getCompareSeatAreaAPI } from 'src/api/compare';
 
 interface Props {
   hallId: number;
@@ -41,26 +41,25 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 const Compare: NextPage<Props> = ({ hallId, seatsData }) => {
-  const compareSeatData = useRecoilValue(getCompareSeatAreaSelector);
-  // const selectedCompareArea = useRecoilValue(compareSeatState);
-  // const [leftCompareData, setLeftCompareData] = useState([]);
-  // const [rightCompareData, setRightCompareData] = useState([]);
+  const selectedCompareArea = useRecoilValue(compareSeatState);
+  const [leftCompareData, setLeftCompareData] = useState<CompareSeatAreaType[]>([]);
+  const [rightCompareData, setRightCompareData] = useState<CompareSeatAreaType[]>([]);
 
-  // useEffect(() => {
-  //   if (!selectedCompareArea.left) setLeftCompareData([]);
-  //   (async () => {
-  //     const res = await getCompareSeatAreaAPI(selectedCompareArea.left);
-  //     setLeftCompareData(res);
-  //   })();
-  // }, [selectedCompareArea.left]);
+  useEffect(() => {
+    if (!selectedCompareArea.left) setLeftCompareData([]);
+    (async () => {
+      const res = await getCompareSeatAreaAPI(selectedCompareArea.left);
+      setLeftCompareData(res);
+    })();
+  }, [selectedCompareArea.left]);
 
-  // useEffect(() => {
-  //   if (!selectedCompareArea.right) setRightCompareData([]);
-  //   (async () => {
-  //     const res = await getCompareSeatAreaAPI(selectedCompareArea.right);
-  //     setRightCompareData(res);
-  //   })();
-  // }, [selectedCompareArea.right]);
+  useEffect(() => {
+    if (!selectedCompareArea.right) setRightCompareData([]);
+    (async () => {
+      const res = await getCompareSeatAreaAPI(selectedCompareArea.right);
+      setRightCompareData(res);
+    })();
+  }, [selectedCompareArea.right]);
 
   return (
     <ComparePageWrapper>
@@ -71,8 +70,8 @@ const Compare: NextPage<Props> = ({ hallId, seatsData }) => {
       <ComparePageContents>
         <SeatInfo hallId={hallId} seatsData={seatsData} mode="compare" />
         <ReviewList>
-          <ThumbnailList reviewList={compareSeatData.left} />
-          <ThumbnailList reviewList={compareSeatData.right} />
+          <ThumbnailList reviewList={leftCompareData} type="left" />
+          <ThumbnailList reviewList={rightCompareData} type="right" />
         </ReviewList>
       </ComparePageContents>
       <MiniSeats hallId={hallId} seatsData={seatsData} data={oylmpicData} className="seats" />

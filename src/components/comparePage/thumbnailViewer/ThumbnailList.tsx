@@ -2,13 +2,14 @@ import React, { FC, useState } from 'react';
 import { CompareSeatAreaType } from 'src/api/compare';
 import Icon from 'src/components/common/icon/Icon';
 import styled from 'styled-components';
-import { CompareReviewType, ThumbnailViewer } from './ThumbnailViewer';
+import { ThumbnailViewer } from './ThumbnailViewer';
 
 interface Props {
   reviewList: CompareSeatAreaType[];
+  type: 'left' | 'right';
 }
 
-export const ThumbnailList: FC<Props> = ({ reviewList }) => {
+export const ThumbnailList: FC<Props> = ({ reviewList, type }) => {
   const [currentReviewIdx, setCurrentReivewIdx] = useState(0);
 
   const goPrevIdx = () => {
@@ -23,7 +24,7 @@ export const ThumbnailList: FC<Props> = ({ reviewList }) => {
   return (
     <Wrap>
       {reviewList?.length ? (
-        <ThumbnailViewer {...reviewList[currentReviewIdx]}></ThumbnailViewer>
+        <ThumbnailViewer {...reviewList[currentReviewIdx]} type={type}></ThumbnailViewer>
       ) : (
         <EmptyBox>
           <div>비교할 구역을</div>

@@ -20,7 +20,7 @@ interface Props extends WordPathType {
   hallId: number;
   svgData: SVGDataType;
   setReviewCount?: Dispatch<SetStateAction<number>>;
-  handleSeatAreaClick: (floor?: number | null, area?: string | null) => void;
+  handleSeatAreaClick: (floor?: number | null, area?: string | null, seatAreaId?: number) => void;
   hoveredArea?: SVGInfoType | null;
   setHoveredArea?: Dispatch<SetStateAction<SVGInfoType | null>>;
   setHoverAreaPosition?: Dispatch<SetStateAction<DOMRect | null>>;
@@ -39,6 +39,7 @@ export const Word: FC<Props> = ({
   setHoveredArea,
   handleSeatAreaClick,
   setSelectedPosition,
+  seatAreaId,
   ...props
 }) => {
   const compareSeat = useRecoilValue(compareSeatState);
@@ -76,7 +77,7 @@ export const Word: FC<Props> = ({
   return (
     <WordPath
       ref={wordRef}
-      onClick={() => handleSeatAreaClick(floor, area)}
+      onClick={() => handleSeatAreaClick(floor, area, seatAreaId)}
       onMouseEnter={() => {
         setHoveredArea?.(hoveredArea ?? null);
       }}

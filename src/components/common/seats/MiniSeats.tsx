@@ -110,8 +110,8 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
     setSvgData({ ...svgData, area: updatedArea, word: updatedWords });
   };
 
-  const handleSeatAreaClick = (floor?: number | null, area?: string | null) => {
-    if (!floor || !area) return;
+  const handleSeatAreaClick = (floor?: number | null, area?: string | null, seatAreaId?: number) => {
+    if (!floor || !area || !seatAreaId) return;
 
     const seatReviews = getReivewCount({ floor, area });
 
@@ -119,7 +119,7 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
 
     const setCompareSeatState = (
       position: 'left' | 'right',
-      data: { floor: number; area: string; hallId: number } | null,
+      data: { floor: number; area: string; hallId: number; seatAreaId: number } | null,
     ) => {
       setCompareSeat({ ...compareSeat, [position]: data });
     };
@@ -128,7 +128,7 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
     const rightCompareSeat = compareSeat.right;
 
     if (!leftCompareSeat && !rightCompareSeat) {
-      setCompareSeatState('left', { floor, area, hallId });
+      setCompareSeatState('left', { floor, area, hallId, seatAreaId });
       return;
     }
     if (leftCompareSeat && leftCompareSeat.area === area && leftCompareSeat.floor === floor) {
@@ -137,7 +137,7 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
     }
 
     if (!rightCompareSeat) {
-      setCompareSeatState('right', { floor, area, hallId });
+      setCompareSeatState('right', { floor, area, hallId, seatAreaId });
       return;
     }
     if (rightCompareSeat && rightCompareSeat.area === area && rightCompareSeat.floor === floor) {
@@ -180,7 +180,7 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
         <LeftSelectMark
           selectedAreaPosition={selectedPosition.left}
           onClick={() => {
-            handleSeatAreaClick(compareSeat.left?.floor, compareSeat.left?.area);
+            handleSeatAreaClick(compareSeat.left?.floor, compareSeat.left?.area, compareSeat.left?.seatAreaId);
           }}>
           L
         </LeftSelectMark>
@@ -189,7 +189,7 @@ export const MiniSeats: VFC<Props> = ({ hallId, seatsData, data, className }) =>
         <RightSelectMark
           selectedAreaPosition={selectedPosition.right}
           onClick={() => {
-            handleSeatAreaClick(compareSeat.right?.floor, compareSeat.right?.area);
+            handleSeatAreaClick(compareSeat.right?.floor, compareSeat.right?.area, compareSeat.right?.seatAreaId);
           }}>
           R
         </RightSelectMark>

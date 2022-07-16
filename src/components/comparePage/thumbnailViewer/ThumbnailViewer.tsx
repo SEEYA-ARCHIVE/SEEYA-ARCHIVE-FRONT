@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { useRecoilState } from 'recoil';
 import Icon from 'src/components/common/icon/Icon';
 import { Img } from 'src/components/common/image/Img';
+import ReviewDetailModal from 'src/components/common/modal/ReviewDetailModal';
+import useModal from 'src/hooks/useModal';
 import { compareSeatState } from 'src/stores/compare';
 import styled from 'styled-components';
 
@@ -24,20 +26,22 @@ export interface CompareSeatAreaType {
   createAt: string;
   countLikeUsers: number;
   countComments: number;
+  type: 'left' | 'right';
 }
 
-const ThumbnailHeader = ({ seatArea, reviewId }: Pick<CompareReviewType, 'seatArea' | 'reviewId'>) => {
-  const [, setCompareArea] = useRecoilState(compareSeatState);
-
-  const resetSelectedCompareArea = () => {};
-
-  const goReivewDetail = () => {};
-
+const ThumbnailHeader = ({
+  seatArea,
+  handleCloseClick,
+  handleGoDetailClick,
+}: Pick<CompareReviewType, 'seatArea' | 'reviewId'> & {
+  handleCloseClick: () => void;
+  handleGoDetailClick: () => void;
+}) => {
   return (
     <HeaderWrap>
-      <Icon name="iconX_24" onClick={resetSelectedCompareArea} />
+      <Icon name="iconX_24" onClick={handleCloseClick} />
       <div>{seatArea}</div>
-      <Icon name="iconThreeDots" onClick={goReivewDetail} />
+      <Icon name="iconThreeDots" onClick={handleGoDetailClick} />
     </HeaderWrap>
   );
 };
@@ -77,11 +81,28 @@ export const ThumbnailViewer: FC<CompareSeatAreaType> = ({
   createAt,
   countLikeUsers,
   countComments,
+  type,
 }) => {
+  const { openModal } = useModal();
+  const [compareSeat, setCompareSeat] = useRecoilState(compareSeatState);
+  const handleCloseClick = () => {
+    setCompareSeat((data) => ({ ...data, [type]: null }));
+  };
+  const handleGoDetailClick = () => {
+    const seatData = compareSeat[type];
+    if (!seatData) return;
+
+    openModal(<ReviewDetailModal hallId={seatData.hallId} seatAreaId={seatData.seatAreaId} reviewId={id} />);
+  };
   return (
     <Wrap>
       <Img src={thumbnailImage} width={389} height={389} />
-      <ThumbnailHeader seatArea={seatAreaName} reviewId={id} />
+      <ThumbnailHeader
+        seatArea={seatAreaName}
+        reviewId={id}
+        handleCloseClick={handleCloseClick}
+        handleGoDetailClick={handleGoDetailClick}
+      />
       <ThumnbnailFooter
         {...{ userId: userNickname, commentCount: countComments, likeCount: countLikeUsers, reviewDesc: review }}
       />
@@ -112,6 +133,10 @@ const HeaderWrap = styled.div`
   font-weight: 700;
 
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
 const FooterWrap = styled.div`

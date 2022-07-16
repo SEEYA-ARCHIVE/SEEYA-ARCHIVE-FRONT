@@ -21,7 +21,7 @@ interface Props extends AreaPathType {
   setHoveredArea?: Dispatch<SetStateAction<SVGInfoType | null>>;
   strokeDasharray?: string;
   strokeWidth?: string;
-  handleSeatAreaClick: (floor?: number | null, area?: string | null) => void;
+  handleSeatAreaClick: (floor?: number | null, area?: string | null, seatAreaId?: number) => void;
 }
 
 export const Area: FC<Props> = ({
@@ -34,6 +34,7 @@ export const Area: FC<Props> = ({
   strokeDasharray,
   strokeWidth,
   handleSeatAreaClick,
+  seatAreaId,
   ...props
 }) => {
   const timer = useRef<NodeJS.Timer | null>(null);
@@ -62,7 +63,7 @@ export const Area: FC<Props> = ({
   return (
     <AreaPath
       {...props}
-      onClick={() => handleSeatAreaClick(floor, area)}
+      onClick={() => handleSeatAreaClick(floor, area, seatAreaId)}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       strokeDasharray={strokeDasharray}

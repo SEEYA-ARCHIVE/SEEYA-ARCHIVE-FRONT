@@ -2,8 +2,8 @@ import { atom, selector } from 'recoil';
 import { CompareSeatAreaType, getCompareSeatAreaAPI } from 'src/api/compare';
 
 export const compareSeatState = atom<{
-  left: { floor: number; area: string; hallId: number } | null;
-  right: { floor: number; area: string; hallId: number } | null;
+  left: { floor: number; area: string; hallId: number; seatAreaId: number } | null;
+  right: { floor: number; area: string; hallId: number; seatAreaId: number } | null;
 }>({
   key: 'compateSeat',
   default: { left: null, right: null },
