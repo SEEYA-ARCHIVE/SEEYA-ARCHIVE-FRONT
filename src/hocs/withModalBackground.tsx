@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { useRouter } from 'next/router';
+import React, { FC, useRef } from 'react';
 import useModal from 'src/hooks/useModal';
 import styled, { css } from 'styled-components';
 
@@ -10,12 +11,15 @@ interface Props {
 
 export const ModalHOC = <P extends object>(WrappedComponent: React.ComponentType<P>): FC<Props & P> => {
   const ModalManageComponent = ({ backgroundBlur, backgroundLock, backgroundTransparent, ...props }: Props) => {
+    const urlRef = useRef(location.href);
+    const router = useRouter();
     const { closeCurrentModal } = useModal();
 
     const onClickModalBackground = () => {
       if (backgroundLock) return;
 
       closeCurrentModal();
+      router.replace(urlRef.current);
     };
 
     return (
@@ -36,7 +40,7 @@ export const ModalHOC = <P extends object>(WrappedComponent: React.ComponentType
 };
 
 const Background = styled.div<Pick<Props, 'backgroundTransparent' | 'backgroundBlur'>>`
-  z-index: 1000;
+  z-index: 9999;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -51,5 +55,5 @@ const Background = styled.div<Pick<Props, 'backgroundTransparent' | 'backgroundB
 
 const Content = styled.div`
   position: absolute;
-  z-index: 1001;
+  z-index: 9999;
 `;
