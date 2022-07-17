@@ -37,3 +37,12 @@ export interface ReviewDetailType {
   previousId?: number;
   nextId?: number;
 }
+
+export interface ReviewCommentType {
+  id: number;
+  review: number;
+  user: number;
+  comment: string;
+  createAt: string;
+  updateAt: string;
+}
