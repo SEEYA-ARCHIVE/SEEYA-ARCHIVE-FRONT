@@ -5,7 +5,7 @@ export const compareSeatState = atom<{
   left: { floor: number; area: string; hallId: number; seatAreaId: number } | null;
   right: { floor: number; area: string; hallId: number; seatAreaId: number } | null;
 }>({
-  key: 'compateSeat',
+  key: 'compareSeatState',
   default: { left: null, right: null },
 });
 

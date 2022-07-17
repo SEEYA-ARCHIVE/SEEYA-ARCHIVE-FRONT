@@ -1,10 +1,14 @@
 import axios from 'axios';
 
-export const uploadImage = async (data: FormData): Promise<any> => {
+export const uploadImage = async (uploadImageData: FormData): Promise<string[]> => {
   try {
-    const response = await axios.post('/s3/upload/review_images', data);
-    console.log('response', response);
+    const { data } = await axios.post<{ imageUrls: { imageUrls: string[] } }>(
+      '/s3/upload/review_images',
+      uploadImageData,
+    );
+    return data.imageUrls.imageUrls;
   } catch (error) {
     console.error(error);
+    return [];
   }
 };

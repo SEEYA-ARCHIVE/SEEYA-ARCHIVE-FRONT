@@ -1,16 +1,22 @@
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 
-interface Props {}
+interface Props {
+  onChangeReview: (value: string) => void;
+}
 
-export const UploadFormReview: FC<Props> = () => {
+export const UploadFormReview: FC<Props> = ({ onChangeReview }) => {
+  const handleReviewChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    onChangeReview(value);
+  };
   return (
     <Wrap>
       <Title>
         <span className="title">리뷰</span>
         <span className="desc">REVIEW</span>
       </Title>
-      <Review placeholder="리뷰 여기에 입력하기" maxLength={500} />
+      <Review placeholder="리뷰 여기에 입력하기" maxLength={500} onChange={handleReviewChange} />
     </Wrap>
   );
 };

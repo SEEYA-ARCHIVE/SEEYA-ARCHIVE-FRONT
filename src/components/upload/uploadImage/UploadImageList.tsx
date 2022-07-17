@@ -1,24 +1,37 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 
-import { UploadImageBox } from './UploadImageBox';
 import { UploadedImageItem } from './UploadImageItem';
 
-interface Props {}
+interface Props {
+  onChangeImageList: (value: string[]) => void;
+}
 
 const MAX_UPLOAD = 5;
-export const UploadImageList: FC<Props> = () => {
+export const UploadImageList: FC<Props> = ({ onChangeImageList }) => {
   const [imgSrc, setImgSrc] = useState<string[]>([]);
+
+  const handleUploadImages = (uploadImgSrc: string[]) => {
+    const availableUploadCount = MAX_UPLOAD - imgSrc.length;
+
+    const avaliableUploadSrc = uploadImgSrc.slice(0, availableUploadCount);
+    setImgSrc([...imgSrc, ...avaliableUploadSrc]);
+    onChangeImageList([...imgSrc, ...avaliableUploadSrc]);
+  };
 
   return (
     <>
       <Wrap>
         <div>
-          {!imgSrc.length && <UploadImageBox />}
-          {new Array(MAX_UPLOAD - imgSrc.length - 1).fill('').map((_, idx) => (
-            <UploadedImageItem key={idx} src={imgSrc[idx]} />
+          {new Array(MAX_UPLOAD).fill('').map((_, idx) => (
+            <UploadedImageItem
+              key={idx}
+              src={imgSrc[idx]}
+              isInput={!imgSrc[idx] && ((idx === 0 && !imgSrc.length) || !!imgSrc[idx - 1])}
+              index={idx}
+              handleUploadImages={handleUploadImages}
+            />
           ))}
-          {!!imgSrc.length && imgSrc.length < MAX_UPLOAD && <UploadImageBox />}
         </div>
         <Desc>시야 사진 최대 5개 첨부 가능, 다른 관객의 초상권을 침해하지 않도록 주의해주세요.</Desc>
       </Wrap>

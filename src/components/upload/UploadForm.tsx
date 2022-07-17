@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Icon from '../common/icon/Icon';
 import { UploadFormReview } from './UploadFormReview';
@@ -8,6 +8,13 @@ import { UploadImageList } from './uploadImage/UploadImageList';
 interface Props {}
 
 export const UploadForm: FC<Props> = () => {
+  const [srcList, setSrcList] = useState<string[]>([]);
+  const [hallId, setHallId] = useState<number>();
+  const [seatAreaId, setSeatAreaId] = useState<number>();
+  const [review, setReview] = useState<string>();
+
+  const uploadReview = async () => {};
+
   return (
     <Wrap>
       <form action="">
@@ -15,9 +22,12 @@ export const UploadForm: FC<Props> = () => {
           <Icon name="iconLeftArrow" />
           <span>시야 사진 업로드</span>
         </Header>
-        <UploadImageList />
-        <UploadFormSeats />
-        <UploadFormReview />
+        <UploadImageList onChangeImageList={(value: string[]) => setSrcList(value)} />
+        <UploadFormSeats
+          onChangeHallId={(value: number) => setHallId(value)}
+          onChangeSeatAreaId={(value: number) => setSeatAreaId(value)}
+        />
+        <UploadFormReview onChangeReview={(value: string) => setReview(value)} />
         <ButtonWrap>
           <button>업로드 하기</button>
         </ButtonWrap>

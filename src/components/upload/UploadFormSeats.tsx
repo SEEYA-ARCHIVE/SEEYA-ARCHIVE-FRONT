@@ -1,21 +1,41 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import { UploadSeats } from '../common/seats/UploadSeats';
 import uploadOlympicData from 'src/components/common/seats/data/uploadOlympic.json';
 import styled from 'styled-components';
 import { Select } from '../common/select/Select';
-import { useRecoilValue } from 'recoil';
-import { getHallListSelector } from 'src/stores/hall';
+import { getHallListAPI, HallListType } from 'src/api/hall';
+import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
 
-interface Props {}
+interface Props {
+  onChangeHallId: (value: number) => void;
+  onChangeSeatAreaId: (value: number) => void;
+}
 
-export const UploadFormSeats: FC<Props> = () => {
-  const hallList = useRecoilValue(getHallListSelector);
+export const UploadFormSeats: FC<Props> = ({ onChangeHallId, onChangeSeatAreaId }) => {
+  const [hallList, setHallList] = useState<HallListType>([]);
   const [selectedHall, setSelectedHall] = useState<number>();
+  const [seatsData, setSeatsData] = useState<SeatAreaType[]>([]);
 
-  if (!hallList.length) return null;
+  const getHallList = async () => {
+    const data = await getHallListAPI();
+    setHallList(data);
+  };
 
-  const hallListOptions = hallList.map((hall) => ({ label: hall.name, value: hall.concertHallId + '' }));
+  const getSeatsData = async (hallId: number) => {
+    const seatsData = await getSeatAreaAPI(hallId);
+
+    setSeatsData(seatsData);
+  };
+
+  useEffect(() => {
+    getHallList();
+  }, []);
+
+  useEffect(() => {
+    getSeatsData(selectedHall ?? 1);
+    onChangeHallId(selectedHall ?? 1);
+  }, [selectedHall]);
 
   return (
     <Wrap>
@@ -25,15 +45,21 @@ export const UploadFormSeats: FC<Props> = () => {
         onChange={(selectHallId) => {
           setSelectedHall(+selectHallId);
         }}
-        options={hallListOptions}
+        options={hallList.map((hall) => ({ label: hall.name, value: hall.concertHallId + '' }))}
       />
-      <UploadSeats hallId={1} data={uploadOlympicData} />
+      <UploadSeats
+        hallId={selectedHall ?? 1}
+        data={uploadOlympicData}
+        seatsData={seatsData}
+        onChangeSeatAreaId={onChangeSeatAreaId}
+      />
     </Wrap>
   );
 };
 
 const Wrap = styled.div`
   padding: 40px 43px 24px 43px;
+  min-height: 349px;
 `;
 
 const Title = styled.div`

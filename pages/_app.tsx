@@ -40,7 +40,6 @@ export default function MyApp({ Component, pageProps, userSession }: Props) {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router.events]);
-  console.log(BACKGROUND_COLOR_SETTING[router.asPath]);
   return (
     <Suspense fallback={<></>}>
       <RecoilRoot initializeState={recoilInitializer}>
