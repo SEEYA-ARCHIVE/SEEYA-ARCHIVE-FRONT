@@ -26,8 +26,8 @@ export interface ReviewDetailType {
   user: ReviewUploader;
   concertHallName: string;
   imageUrlArray: string[];
-  createAt: Date;
-  updateAt: Date;
+  createAt: string;
+  updateAt: string;
   seatArea: string;
   artist: string;
   review: string;
