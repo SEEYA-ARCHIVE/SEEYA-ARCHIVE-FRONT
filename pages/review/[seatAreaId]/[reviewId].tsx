@@ -9,6 +9,8 @@ import { ReviewDetailType } from 'src/types/api/review';
 import styled from 'styled-components';
 
 interface Props {
+  seatAreaId: number;
+  reviewId: number;
   reviewData: ReviewDetailType;
 }
 
@@ -18,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   try {
     const reviewData = await getReviewDetailAPI(seatAreaId, reviewId);
-    return { props: { reviewData } };
+    return { props: { seatAreaId, reviewId, reviewData } };
   } catch {
     return {
       redirect: {
@@ -29,17 +31,17 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
 };
 
-const ReviewPage: NextPage<Props> = ({ reviewData }) => {
+const ReviewPage: NextPage<Props> = ({ seatAreaId, reviewId, reviewData }) => {
   return (
     <Wrapper>
       <Head>
         <title>시야아카이브 - {reviewData.concertHallName}</title>
       </Head>
       <Header />
-      <ImgViewer imgList={reviewData.images} userId="시야봇" />
+      <ImgViewer imgList={reviewData.imageUrlArray} userId="시야봇" />
       <ReviewWrapper>
         <Review
-          reviewId={reviewData.id}
+          reviewId={reviewId}
           reviewText={reviewData.review}
           concertHall={reviewData.concertHallName}
           seatArea={reviewData.seatArea}

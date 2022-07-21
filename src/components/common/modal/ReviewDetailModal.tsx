@@ -63,7 +63,7 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId, isFromComp
   return (
     <Wrapper>
       <CloseX onClick={onClickCloseButton} />
-      <ImgViewer imgList={reviewData.images} userId="시야봇" />
+      <ImgViewer imgList={reviewData.imageUrlArray} userId="시야봇" />
       <Review
         reviewId={reviewData.id}
         reviewText={reviewData.review}
