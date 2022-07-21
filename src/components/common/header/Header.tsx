@@ -13,11 +13,6 @@ export const Header: FC<Props> = () => {
   const router = useRouter();
   const [userSession, setUserSession] = useRecoilState(userSessionState);
 
-<<<<<<< HEAD
-=======
-  const logout = () => {};
-
->>>>>>> 8e7b013 (feat: 로그아웃 연결)
   return (
     <HeaderWrapper>
       <Nav>
