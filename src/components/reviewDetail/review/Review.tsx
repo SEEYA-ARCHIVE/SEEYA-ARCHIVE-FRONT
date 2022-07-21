@@ -1,10 +1,10 @@
-import React, { VFC } from 'react';
+import React, { Suspense, VFC } from 'react';
 import styled from 'styled-components';
 import CommentFactory from 'src/components/reviewDetail/reviewComment/CommentFactory';
-import ReviewComments from 'src/components/reviewDetail/reviewComment/ReviewComments';
 import ReviewTagList from 'src/components/reviewDetail/reviewTagList/ReviewTagList';
 import ReviewText from 'src/components/reviewDetail/review/ReviewText';
 import { convertDateToFormattedStringDate } from 'src/utils/date';
+import ReviewCommentList from '../reviewComment/ReviewCommentList';
 
 interface Props {
   reviewId: number;
@@ -28,7 +28,9 @@ const Review: VFC<Props> = ({ reviewId, reviewText, concertHall, seatArea, creat
         <ReviewTagList tagList={[concertHall, seatArea]} />
       </TagListWrapper>
       <CommentsWrapper>
-        <ReviewComments />
+        <Suspense fallback={<></>}>
+          <ReviewCommentList reviewId={reviewId} />
+        </Suspense>
       </CommentsWrapper>
       <CommentFactory reviewId={reviewId} />
     </ReviewWrapper>
@@ -40,7 +42,7 @@ const ReviewWrapper = styled.div`
   background-color: ${({ theme }) => theme.color.white};
   border-radius: 20px;
   width: 300px;
-  height: 500px;
+  min-height: 500px;
 `;
 
 const ReviewTitle = styled.p`

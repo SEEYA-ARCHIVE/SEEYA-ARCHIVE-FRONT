@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { useRecoilValue } from 'recoil';
+import { getReviewCommentList } from 'src/stores/review';
+import { convertDateToFormattedStringDate } from 'src/utils/date';
 import styled from 'styled-components';
-import ReviewComment from './ReviewComments';
+import ReviewComment from './ReviewComment';
 
-const ReviewCommentList = () => {
-  // TODO API 연동
+interface Props {
+  reviewId: number;
+}
+
+const ReviewCommentList: FC<Props> = ({ reviewId }) => {
+  const commentListData = useRecoilValue(getReviewCommentList(reviewId));
+
   return (
     <Wrapper>
-      <ReviewComment nickname="SeeyaBot" comment="댓글기능 추가 예정입니다." createdAt="2022/06/16" />
+      {commentListData.map((commentData) => (
+        <ReviewComment
+          key={commentData.id}
+          nickname={''}
+          comment={commentData.comment}
+          createdAt={convertDateToFormattedStringDate(commentData.createAt)}
+        />
+      ))}
     </Wrapper>
   );
 };
@@ -20,7 +35,7 @@ const Wrapper = styled.div`
   gap: 24px;
 
   width: 255px;
-  height: 156px;
+  max-height: 100px;
   overflow-x: hidden;
   overflow-y: auto;
 `;
