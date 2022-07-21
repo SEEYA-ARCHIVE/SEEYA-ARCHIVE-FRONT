@@ -13,6 +13,7 @@ import { UserType } from 'src/types/api/user';
 import { initAxiosConfig } from 'src/api/axios';
 import { getUserAPI } from 'src/api/user';
 import { userSessionState } from 'src/stores/user';
+import axios from 'axios';
 
 initAxiosConfig();
 
@@ -55,7 +56,16 @@ export default function MyApp({ Component, pageProps, userSession }: Props) {
 }
 
 MyApp.getInitialProps = async (appContext: AppContext) => {
-  const user = await getUserAPI();
+  const { ctx } = appContext;
+
+  const cookie = ctx.req ? ctx.req.headers.cookie : null;
+
+  let user;
+  if (cookie) {
+    axios.defaults.headers.common['cookie'] = cookie;
+
+    user = await getUserAPI();
+  }
 
   const appProps = await App.getInitialProps(appContext);
 

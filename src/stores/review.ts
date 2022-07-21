@@ -36,7 +36,7 @@ export const getReviewCommentList = selectorFamily({
   key: 'GET/reviewCommentList',
   get: (reviewId: number) => async () => {
     try {
-      return await getReviewCommentListAPI(seatAreaId, reviewId);
+      return await getReviewCommentListAPI(reviewId);
     } catch (err) {
       return [];
     }
