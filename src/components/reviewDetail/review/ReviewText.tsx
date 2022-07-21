@@ -33,11 +33,20 @@ const ReviewText: VFC<Props> = ({ text }) => {
 };
 
 const TextWrapper = styled.div`
+  height: 180px;
   font-size: 12px;
   line-height: 20px;
+
+  overflow-y: auto;
   white-space: pre-line;
   word-wrap: break-word;
   color: ${({ theme }) => theme.fontColor.black};
+
+  -ms-user-select: text;
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  user-select: text;
 
   .hashtag {
     color: ${({ theme }) => theme.color.blue5};

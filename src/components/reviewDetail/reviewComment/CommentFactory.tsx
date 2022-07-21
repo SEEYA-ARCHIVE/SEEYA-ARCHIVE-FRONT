@@ -1,23 +1,40 @@
-import React, { useEffect, useState, VFC } from 'react';
+import React, { useState, VFC } from 'react';
 import styled, { css } from 'styled-components';
 import Icon from 'src/components/common/icon/Icon';
-import { getLocalStorage, setLocalStorage } from 'src/utils/storage';
+import { writeReviewCommentAPI } from 'src/api/review';
+import { userSessionState } from 'src/stores/user';
+import { useRecoilValue } from 'recoil';
 
 interface Props {
   reviewId: number;
 }
 
 const CommentFactory: VFC<Props> = ({ reviewId }) => {
+  const [comment, setComment] = useState('');
   const [isLiked, setIsLiked] = useState(false);
+  const userSession = useRecoilValue(userSessionState);
 
   const onClickLikeButton = () => {
     setIsLiked((prev) => !prev!);
+  };
+
+  const onChangeComment = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setComment(value);
   };
 
   const onClickReportButton = () => {
     window.open(
       'https://docs.google.com/forms/d/e/1FAIpQLSd6TDa06LY6PvrY4kB2jpdXYQI0pnfw9F--JYZd1nadcyWX_g/viewform?usp=sf_link',
     );
+  };
+
+  const submitComment = async () => {
+    if (userSession) await writeReviewCommentAPI(reviewId, userSession.id, comment);
+  };
+
+  const onKeyPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') submitComment();
   };
 
   return (
@@ -34,7 +51,14 @@ const CommentFactory: VFC<Props> = ({ reviewId }) => {
           신고하기
         </RepotButton>
       </InteractionWrapper>
-      <CommentInput type="text" placeholder="댓글 기능 제공 예정입니다." disabled />
+
+      <CommentInput
+        type="text"
+        placeholder="댓글을 입력해주세요."
+        value={comment}
+        onChange={onChangeComment}
+        onKeyPress={onKeyPressEnter}
+      />
     </Wrapper>
   );
 };
@@ -105,7 +129,12 @@ const RepotButton = styled.button`
   border-radius: 25px;
 `;
 
+const CommentForm = styled.form`
+  width: 100%;
+`;
+
 const CommentInput = styled.input`
+  width: 100%;
   padding: 8px 0 8px 16px;
 
   background-color: ${({ theme }) => theme.color.gray5};
