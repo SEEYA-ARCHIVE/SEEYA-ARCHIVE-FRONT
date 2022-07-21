@@ -13,8 +13,6 @@ export const Header: FC<Props> = () => {
   const router = useRouter();
   const [userSession, setUserSession] = useRecoilState(userSessionState);
 
-  const logout = () => {};
-
   return (
     <HeaderWrapper>
       <Nav>
@@ -26,7 +24,7 @@ export const Header: FC<Props> = () => {
           }}
         />
         <AuthMenu>
-          {!userSession ? (
+          {userSession ? (
             <HeaderButton onClick={logout}>
               <a href="https://api.seeya-archive.com/kakao_logout">LOG OUT</a>
             </HeaderButton>
