@@ -71,8 +71,16 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId, isFromComp
         seatArea={reviewData.seatArea}
         createAt={reviewData.createAt}
       />
-      {reviewData.previousId && <Triangle rotate={90} position={{ left: -57 }} onClick={onClickPrevButton} />}
-      {reviewData.nextId && <Triangle rotate={270} position={{ right: -57 }} onClick={onClickNextButton} />}
+      {reviewData.previousId && (
+        <TriangleButton position={{ left: -87 }} onClick={onClickPrevButton}>
+          <Triangle rotate={90} />
+        </TriangleButton>
+      )}
+      {reviewData.nextId && (
+        <TriangleButton position={{ right: -87 }} onClick={onClickNextButton}>
+          <Triangle rotate={270} />
+        </TriangleButton>
+      )}
     </Wrapper>
   );
 };
@@ -94,10 +102,28 @@ const CloseX = styled(iconX)`
   cursor: pointer;
 `;
 
-const Triangle = styled.div<{
-  rotate: 0 | 90 | 180 | 270;
-  position: { top?: number; bottom?: number; left?: number; right?: number };
-}>`
+const TriangleButton = styled.button<{ position: { top?: number; bottom?: number; left?: number; right?: number } }>`
+  border: none;
+  background: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 80px;
+  height: 80px;
+
+  position: absolute;
+  ${({ position }) =>
+    css`
+      ${position?.top && `top: ${position.top}px;`}
+      ${position?.right && `right: ${position.right}px;`}
+      ${position?.bottom && `bottom: ${position.bottom}px;`}
+      ${position?.left && `left: ${position.left}px;`}
+    `}
+`;
+
+const Triangle = styled.div<{ rotate: 0 | 90 | 180 | 270 }>`
   width: 0;
   height: 0;
 
@@ -108,15 +134,6 @@ const Triangle = styled.div<{
   cursor: pointer;
 
   transform: ${({ rotate }) => (rotate ? `rotate(${rotate}deg)` : '')};
-
-  position: absolute;
-  ${({ position }) =>
-    css`
-      ${position?.top && `top: ${position.top}px;`}
-      ${position?.right && `right: ${position.right}px;`}
-      ${position?.bottom && `bottom: ${position.bottom}px;`}
-      ${position?.left && `left: ${position.left}px;`}
-    `}
 `;
 
 export default ModalHOC(ReviewDetailModal);

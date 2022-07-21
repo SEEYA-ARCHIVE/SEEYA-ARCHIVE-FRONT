@@ -9,3 +9,19 @@ export const getUserAPI = async (): Promise<UserType | undefined> => {
     return undefined;
   }
 };
+
+export const getUserInitialNicknameAPI = async (): Promise<string> => {
+  const { data } = await axios.get('/set/nickname');
+
+  return data.nickname;
+};
+
+export const checkDuplicateNicknameAPI = async (nickname: string): Promise<boolean> => {
+  const { data } = await axios.get(`/check/nickname/duplicate?nickname=${nickname}`);
+
+  return data;
+};
+
+export const setUserNikcnameAPI = async (nickname: string) => {
+  await axios.patch('/set/nickname', { nickname });
+};

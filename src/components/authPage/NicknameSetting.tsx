@@ -1,23 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+
+import { getUserInitialNickname } from 'src/stores/user';
+import { checkDuplicateNicknameAPI, setUserNikcnameAPI } from 'src/api/user';
+import { useRouter } from 'next/router';
 
 type NicknameStatus = 'error' | 'success';
 
 const NicknameSetting = () => {
+  const router = useRouter();
   const [nickname, setNickname] = useState('');
   const [nicknameStatus, setNicknameStatus] = useState<NicknameStatus>('error');
-  const [showError, setShowError] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
+  const initialNickname = useRecoilValue(getUserInitialNickname);
 
-  const changeNicknameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeNicknameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setNickname(value);
 
-    if (showError) setShowError(false);
+    if (showStatus) setShowStatus(false);
   };
 
-  const clickDuplicateButton = () => {};
+  useEffect(() => {
+    if (!initialNickname) return;
 
-  const submitNikcname = () => {};
+    setNickname(initialNickname);
+  }, [initialNickname]);
+
+  const onClickDuplicateButton = async () => {
+    const spaceRegExp = /\s/g;
+    if (spaceRegExp.test(nickname)) {
+      setNicknameStatus('error');
+      setShowStatus(true);
+      return;
+    }
+
+    const isAvailable = await checkDuplicateNicknameAPI(nickname);
+
+    if (isAvailable) setNicknameStatus('success');
+    else setNicknameStatus('error');
+
+    setShowStatus(true);
+  };
+
+  const onSubmitNikcname = async () => {
+    try {
+      await setUserNikcnameAPI(nickname);
+      router.push('/');
+    } catch (e) {
+      // TODO 에러 핸들링
+    }
+  };
 
   return (
     <NicknameWrapper>
@@ -26,15 +60,16 @@ const NicknameSetting = () => {
           type="text"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
-          onChange={changeNicknameInput}
+          onChange={onChangeNicknameInput}
         />
-        <NicknameButton>중복확인</NicknameButton>
+        <NicknameButton onClick={onClickDuplicateButton}>중복확인</NicknameButton>
       </NicknameInputWrapper>
       <NicknameStatusText status={nicknameStatus}>
-        {showError &&
-          (nicknameStatus === 'success' ? '사용할 수 있는 닉네임입니다.' : '중복입니다. 다른 닉네임을 입력해주세요.')}
+        {showStatus && (nicknameStatus === 'success' ? '사용할 수 있는 닉네임입니다.' : '다른 닉네임을 입력해주세요.')}
       </NicknameStatusText>
-      <SubmitButton disabled={nicknameStatus === 'error'}>확인</SubmitButton>
+      <SubmitButton disabled={nicknameStatus === 'error'} onClick={onSubmitNikcname}>
+        확인
+      </SubmitButton>
     </NicknameWrapper>
   );
 };
@@ -89,6 +124,10 @@ const NicknameButton = styled.button`
 `;
 
 const NicknameStatusText = styled.p<{ status: NicknameStatus }>`
+  margin-left: 4px;
+  width: 100%;
+  height: 16px;
+
   font-size: 12px;
   line-height: 16px;
 

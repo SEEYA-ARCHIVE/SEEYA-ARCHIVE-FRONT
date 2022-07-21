@@ -1,6 +1,5 @@
 import { selectorFamily } from 'recoil';
-import { ReviewDetailType } from 'src/types/api/review';
-import { getReviewListAPI, getReviewDetailAPI } from 'src/api/review';
+import { getReviewListAPI, getReviewDetailAPI, getReviewCommentListAPI } from 'src/api/review';
 
 export const getReviewList = selectorFamily({
   key: 'GET/reviewList',
@@ -31,4 +30,15 @@ export const getReviewDetail = selectorFamily({
         return null;
       }
     },
+});
+
+export const getReviewCommentList = selectorFamily({
+  key: 'GET/reviewCommentList',
+  get: (reviewId: number) => async () => {
+    try {
+      return await getReviewCommentListAPI(seatAreaId, reviewId);
+    } catch (err) {
+      return [];
+    }
+  },
 });
