@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { ROUTE } from 'src/route';
 import { userSessionState } from 'src/stores/user';
@@ -11,7 +11,11 @@ interface Props {}
 
 export const Header: FC<Props> = () => {
   const router = useRouter();
-  const userSession = useRecoilValue(userSessionState);
+  const [userSession, setUserSession] = useRecoilState(userSessionState);
+
+  const logout = () => {
+    setUserSession(undefined);
+  };
 
   return (
     <HeaderWrapper>
@@ -25,10 +29,7 @@ export const Header: FC<Props> = () => {
         />
         <AuthMenu>
           {userSession ? (
-            <>
-              <HeaderButton>LOG OUT</HeaderButton>
-              <HeaderButton>MY PAGE</HeaderButton>
-            </>
+            <HeaderButton onClick={logout}>LOG OUT</HeaderButton>
           ) : (
             <HeaderButton
               onClick={() => {
