@@ -45,7 +45,7 @@ export const UploadForm: FC<Props> = () => {
     <Wrap>
       <form action="">
         <Header>
-          <Icon name="iconLeftArrow" />
+          {/* <Icon name="iconLeftArrow" /> */}
           <span>시야 사진 업로드</span>
         </Header>
         <UploadImageList onChangeImageList={(value: string[]) => setSrcList(value)} />

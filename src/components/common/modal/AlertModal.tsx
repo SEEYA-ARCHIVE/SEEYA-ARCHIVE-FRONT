@@ -59,11 +59,13 @@ const AlertModal: FC<Props> = ({ type, onClick, color = 'red', iconName, mainMsg
             <Icon name={iconName || 'iconAlertFunc'} />
           </div>
           <p className="mainMsg">{mainMsg}</p>
-          <div className="subMsg">
-            {subMsg?.map((msg) => (
-              <p key={msg}>{msg}</p>
-            ))}
-          </div>
+          {subMsg && (
+            <div className="subMsg">
+              {subMsg?.map((msg) => (
+                <p key={msg}>{msg}</p>
+              ))}
+            </div>
+          )}
         </>
       )}
       <Button
@@ -91,7 +93,8 @@ const Wrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 300px;
-  height: 295px;
+  padding-top: 20px;
+  padding-bottom: 30px;
   border-radius: 20px;
   box-shadow: 0px 4px 10px rgba(219, 197, 197, 0.75);
   background-color: ${({ theme }) => theme.color.white};
@@ -106,7 +109,8 @@ const Wrapper = styled.div`
   .icon {
     display: flex;
     align-items: flex-end;
-    height: 125px;
+    padding-top: 30px;
+    padding-bottom: 15px;
   }
 
   .mainMsg {

@@ -12,7 +12,7 @@ import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
 import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
 import { media } from 'src/styles/theme';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import { UploadButton } from 'src/components/common/FABButton/UploadButton';
 
 interface Props {
   hallId: number;
@@ -36,14 +36,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
-  const router = useRouter();
-
   const clickQnAButton = () => {
     window.open('https://forms.gle/NXi2paRYy2TX3FN57');
-  };
-
-  const clickUploadButton = () => {
-    router.push('/upload');
   };
 
   return (
@@ -61,13 +55,7 @@ const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
         className="qa_btn"
         onClick={clickQnAButton}
       />
-      <FABButton
-        value="업로드"
-        bgColor="yellow"
-        position={{ bottom: 40, right: 90 }}
-        className="upload_btn"
-        onClick={clickUploadButton}
-      />
+      <UploadButton />
     </SeatPageWrapper>
   );
 };
@@ -99,13 +87,6 @@ const SeatPageWrapper = styled.div`
     ${media.tablet} {
       bottom: 30px;
       right: 30px;
-    }
-  }
-
-  .upload_btn {
-    ${media.tablet} {
-      right: 30px;
-      bottom: -65px;
     }
   }
 `;
