@@ -8,11 +8,10 @@ import { getHallListAPI, HallListType } from 'src/api/hall';
 import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
 
 interface Props {
-  onChangeHallId: (value: number) => void;
   onChangeSeatAreaId: (value: number) => void;
 }
 
-export const UploadFormSeats: FC<Props> = ({ onChangeHallId, onChangeSeatAreaId }) => {
+export const UploadFormSeats: FC<Props> = ({ onChangeSeatAreaId }) => {
   const [hallList, setHallList] = useState<HallListType>([]);
   const [selectedHall, setSelectedHall] = useState<number>();
   const [seatsData, setSeatsData] = useState<SeatAreaType[]>([]);
@@ -34,7 +33,6 @@ export const UploadFormSeats: FC<Props> = ({ onChangeHallId, onChangeSeatAreaId 
 
   useEffect(() => {
     getSeatsData(selectedHall ?? 1);
-    onChangeHallId(selectedHall ?? 1);
   }, [selectedHall]);
 
   return (

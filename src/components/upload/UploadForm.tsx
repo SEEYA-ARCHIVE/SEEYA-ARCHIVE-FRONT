@@ -1,6 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { FC, MouseEvent, useEffect, useState } from 'react';
+import { uploadReviewAPI } from 'src/api/upload';
+import useModal from 'src/hooks/useModal';
 import styled from 'styled-components';
 import Icon from '../common/icon/Icon';
+import AlertModal from '../common/modal/AlertModal';
 import { UploadFormReview } from './UploadFormReview';
 import { UploadFormSeats } from './UploadFormSeats';
 import { UploadImageList } from './uploadImage/UploadImageList';
@@ -8,12 +12,34 @@ import { UploadImageList } from './uploadImage/UploadImageList';
 interface Props {}
 
 export const UploadForm: FC<Props> = () => {
-  const [srcList, setSrcList] = useState<string[]>([]);
-  const [hallId, setHallId] = useState<number>();
-  const [seatAreaId, setSeatAreaId] = useState<number>();
-  const [review, setReview] = useState<string>();
+  const router = useRouter();
 
-  const uploadReview = async () => {};
+  const [srcList, setSrcList] = useState<string[]>([]);
+  const [seatAreaId, setSeatAreaId] = useState<number>();
+  const [review, setReview] = useState<string>('');
+  const { openModal } = useModal();
+
+  const uploadReview = async (e: MouseEvent) => {
+    e.preventDefault();
+    const uploadReviewData = {
+      imageUrlArray: srcList,
+      seatAreaId: seatAreaId,
+      review,
+    };
+
+    const { data: uploadedReview } = await uploadReviewAPI(uploadReviewData);
+    openModal(
+      <AlertModal
+        color="blue5"
+        iconName="iconAlertUpload"
+        mainMsg="업로드가 완료되었습니다."
+        subMsg={['사진과 리뷰를 제공해주셔서 감사합니다.']}
+        onClick={() => {
+          router.push(`/review/${uploadedReview.seatArea}`);
+        }}
+      />,
+    );
+  };
 
   return (
     <Wrap>
@@ -23,13 +49,10 @@ export const UploadForm: FC<Props> = () => {
           <span>시야 사진 업로드</span>
         </Header>
         <UploadImageList onChangeImageList={(value: string[]) => setSrcList(value)} />
-        <UploadFormSeats
-          onChangeHallId={(value: number) => setHallId(value)}
-          onChangeSeatAreaId={(value: number) => setSeatAreaId(value)}
-        />
+        <UploadFormSeats onChangeSeatAreaId={(value: number) => setSeatAreaId(value)} />
         <UploadFormReview onChangeReview={(value: string) => setReview(value)} />
         <ButtonWrap>
-          <button>업로드 하기</button>
+          <button onClick={uploadReview}>업로드 하기</button>
         </ButtonWrap>
       </form>
     </Wrap>

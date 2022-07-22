@@ -12,3 +12,22 @@ export const uploadImage = async (uploadImageData: FormData): Promise<string[]> 
     return [];
   }
 };
+
+interface uploadReviewAPIRequest {
+  imageUrlArray: string[];
+  seatAreaId?: number;
+  review: string;
+}
+interface uploadReviewAPIResponse {
+  imageUrlArray: string[];
+  seatArea: number;
+  review: string;
+}
+
+export const uploadReviewAPI = async (uploadReivewData: uploadReviewAPIRequest) => {
+  const data = (await axios.post)<uploadReviewAPIResponse>(
+    `seat_areas/${uploadReivewData.seatAreaId}/reviews`,
+    uploadReivewData,
+  );
+  return data;
+};

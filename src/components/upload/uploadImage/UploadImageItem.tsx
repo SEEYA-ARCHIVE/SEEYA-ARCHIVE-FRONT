@@ -9,9 +9,10 @@ interface Props {
   isInput: boolean;
   index: number;
   handleUploadImages: (uploadImgSrc: string[]) => void;
+  deleteUploadImage: (idx: number) => void;
 }
 
-export const UploadedImageItem: FC<Props> = ({ src, isInput, index, handleUploadImages }) => {
+export const UploadedImageItem: FC<Props> = ({ src, isInput, index, handleUploadImages, deleteUploadImage }) => {
   const isEmpty = !src;
 
   const uploadImages = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +39,16 @@ export const UploadedImageItem: FC<Props> = ({ src, isInput, index, handleUpload
     );
   }
 
-  return <Wrap isEmpty={isEmpty}>{src && <Img src={src} width={80} height={80} />}</Wrap>;
+  return (
+    <ImageWrap>
+      <Wrap isEmpty={isEmpty}>{src && <Img src={src} width={80} height={80} />}</Wrap>
+      {!!src && (
+        <XButtonWrap onClick={() => deleteUploadImage(index)}>
+          <Icon name="iconX_12" />
+        </XButtonWrap>
+      )}
+    </ImageWrap>
+  );
 };
 
 const InputWrap = styled.div`
@@ -58,6 +68,10 @@ const InputWrap = styled.div`
   }
 `;
 
+const ImageWrap = styled.div`
+  position: relative;
+`;
+
 const Wrap = styled.div<{ isEmpty: boolean }>`
   width: 80px;
   height: 80px;
@@ -70,4 +84,17 @@ const Wrap = styled.div<{ isEmpty: boolean }>`
       background-color: #688f95;
       opacity: 0.15;
     `}
+`;
+
+const XButtonWrap = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: black;
+  position: absolute;
+  top: -5px;
+  right: -5px;
 `;

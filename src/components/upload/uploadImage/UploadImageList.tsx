@@ -19,6 +19,11 @@ export const UploadImageList: FC<Props> = ({ onChangeImageList }) => {
     onChangeImageList([...imgSrc, ...avaliableUploadSrc]);
   };
 
+  const deleteUploadImage = (idx: number) => {
+    const newImgSrc = imgSrc.filter((_, i) => i !== idx);
+    setImgSrc(newImgSrc);
+  };
+
   return (
     <>
       <Wrap>
@@ -30,6 +35,7 @@ export const UploadImageList: FC<Props> = ({ onChangeImageList }) => {
               isInput={!imgSrc[idx] && ((idx === 0 && !imgSrc.length) || !!imgSrc[idx - 1])}
               index={idx}
               handleUploadImages={handleUploadImages}
+              deleteUploadImage={deleteUploadImage}
             />
           ))}
         </div>

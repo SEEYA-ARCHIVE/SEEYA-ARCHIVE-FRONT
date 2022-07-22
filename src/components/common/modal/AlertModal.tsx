@@ -4,12 +4,18 @@ import styled, { css } from 'styled-components';
 import { Button } from '../button/Button';
 import Icon from '../icon/Icon';
 import { ModalHOC } from 'src/hocs/withModalBackground';
+import { theme } from 'src/styles/theme';
+import * as icons from 'src/components/common/icon/iconPath';
 
 type AlertType = 'NO_SEAT' | 'NO_PHOTO' | 'NO_FUNC';
 
 interface Props {
-  type: AlertType;
+  type?: AlertType;
   onClick?: () => void;
+  color?: keyof typeof theme.color;
+  iconName?: keyof typeof icons;
+  mainMsg?: string;
+  subMsg?: string[];
 }
 
 const ALERT_DATA = {
@@ -30,27 +36,44 @@ const ALERT_DATA = {
   },
 };
 
-const AlertModal: FC<Props> = ({ type, onClick }) => {
+const AlertModal: FC<Props> = ({ type, onClick, color = 'red', iconName, mainMsg, subMsg }) => {
   const { closeCurrentModal } = useModal();
-  const subMsgList = ALERT_DATA[type].subMsg;
+
   return (
-    <Wrapper type={type}>
-      <Icon name="iconAlertTopBar" className="topbar" />
-      <div className="icon">{ALERT_DATA[type].icon}</div>
-      <p className="mainMsg">{ALERT_DATA[type].mainMsg}</p>
-      <div className="subMsg">
-        {subMsgList.map((msg) => (
-          <p key={msg}>{msg}</p>
-        ))}
-      </div>
+    <Wrapper>
+      {!!type ? (
+        <>
+          <Icon name="iconAlertTopBar" className="topbar" />
+          <div className="icon">{ALERT_DATA[type].icon}</div>
+          <p className="mainMsg">{ALERT_DATA[type].mainMsg}</p>
+          <div className="subMsg">
+            {ALERT_DATA[type].subMsg.map((msg) => (
+              <p key={msg}>{msg}</p>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <Topbar className="topbar" bgColor={color}></Topbar>
+          <div className="icon">
+            <Icon name={iconName || 'iconAlertFunc'} />
+          </div>
+          <p className="mainMsg">{mainMsg}</p>
+          <div className="subMsg">
+            {subMsg?.map((msg) => (
+              <p key={msg}>{msg}</p>
+            ))}
+          </div>
+        </>
+      )}
       <Button
         onClick={() => {
           onClick?.();
           closeCurrentModal();
         }}
         className="button"
-        bgColor="red">
-        알았어요.
+        bgColor={color}>
+        확인
       </Button>
     </Wrapper>
   );
@@ -58,7 +81,7 @@ const AlertModal: FC<Props> = ({ type, onClick }) => {
 
 export default ModalHOC(AlertModal);
 
-const Wrapper = styled.div<{ type: AlertType }>`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,4 +123,10 @@ const Wrapper = styled.div<{ type: AlertType }>`
     margin-bottom: 15px;
     color: ${({ theme }) => theme.fontColor.gray};
   }
+`;
+
+const Topbar = styled.div<{ bgColor: keyof typeof theme.color }>`
+  height: 18px;
+  width: 100%;
+  background-color: ${({ bgColor }) => theme.color[bgColor]};
 `;
