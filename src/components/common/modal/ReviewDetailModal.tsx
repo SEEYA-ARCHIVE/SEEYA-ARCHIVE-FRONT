@@ -59,7 +59,6 @@ const ReviewDetailModal: FC<Props> = ({ hallId, seatAreaId, reviewId, isFromComp
   };
 
   if (reviewDetailState === 'loading') return <></>;
-
   return (
     <Wrapper>
       <CloseX onClick={onClickCloseButton} />

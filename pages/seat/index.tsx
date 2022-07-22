@@ -12,6 +12,7 @@ import oylmpicData from 'src/components/common/seats/data/seatOlympic.json';
 import { getSeatAreaAPI, SeatAreaType } from 'src/api/seat';
 import { media } from 'src/styles/theme';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 interface Props {
   hallId: number;
@@ -35,12 +36,14 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 const Seat: NextPage<Props> = ({ hallId, seatsData }) => {
+  const router = useRouter();
+
   const clickQnAButton = () => {
     window.open('https://forms.gle/NXi2paRYy2TX3FN57');
   };
 
   const clickUploadButton = () => {
-    window.open('https://forms.gle/62fdjT7QAYza261R8');
+    router.push('/upload');
   };
 
   return (

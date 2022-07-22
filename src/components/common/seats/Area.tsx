@@ -67,12 +67,14 @@ export const Area: FC<Props> = ({
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
       strokeDasharray={strokeDasharray}
-      strokeWidth={strokeWidth}></AreaPath>
+      strokeWidth={strokeWidth}
+      noSelect={!floor || !area}></AreaPath>
   );
 };
 
-const AreaPath = styled.path`
-  cursor: pointer;
+const AreaPath = styled.path<{ noSelect: boolean }>`
+  cursor: ${({ noSelect }) => (noSelect ? 'auto' : 'pointer')};
+
   position: relative;
   &:before {
     content: '';

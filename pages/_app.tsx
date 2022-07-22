@@ -14,6 +14,7 @@ import { initAxiosConfig } from 'src/api/axios';
 import { getUserAPI } from 'src/api/user';
 import { userSessionState } from 'src/stores/user';
 import axios from 'axios';
+import { ROUTE } from 'src/route';
 
 initAxiosConfig();
 
@@ -23,6 +24,7 @@ interface Props extends AppProps {
 
 export default function MyApp({ Component, pageProps, userSession }: Props) {
   const router = useRouter();
+
   const recoilInitializer = ({ set }: MutableSnapshot) => {
     if (userSession) {
       set(userSessionState, userSession);
@@ -43,8 +45,8 @@ export default function MyApp({ Component, pageProps, userSession }: Props) {
       <RecoilRoot initializeState={recoilInitializer}>
         <GlobalStyle />
         <ThemeProvider theme={theme}>
-          <Wrap>
-            <Layout>
+          <Wrap bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
+            <Layout bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
               <Component {...pageProps} />
             </Layout>
           </Wrap>
@@ -72,13 +74,20 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   return { ...appProps, userSession: user };
 };
 
-const Wrap = styled.div`
+const BACKGROUND_COLOR_SETTING = {
+  [ROUTE.HOME]: 'white',
+  [ROUTE.SEAT]: 'white',
+  [ROUTE.SEAT_COMPARE]: 'white',
+  [ROUTE.UPLOAD]: 'skyblue',
+};
+
+const Wrap = styled.div<{ bgColor?: string }>`
   height: 100vh;
+  background-color: ${({ theme, bgColor }) => theme.color[bgColor ?? 'white']};
 `;
-const Layout = styled.div`
+const Layout = styled.div<{ bgColor?: string }>`
   position: relative;
   max-width: 1280px;
   height: 100vh;
   margin: auto;
-  background-color: ${({ theme }) => theme.color.white};
 `;

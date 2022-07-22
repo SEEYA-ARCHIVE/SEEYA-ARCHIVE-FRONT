@@ -1,4 +1,4 @@
-import React, { useEffect, VFC } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, VFC } from 'react';
 import styled from 'styled-components';
 
 interface IOption {
@@ -8,7 +8,7 @@ interface IOption {
 
 interface Props {
   value: string;
-  onChange: (selectFloor: string) => void;
+  onChange: (selectFloor: string) => void | Dispatch<SetStateAction<string>>;
   options: IOption[];
 }
 
