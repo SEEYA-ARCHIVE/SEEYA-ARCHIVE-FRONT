@@ -19,6 +19,7 @@ interface uploadReviewAPIRequest {
   review: string;
 }
 interface uploadReviewAPIResponse {
+  id: number;
   imageUrlArray: string[];
   seatArea: number;
   review: string;

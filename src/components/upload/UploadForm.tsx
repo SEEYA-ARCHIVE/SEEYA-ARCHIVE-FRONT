@@ -35,7 +35,7 @@ export const UploadForm: FC<Props> = () => {
         mainMsg="업로드가 완료되었습니다."
         subMsg={['사진과 리뷰를 제공해주셔서 감사합니다.']}
         onClick={() => {
-          router.push(`/review/${uploadedReview.seatArea}`);
+          router.push(`/review/${uploadedReview.seatArea}/${uploadedReview.id}`);
         }}
       />,
     );
