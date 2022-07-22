@@ -33,10 +33,3 @@ export const UploadButton: FC<Props> = () => {
     />
   );
 };
-
-const Wrap = styled.div`
-  ${media.tablet} {
-    right: 30px;
-    bottom: -65px;
-  }
-`;

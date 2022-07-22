@@ -89,4 +89,10 @@ const SeatPageWrapper = styled.div`
       right: 30px;
     }
   }
+  .upload_btn {
+    ${media.tablet} {
+      right: 30px;
+      bottom: -65px;
+    }
+  }
 `;
