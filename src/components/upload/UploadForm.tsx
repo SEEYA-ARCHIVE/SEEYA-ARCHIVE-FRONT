@@ -21,6 +21,9 @@ export const UploadForm: FC<Props> = () => {
 
   const uploadReview = async (e: MouseEvent) => {
     e.preventDefault();
+    if (!srcList.length || !seatAreaId || !review) {
+      openModal(<AlertModal iconName="iconAlertUpload" mainMsg="정보를 모두 입력해주세요" />);
+    }
     const uploadReviewData = {
       imageUrlArray: srcList,
       seatAreaId: seatAreaId,

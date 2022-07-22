@@ -27,6 +27,7 @@ export const UploadImageList: FC<Props> = ({ onChangeImageList }) => {
   return (
     <>
       <Wrap>
+        <Title>사진</Title>
         <div>
           {new Array(MAX_UPLOAD).fill('').map((_, idx) => (
             <UploadedImageItem
@@ -49,7 +50,7 @@ const Wrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 84px;
+  padding: 0 43px;
   padding-top: 75px;
 
   & > div {
@@ -59,6 +60,12 @@ const Wrap = styled.div`
   & > div > * + * {
     margin-left: 10px;
   }
+`;
+
+const Title = styled.div`
+  margin-bottom: 12px;
+  font-weight: 700;
+  align-self: baseline;
 `;
 
 const Desc = styled.p`

@@ -19,6 +19,7 @@ interface Props {
   className?: string;
   seatsData: SeatAreaType[];
   onChangeSeatAreaId: (value: number) => void;
+  setSelectedArea: (floor: number, area: string) => void;
 }
 
 export interface SVGInfoType {
@@ -32,7 +33,14 @@ const SELECTED_COLOR = '#13ACC1';
 
 export type SelectedPositionType = { left: DOMRect | null; right: DOMRect | null };
 
-export const UploadSeats: VFC<Props> = ({ onChangeSeatAreaId, hallId, data, className, seatsData }) => {
+export const UploadSeats: VFC<Props> = ({
+  onChangeSeatAreaId,
+  hallId,
+  data,
+  className,
+  seatsData,
+  setSelectedArea,
+}) => {
   const [svgData, setSvgData] = useState(data);
   const [selected, setSelected] = useState(0);
   const { width, height, viewBox, xmlns, area, word } = svgData;
@@ -91,6 +99,7 @@ export const UploadSeats: VFC<Props> = ({ onChangeSeatAreaId, hallId, data, clas
 
   const handleSeatAreaClick = (floor?: number | null, area?: string | null, seatAreaId?: number) => {
     if (!floor || !area || !seatAreaId) return;
+    setSelectedArea(floor, area);
     setSelected(seatAreaId);
   };
 
