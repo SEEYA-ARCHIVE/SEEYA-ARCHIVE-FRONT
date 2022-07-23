@@ -61,7 +61,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
 
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
-
+  console.log('success');
   let user;
   if (cookie) {
     axios.defaults.headers.common['cookie'] = cookie;
