@@ -19,10 +19,8 @@ export const getReviewCommentListAPI = async (reviewId: number): Promise<ReviewC
   return data;
 };
 
-export const writeReviewCommentAPI = async (reviewId: number, userId: number, comment: string) => {
+export const writeReviewCommentAPI = async (reviewId: number, comment: string) => {
   await axios.post(`/reviews/${reviewId}/comments`, {
-    review: reviewId,
-    user: userId,
     comment,
   });
 };

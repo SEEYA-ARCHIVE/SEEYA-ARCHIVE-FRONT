@@ -39,7 +39,8 @@ const CommentFactory: VFC<Props> = ({ reviewId }) => {
   const submitComment = async () => {
     if (userSession) {
       try {
-        await writeReviewCommentAPI(reviewId, userSession.id, comment);
+        await writeReviewCommentAPI(reviewId, comment);
+        setComment('');
         refreshCommentList();
       } catch (err) {
         openModal(<AlertModal iconName="iconAlertUpload" mainMsg="에러가 발생했습니다. 다시 시도해주세요" />);
