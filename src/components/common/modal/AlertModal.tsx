@@ -3,7 +3,7 @@ import useModal from 'src/hooks/useModal';
 import styled, { css } from 'styled-components';
 import { Button } from '../button/Button';
 import Icon from '../icon/Icon';
-import { ModalHOC } from 'src/hocs/withModalBackground';
+
 import { theme } from 'src/styles/theme';
 import * as icons from 'src/components/common/icon/iconPath';
 
@@ -81,7 +81,7 @@ const AlertModal: FC<Props> = ({ type, onClick, color = 'red', iconName, mainMsg
   );
 };
 
-export default ModalHOC(AlertModal);
+export default AlertModal;
 
 const Wrapper = styled.div`
   display: flex;

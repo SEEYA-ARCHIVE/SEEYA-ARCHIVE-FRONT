@@ -4,6 +4,7 @@ import Head from 'next/head';
 
 import { Header } from 'src/components/common/header/Header';
 import { UploadForm } from 'src/components/upload/UploadForm';
+import withAuth from 'src/hocs/withAuth';
 
 interface Props {}
 
@@ -21,7 +22,7 @@ const UploadPage: FC<Props> = () => {
   );
 };
 
-export default UploadPage;
+export default withAuth(UploadPage);
 
 const Wrap = styled.div`
   width: 100%;
