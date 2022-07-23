@@ -23,6 +23,7 @@ export const UploadForm: FC<Props> = () => {
     e.preventDefault();
     if (!srcList.length || !seatAreaId || !review) {
       openModal(<AlertModal iconName="iconAlertUpload" mainMsg="정보를 모두 입력해주세요" />);
+      return;
     }
     const uploadReviewData = {
       imageUrlArray: srcList,
