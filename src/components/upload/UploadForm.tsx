@@ -31,6 +31,18 @@ export const UploadForm: FC<Props> = () => {
     };
 
     const { data: uploadedReview } = await uploadReviewAPI(uploadReviewData);
+
+    if (!uploadedReview) {
+      openModal(
+        <AlertModal
+          color="red"
+          iconName="iconAlertUpload"
+          mainMsg="업로드에 실패했습니다."
+          subMsg={['잠시 후 다시 시도해주세요.']}
+        />,
+      );
+      return;
+    }
     openModal(
       <AlertModal
         color="blue5"
