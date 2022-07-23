@@ -26,9 +26,13 @@ interface uploadReviewAPIResponse {
 }
 
 export const uploadReviewAPI = async (uploadReivewData: uploadReviewAPIRequest) => {
-  const data = (await axios.post)<uploadReviewAPIResponse>(
-    `seat_areas/${uploadReivewData.seatAreaId}/reviews`,
-    uploadReivewData,
-  );
-  return data;
+  try {
+    const data = (await axios.post)<uploadReviewAPIResponse>(
+      `seat_areas/${uploadReivewData.seatAreaId}/reviews`,
+      uploadReivewData,
+    );
+    return data;
+  } catch (error) {
+    return { data: null };
+  }
 };
