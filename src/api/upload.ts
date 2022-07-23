@@ -27,7 +27,7 @@ interface uploadReviewAPIResponse {
 
 export const uploadReviewAPI = async (uploadReivewData: uploadReviewAPIRequest) => {
   try {
-    const data = (await axios.post)<uploadReviewAPIResponse>(
+    const data = await axios.post<uploadReviewAPIResponse>(
       `seat_areas/${uploadReivewData.seatAreaId}/reviews`,
       uploadReivewData,
     );
