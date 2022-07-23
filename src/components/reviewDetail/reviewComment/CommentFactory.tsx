@@ -3,7 +3,11 @@ import styled, { css } from 'styled-components';
 import Icon from 'src/components/common/icon/Icon';
 import { writeReviewCommentAPI } from 'src/api/review';
 import { userSessionState } from 'src/stores/user';
-import { useRecoilValue } from 'recoil';
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from 'recoil';
+import { getReviewCommentList } from 'src/stores/review';
+import useModal from 'src/hooks/useModal';
+import AlertModal from 'src/components/common/modal/AlertModal';
+import { useRouter } from 'next/router';
 
 interface Props {
   reviewId: number;
@@ -13,6 +17,9 @@ const CommentFactory: VFC<Props> = ({ reviewId }) => {
   const [comment, setComment] = useState('');
   const [isLiked, setIsLiked] = useState(false);
   const userSession = useRecoilValue(userSessionState);
+  const router = useRouter();
+  const { openModal } = useModal();
+  const refreshCommentList = useRecoilRefresher_UNSTABLE(getReviewCommentList(reviewId));
 
   const onClickLikeButton = () => {
     setIsLiked((prev) => !prev!);
@@ -30,7 +37,17 @@ const CommentFactory: VFC<Props> = ({ reviewId }) => {
   };
 
   const submitComment = async () => {
-    if (userSession) await writeReviewCommentAPI(reviewId, userSession.id, comment);
+    if (userSession) {
+      try {
+        await writeReviewCommentAPI(reviewId, userSession.id, comment);
+        refreshCommentList();
+      } catch (err) {
+        openModal(<AlertModal iconName="iconAlertUpload" mainMsg="에러가 발생했습니다. 다시 시도해주세요" />);
+      }
+      return;
+    }
+
+    openModal(<AlertModal color="blue5" mainMsg="로그인 후 이용 가능합니다." onClick={() => router.push('/auth')} />);
   };
 
   const onKeyPressEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
