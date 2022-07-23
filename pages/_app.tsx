@@ -64,7 +64,10 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
 
   let user;
   if (cookie) {
+    const csrfToken = cookie?.split('csrftoken=')[1]?.split(';')[0];
+
     axios.defaults.headers.common['cookie'] = cookie;
+    if (csrfToken) axios.defaults.headers.common['X-CSRF-Token'] = csrfToken;
 
     user = await getUserAPI();
   }
