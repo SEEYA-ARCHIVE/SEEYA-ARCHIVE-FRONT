@@ -16,6 +16,10 @@ import { userSessionState } from 'src/stores/user';
 import axios from 'axios';
 import { ROUTE } from 'src/route';
 
+import { setUpMocks } from '../src/api/mock/index';
+
+setUpMocks();
+
 initAxiosConfig();
 
 interface Props extends AppProps {
@@ -61,7 +65,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
 
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
-  console.log('success');
+
   let user;
   if (cookie) {
     axios.defaults.headers.common['cookie'] = cookie;

@@ -14,6 +14,9 @@ const nextConfig = {
   // Docker를 위한 설정
   // https://nextjs.org/docs/advanced-features/output-file-tracing
   output: 'standalone',
+  experimental: {
+    esmExternals: false,
+  },
 };
 
 module.exports = nextConfig;
