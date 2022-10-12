@@ -4,7 +4,7 @@ import { HallListType } from '../../hall';
 const HALL_LISTS_MOCK: HallListType = [
   {
     concertHallId: 0,
-    name: '올림픽 홀',
+    name: '올림픽홀',
     address: '올림픽 공원',
     lat: 38,
     lng: 37,

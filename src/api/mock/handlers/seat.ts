@@ -1,4 +1,6 @@
-export const MOCK_SEAT_AREA = [
+import { rest } from 'msw';
+
+const SEAT_AREA_MOCK = [
   {
     seatAreaId: 28,
     floor: 1,
@@ -60,3 +62,7 @@ export const MOCK_SEAT_AREA = [
     countReviews: 8,
   },
 ];
+
+export const seatHandler = rest.get(`${process.env.NEXT_PUBLIC_HOST}/concert_halls/0/seat_areas`, (req, res, ctx) => {
+  return res(ctx.json(SEAT_AREA_MOCK));
+});

@@ -1,5 +1,3 @@
-import { MOCK_SEAT_AREA } from './mock/seat_areas';
-
 export interface CompareSeatAreaType {
   id: number;
   userNickname: string;
