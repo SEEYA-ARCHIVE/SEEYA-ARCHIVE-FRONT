@@ -21,7 +21,7 @@ export const HallIcon: FC<Props> = ({ name, iconName, concertHallId }) => {
   const [isMouseEnter, setIsMouseEnter] = useState(false);
 
   const handleClick = () => {
-    if (!concertHallId) {
+    if (concertHallId === undefined) {
       openModal(<AlertModal type="NO_SEAT" />);
       return;
     }
