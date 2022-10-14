@@ -8,7 +8,7 @@ export interface ReviewListType {
 export interface ReviewPreivew {
   id: number;
   createAt: string;
-  previewImages: string;
+  previewImage: string;
   artist: string;
   author?: string;
   tagList?: string[];
