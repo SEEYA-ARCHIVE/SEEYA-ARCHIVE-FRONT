@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { ReviewDetailType } from 'src/types/api/review';
 import sampleImage from '../../../../public/assets/image/sample.jpeg';
 
 const REVIEW_LIST_MOCK = {
@@ -16,29 +17,27 @@ const REVIEW_LIST_MOCK = {
   ],
 };
 
-const REVIEW_MOCK = {
+const REVIEW_DETAIL_MOCK: ReviewDetailType = {
   id: 1,
-  concertHall: '올림픽홀',
+  user: {
+    id: 12,
+    email: 'seeya@gmail.com',
+    kakaoId: 'seeya',
+    nickname: 'seeya-tester',
+  },
+  concertHallName: '올림픽홀',
+  imageUrlArray: [sampleImage.src, sampleImage.src],
+  images: [sampleImage.src, sampleImage.src],
   createAt: '2021-09-22T16:15:45+09:00',
   updateAt: '2021-09-22T16:15:45+09:00',
   seatArea: 'B1',
-  images: [sampleImage, '/media/review-images/05_2021-09-22T07:15:45.000Z_.jpg'],
-  artist: null,
+  artist: 'seeya-singer',
+  review: '너무 좋아요',
+  comments: ['리뷰 테스트1', '리뷰 테스트2', '리뷰 테스트3'],
+  likeUsers: [],
   nextId: 13,
-  previousId: null,
+  previousId: 2,
 };
-
-// export const getReviewDetailAPI = async (seatAreaId: number, reviewId: number): Promise<ReviewDetailType> => {
-//   const { data } = await axios.get(`/seat_areas/${seatAreaId}/reviews/${reviewId}`);
-
-//   return data;
-// };
-
-// export const getReviewListAPI = async (seatId: number, page: number): Promise<ReviewListType> => {
-//   const { data } = await axios.get(`/seat_areas/${seatId}/reviews?page=${page}`);
-
-//   return data;
-// };
 
 // export const getReviewCommentListAPI = async (reviewId: number): Promise<ReviewCommentType[]> => {
 //   const { data } = await axios.get(`/reviews/${reviewId}/comments`);
@@ -58,6 +57,14 @@ export const getReviewListAPIHandler = rest.get(
     return res(ctx.json(REVIEW_LIST_MOCK));
   },
 );
+
+export const getReviewDetailAPIHandler = rest.get(
+  `${process.env.NEXT_PUBLIC_HOST}/seat_areas/:seatAreaId/reviews/:reviewId`,
+  (req, res, ctx) => {
+    return res(ctx.json(REVIEW_DETAIL_MOCK));
+  },
+);
+
 // export const reviewHandlers = [
 // rest.get(`${process.env.NEXT_PUBLIC_HOST}/seat_areas/:seatAreaId/reviews`, (req, res, ctx) => {
 //   return res(ctx.json({ results: [REVIEW_MOCK] }));
