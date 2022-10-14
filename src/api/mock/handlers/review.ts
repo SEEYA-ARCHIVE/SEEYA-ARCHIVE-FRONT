@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { ReviewDetailType } from 'src/types/api/review';
+import { ReviewCommentType, ReviewDetailType } from 'src/types/api/review';
 import sampleImage from '../../../../public/assets/image/sample.jpeg';
 
 const REVIEW_LIST_MOCK = {
@@ -39,17 +39,24 @@ const REVIEW_DETAIL_MOCK: ReviewDetailType = {
   previousId: 2,
 };
 
-// export const getReviewCommentListAPI = async (reviewId: number): Promise<ReviewCommentType[]> => {
-//   const { data } = await axios.get(`/reviews/${reviewId}/comments`);
-
-//   return data;
-// };
-
-// export const writeReviewCommentAPI = async (reviewId: number, comment: string) => {
-//   await axios.post(`/reviews/${reviewId}/comments`, {
-//     comment,
-//   });
-// };
+const REVIEW_COMMENT_LIST_MOCK: ReviewCommentType[] = [
+  {
+    id: 1,
+    review: 13,
+    user: 12,
+    comment: '리뷰는 뭐고 코멘트는 뭘까? 여기는 comment',
+    createAt: '2021-09-22T16:15:45+09:00',
+    updateAt: '2021-09-22T16:15:45+09:00',
+  },
+  {
+    id: 2,
+    review: 14,
+    user: 10,
+    comment: 'here is comment so good!',
+    createAt: '2021-09-22T16:15:45+09:00',
+    updateAt: '2021-09-22T16:15:45+09:00',
+  },
+];
 
 export const getReviewListAPIHandler = rest.get(
   `${process.env.NEXT_PUBLIC_HOST}/seat_areas/:seatId/reviews`,
@@ -65,14 +72,27 @@ export const getReviewDetailAPIHandler = rest.get(
   },
 );
 
-// export const reviewHandlers = [
-// rest.get(`${process.env.NEXT_PUBLIC_HOST}/seat_areas/:seatAreaId/reviews`, (req, res, ctx) => {
-//   return res(ctx.json({ results: [REVIEW_MOCK] }));
-// }),
-// rest.get(`${process.env.NEXT_PUBLIC_HOST}/seat_areas/:seatAreaId/reviews`, (req, res, ctx) => {
-//   return res(ctx.json({ results: [REVIEW_MOCK] }));
-// }),
-// rest.get(`${process.env.NEXT_PUBLIC_HOST}/seat_areas/:seatAreaId/reviews`, (req, res, ctx) => {
-//   return res(ctx.json({ results: [REVIEW_MOCK] }));
-// }),
-// ];
+export const getReviewCommentListAPIHandler = rest.get(
+  `${process.env.NEXT_PUBLIC_HOST}/reviews/:reviewId/comments`,
+  (req, res, ctx) => {
+    return res(ctx.json(REVIEW_COMMENT_LIST_MOCK));
+  },
+);
+
+export const writeReviewCommentAPIHandler = rest.post(
+  `${process.env.NEXT_PUBLIC_HOST}/reviews/:reviewId/comments`,
+  (req, res, ctx) => {
+    const comment = (req.body as any).comment;
+
+    REVIEW_COMMENT_LIST_MOCK.push({
+      id: Math.floor(Math.random() * 100),
+      review: 14,
+      user: 10,
+      comment,
+      createAt: '2021-09-22T16:15:45+09:00',
+      updateAt: '2021-09-22T16:15:45+09:00',
+    });
+
+    return res();
+  },
+);
