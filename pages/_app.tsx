@@ -18,6 +18,7 @@ import axios from 'axios';
 import { ROUTE } from 'src/route';
 
 import { setUpMocks } from '../src/api/mock/index';
+import ErrorBoundary from 'src/components/common/errorBoundary/ErrorBoundary';
 
 setUpMocks();
 
@@ -58,19 +59,21 @@ export default function MyApp({ Component, pageProps, userSession }: Props) {
   }, [router.events]);
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<></>}>
-        <RecoilRoot initializeState={recoilInitializer}>
-          <GlobalStyle />
-          <ThemeProvider theme={theme}>
-            <Wrap bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
-              <Layout bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
-                <Component {...pageProps} />
-              </Layout>
-            </Wrap>
-            <Modal />
-          </ThemeProvider>
-        </RecoilRoot>
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<></>}>
+          <RecoilRoot initializeState={recoilInitializer}>
+            <GlobalStyle />
+            <ThemeProvider theme={theme}>
+              <Wrap bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
+                <Layout bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
+                  <Component {...pageProps} />
+                </Layout>
+              </Wrap>
+              <Modal />
+            </ThemeProvider>
+          </RecoilRoot>
+        </Suspense>
+      </ErrorBoundary>
     </QueryClientProvider>
   );
 }
