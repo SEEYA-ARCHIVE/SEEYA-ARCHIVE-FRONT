@@ -4,6 +4,7 @@ import App from 'next/app';
 import { useRouter } from 'next/router';
 import styled, { ThemeProvider } from 'styled-components';
 import { MutableSnapshot, RecoilRoot } from 'recoil';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import { GlobalStyle } from 'src/styles/global-style';
 import { theme } from 'src/styles/theme';
@@ -17,10 +18,22 @@ import axios from 'axios';
 import { ROUTE } from 'src/route';
 
 import { setUpMocks } from '../src/api/mock/index';
+import ErrorBoundary from 'src/components/common/errorBoundary/ErrorBoundary';
 
 setUpMocks();
 
 initAxiosConfig();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+      useErrorBoundary: true,
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 interface Props extends AppProps {
   userSession?: UserType;
@@ -45,19 +58,23 @@ export default function MyApp({ Component, pageProps, userSession }: Props) {
     };
   }, [router.events]);
   return (
-    <Suspense fallback={<></>}>
-      <RecoilRoot initializeState={recoilInitializer}>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          <Wrap bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
-            <Layout bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
-              <Component {...pageProps} />
-            </Layout>
-          </Wrap>
-          <Modal />
-        </ThemeProvider>
-      </RecoilRoot>
-    </Suspense>
+    <QueryClientProvider client={queryClient}>
+      <ErrorBoundary>
+        <Suspense fallback={<></>}>
+          <RecoilRoot initializeState={recoilInitializer}>
+            <GlobalStyle />
+            <ThemeProvider theme={theme}>
+              <Wrap bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
+                <Layout bgColor={BACKGROUND_COLOR_SETTING[router.asPath]}>
+                  <Component {...pageProps} />
+                </Layout>
+              </Wrap>
+              <Modal />
+            </ThemeProvider>
+          </RecoilRoot>
+        </Suspense>
+      </ErrorBoundary>
+    </QueryClientProvider>
   );
 }
 
